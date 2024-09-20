@@ -3,6 +3,7 @@
 #include <moduleLoader.h>
 #include <interrupts.h>
 #include <video.h>
+#include <MemoryManager.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -43,7 +44,9 @@ void initializeKernelBinary()
 int main()
 {	
 	load_idt();
+    createMemoryManager(20);
 	((EntryPoint)sampleCodeModuleAddress)();
+
 	while(1) _hlt();
 	return 0;
 }

@@ -6,6 +6,8 @@
 #include <speaker.h>
 #include <time.h>
 #include <memory.h>
+#include <MemoryManager.h>
+
 /* File Descriptors*/
 #define STDIN 0
 #define STDOUT 1
@@ -27,6 +29,9 @@
 #define SET_FONT_COLOR 11
 #define GET_FONT_COLOR 12
 
+#define MALLOC  13
+#define FREE    14
+
 static uint8_t syscall_read(uint32_t fd);
 static void syscall_write(uint32_t fd, char c);
 static void syscall_clear();
@@ -40,14 +45,16 @@ static void syscall_getMemory(uint64_t pos, uint8_t * vec);
 static void syscall_playSound(uint64_t frequency, uint64_t ticks);
 static void syscall_setFontColor(uint8_t r, uint8_t g, uint8_t b);
 static uint32_t syscall_getFontColor();
+static void *syscall_malloc(uint64_t size);
+static void syscall_free(void *ptr);
 
 
 uint64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
-	switch (nr) {
+    switch (nr) {
         case READ:
             return syscall_read((uint32_t)arg0);
-		case WRITE:
-			syscall_write((uint32_t)arg0, (char)arg1);
+        case WRITE:
+            syscall_write((uint32_t)arg0, (char)arg1);
             break;
         case CLEAR:
             syscall_clear();
@@ -77,8 +84,13 @@ uint64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t a
             break;
         case GET_FONT_COLOR:
             return syscall_getFontColor();
-	}
-	return 0;
+        case MALLOC:
+            return syscall_malloc((uint64_t) arg0);
+        case FREE:
+            syscall_free((void *)arg0);
+            break;
+    }
+    return 0;
 }
 
 // Read char
@@ -163,4 +175,14 @@ static void syscall_setFontColor(uint8_t r, uint8_t g, uint8_t b){
 static uint32_t syscall_getFontColor(){
     ColorInt c = { color: getFontColor() };
     return c.bits;
+}
+
+// Malloc i
+static void *syscall_malloc(uint64_t size) {
+    return allocMemory(size);
+}
+
+// Free
+static void syscall_free(void *ptr) {
+     my_free(ptr);
 }
