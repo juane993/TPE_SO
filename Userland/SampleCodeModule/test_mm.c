@@ -11,7 +11,7 @@
 
 void createMemoryManager(void *p, int s);
 
-#define MAX_BLOCKS 128
+#define MAX_BLOCKS 20
 
 typedef struct MM_rq {
 	void *address;
@@ -30,15 +30,17 @@ uint64_t test_mm(uint64_t maxmem) {
 	max_memory = maxmem;
 
 	int z=0;
-	while (z < 130) {
+	while (z < 20) {
 		rq = 0;
 		total = 0;
 
 		// Request as many blocks as we can
 		while (rq < MAX_BLOCKS && total < max_memory) {
 
-			mm_rqs[rq].size = GetUniform(max_memory - total - 1) + 1;
-			printf("%d\n", mm_rqs[rq].size);
+			//mm_rqs[rq].size = GetUniform(max_memory - total - 1) + 1;
+            mm_rqs[rq].size = GetUniform(30);
+
+			//printf("%d\n", mm_rqs[rq].size);
 			mm_rqs[rq].address = allocMemory(mm_rqs[rq].size);
 			//printf("Dirección: %p, \n", mm_rqs[rq].address);
 
@@ -51,7 +53,7 @@ uint64_t test_mm(uint64_t maxmem) {
 			if(rq < MAX_BLOCKS && total < max_memory)
 			{
 				mm_rqs[rq].size = 15;
-				printf("%d\n", mm_rqs[rq].size);
+			//	printf("%d\n", mm_rqs[rq].size);
 				mm_rqs[rq].address = allocMemory(mm_rqs[rq].size);
 				//printf("Dirección: %p, \n", mm_rqs[rq].address);
 
@@ -69,7 +71,13 @@ uint64_t test_mm(uint64_t maxmem) {
 			if (mm_rqs[i].address) {
 				// Mostrar información antes de memset
 				printf("Bloque %d: Dirección: %p, Tamaño: %u bytes\n", i, mm_rqs[i].address, mm_rqs[i].size);
-				memset(mm_rqs[i].address, i, mm_rqs[i].size);
+				//memset(mm_rqs[i].address, i, mm_rqs[i].size);
+
+                //memset de reemplazo
+                //char * temp = (char *) mm_rqs[i].address;
+                for (int j = 0; j < mm_rqs[i].size; ++j) {
+                    ((uint8_t *)mm_rqs[i].address)[j] = i;
+                }
 			}
 		}
 
@@ -78,7 +86,7 @@ uint64_t test_mm(uint64_t maxmem) {
 			if (mm_rqs[i].address) {
 				printf("Contenido del bloque %d en dirección %p: ", i, mm_rqs[i].address);
 				for (uint32_t j = 0; j < mm_rqs[i].size; j++) {
-					printf("%u ", ((uint8_t*)mm_rqs[i].address)[j]);
+					printf("%d ", ((uint8_t*)mm_rqs[i].address)[j]);
 				}
 				printf("\n");
 			}
@@ -101,7 +109,7 @@ uint64_t test_mm(uint64_t maxmem) {
 		}
 
 		printf("TODO BIEN %d,\n",z);
-		z ++;
+		z++;
 	}
 	return 0;
 }
