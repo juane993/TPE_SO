@@ -1,0 +1,18 @@
+# Variables
+CC = gcc
+TARGET = Test
+SRCS = MemoryManager.c ./testmm/test_mm.c ./testmm/test_util.c ./testmm/syscall.c
+
+# Regla principal
+all: $(TARGET)
+
+# Regla para generar el ejecutable
+$(TARGET): $(SRCS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS)
+
+# Regla para limpiar los archivos generados
+clean:
+	rm -f $(TARGET)
+
+# Regla para recompilar
+rebuild: clean all
