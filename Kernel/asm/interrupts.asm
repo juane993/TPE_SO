@@ -14,15 +14,18 @@ GLOBAL _irq04Handler
 GLOBAL _irq05Handler
 GLOBAL _syscallHandler
 
+
 GLOBAL _ex00Handler
 GLOBAL _ex06Handler
 GLOBAL _ex0DHandler
 GLOBAL _ex0EHandler
 
+
 EXTERN irqDispatcher
 EXTERN syscallDispatcher
 EXTERN exceptionDispatcher
 EXTERN load_main
+EXTERN scheduler
 
 SECTION .text
 
@@ -126,10 +129,24 @@ picSlaveMask:
     pop     rbp
     retn
 
-
 ;8254 Timer (Timer Tick)
 _irq00Handler:
-	irqHandlerMaster 0
+    pushState
+
+    mov rdi, rsp
+    call scheduler
+    mov rsp, rax
+
+    mov rdi, 0
+    call irqDispatcher
+
+   ; signal pic EOI (End of Interrupt)
+
+    mov al, 20h
+    out 20h, al
+
+    popState
+    iretq
 
 ;Keyboard
 _irq01Handler:
