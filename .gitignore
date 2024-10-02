@@ -9,3 +9,16 @@
 
 #Object files
 *.o
+.bash_history
+.idea/workspace.xml
+.idea/vcs.xml
+.bash_history
+*.xml
+.idea/TPE_SO.iml
+Kernel/kernel.elf
+Userland/0000-sampleCodeModule.elf
+.bash_history
+Kernel/kernel.elf
+Userland/0000-sampleCodeModule.elf
+.bash_history
+*.elf
