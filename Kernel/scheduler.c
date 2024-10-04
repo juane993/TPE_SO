@@ -16,20 +16,17 @@ typedef struct  schedulerCDT{
     PCB procesess[70];
 }schedulerCDT;
 
-schedulerADT scheduler;
-//schedulerADT scheduler = (schedulerADT) SCHEDULER_ADDRESS;
 
-uint8_t * schedulerrrrr(uint8_t * current)
+schedulerADT sch = (schedulerADT) SCHEDULER_ADDRESS;
+
+uint8_t * scheduler(uint8_t * currentSP)
 {
-    return current;
-    for (int i = 0; i < currentRunningProceses; ++i) {
-        if(current == scheduler->procesess[i].RSP)
-        {
-            scheduler->procesess[i].state = READY;
-            scheduler->procesess[i+1 % currentRunningProceses].state = RUNNING;
-            return scheduler->procesess[i+1 % currentRunningProceses].RSP; //hay que chequear si esta bloqueado
-        }
-    }
+   uint8_t currentPid = sch->currentPid;
+   sch->procesess[currentPid].RSP = currentSP;
+   sch->procesess[currentPid].state = READY;
+   sch->procesess[currentPid + 1% currentRunningProceses].state = RUNNING;
+    return sch->procesess[currentPid + 1 % currentRunningProceses].RSP;
+    
     //es un proceso nuevo, hay que crearlo
 }
 
