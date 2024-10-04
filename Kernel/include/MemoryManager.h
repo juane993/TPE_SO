@@ -11,7 +11,7 @@
 #define NULL ((void *)0)
 
 #define BLOCK_COUNT 20
-#define START_FREE_MEM 600000
+#define START_FREE_MEM 0x600000
 
 void createMemoryManager(int size);
 void* allocMemory(uint32_t size);

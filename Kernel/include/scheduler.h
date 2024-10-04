@@ -2,6 +2,7 @@
 #define _SCHEDULER_H
 
 #include <stdint.h>
+#define SCHEDULER_ADDRESS (0x700000)
 
 typedef enum {
     READY,
@@ -10,11 +11,7 @@ typedef enum {
     NOT_EXISTS
 } State;
 
-typedef struct PCB {
-    uint8_t priority;
-    uint8_t processPid;
-    State state;
-    uint8_t * RSP;
-} PCB;
 
+
+typedef struct schedulerCDT  *schedulerADT;
 #endif
