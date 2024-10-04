@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #define SCHEDULER_ADDRESS (0x700000)
+#define MAX_PROCESSES 70
 
 typedef enum {
     READY,
