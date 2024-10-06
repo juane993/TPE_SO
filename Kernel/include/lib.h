@@ -79,7 +79,7 @@ void saveRegisters();
  */
 void _hlt();
 
-void initProcessStack(void * main, void * stackBase,uint8_t argc, char ** argv);
+uint64_t * initProcessStack(void * main, void * stackBase,uint8_t argc, char ** argv);
 
 #endif
 

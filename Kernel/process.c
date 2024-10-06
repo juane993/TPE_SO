@@ -5,11 +5,11 @@
 
 
 
-uint64_t * initProcess(void * mainFunc,uint8_t argc, char ** args)
+uint64_t * initProcess(void * mainFunc,uint8_t argc, char ** args, uint64_t ** stackBase)
 {
 
-    void * stackBase = allocMemory(MEM_BLOCK_SIZE);
-    uint64 * rsp = initProcessStack(mainFunc,stackBase,argc,args);
+    *stackBase = allocMemory(MEM_BLOCK_SIZE);
+    uint64_t * rsp = initProcessStack(mainFunc,*stackBase,argc,args);
     return rsp;
 
     //pushFlags, entryPoint, bp

@@ -6,7 +6,7 @@ typedef struct  schedulerCDT{
     uint8_t currentPid;
     uint8_t nextUPid;
     PCB procesess[MAX_PROCESSES];
-    processNames[1];
+    processNames names[1];
 }schedulerCDT;
 
 
@@ -18,8 +18,8 @@ void initScheduler()
     for (int i = 0; i < MAX_PROCESSES; ++i) {
         sch->procesess[i].state = NOT_EXISTS;
     }
-    sch->processNames[0]->name = "endless_loop";
-    sch->processNames[0]->mainFunc = 0; //puntero a la funcion del proceso
+    sch->names[0].name = "endless_loop";
+    sch->names[0].mainFunc = (void *)0; //puntero a la funcion del proceso
 }
 
 uint8_t * scheduler(uint8_t * currentSP)
@@ -48,21 +48,31 @@ uint8_t * scheduler(uint8_t * currentSP)
    return currentSP;
 }
 
-uint8_t createProcess(char * name,uint8_t argc, char ** args, )
+uint8_t createProcess(char * name,uint8_t argc, char * args[])
 {
     void * mainFunc;
     char found = 0;
     for (int i = 0; i < 1 && !found; ++i) {
-        if(strcmp(name,sch->procesessNames[i]->name) == 0)
+        if(strcmp(name,sch->names[i].name) == 0)
         {
-            mainFunc = sch->procesessNames[i]->mainFunc;
+            mainFunc = sch->names[i].mainFunc;
             found = 1;
         }
     }
-    uint64 * initProcess(mainFunc,argc,args);
-    sch->processes[currentRunningProcesess].state = ready;
-    sch->procesess[currentRunningProcesess].PCB->processPid = currentRunningProceses;
-    //currentRunningProcesse++
+    if(!found){
+        return -1;
+    }
+
+    uint64_t * base;
+    uint64_t * stackPointer = initProcess(mainFunc,argc,args, &base);
+    sch->procesess[currentRunningProceses].state = READY;
+    sch->procesess[currentRunningProceses].processPid = currentRunningProceses;
+    sch->procesess[currentRunningProceses].RSP = stackPointer;
+    sch->procesess[currentRunningProceses].stackBase = base;
+    sch->procesess[currentRunningProceses].argc = argc;
+    sch->procesess[currentRunningProceses].argv = args;
+    currentRunningProceses++;
+    return sch->procesess[currentRunningProceses].processPid;
     //sch->procesess[currentPid].RSP = currentSP;
     return -1;
 }

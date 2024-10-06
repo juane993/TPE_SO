@@ -142,14 +142,14 @@ saveRegisters:
 initProcessStack:
     mov r8, rsp 	; Preservar rsp
     mov r9, rbp		; Preservar rbp
-    mov rsp, rdx 	; Carga sp del proceso
-    mov rbp, rdx
+    mov rsp, rsi 	; Carga sp del proceso
+    mov rbp, rsi
     push 0x0        ; Código de error (o 0 como valor inicial)
     push rdx        ; Dirección de pila
     push 0x202      ; Valor de FLAGS (0x202 habilita interrupciones)
     push 0x8        ; Selector de segmento de código
     push rdi        ; Dirección de retorno (RIP para el proceso)
-    mov rdi, rsi 	; Primer argumento de wrapper, RIP
+    mov rdi, rdx 	; Primer argumento, argc
     mov rsi, rcx	; Segundo argumento, args
     pushState
     mov rax, rsp
