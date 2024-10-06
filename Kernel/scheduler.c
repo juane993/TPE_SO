@@ -30,6 +30,7 @@ void initScheduler()
 
 uint8_t * scheduler(uint8_t * currentSP)
 {
+    return currentSP;
    uint8_t currentPid = sch->currentPid;
    sch->procesess[currentPid].RSP = currentSP;
 
@@ -45,7 +46,6 @@ uint8_t * scheduler(uint8_t * currentSP)
    for (int i = 0; i < currentPid; i++) {
        if(sch->procesess[i].state == READY)
        {
-           found = 1;
            currentPid = i;
            return sch->procesess[i].RSP;
        }
@@ -54,7 +54,7 @@ uint8_t * scheduler(uint8_t * currentSP)
    return currentSP;
 }
 
-uint8_t createProcess(void * entryPoint, char ** args, uint_8 argc)
+uint8_t createProcess(void * entryPoint, char ** args, uint8_t argc)
 {
     //RSP = malloc;
     //pushFlags, entryPoint, bp
@@ -63,7 +63,17 @@ uint8_t createProcess(void * entryPoint, char ** args, uint_8 argc)
     //currentRunningProcesse++
     //int 20
     //
-    
+    return -1;
+}
+
+int32_t kill(int32_t pid){
+    return -1;
+}
+int32_t block(int32_t pid){
+    return -1;
+}
+int32_t unblock(int32_t pid){
+    return -1;
 }
 
 

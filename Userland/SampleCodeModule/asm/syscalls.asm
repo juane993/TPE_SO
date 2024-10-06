@@ -14,6 +14,11 @@ GLOBAL setFontColor
 GLOBAL getFontColor
 GLOBAL allocMemory
 GLOBAL my_free
+GLOBAL my_create_process
+GLOBAL my_kill
+GLOBAL my_block
+GLOBAL my_unblock
+
 
 read:
     mov rax, 0
@@ -88,5 +93,25 @@ allocMemory:
 
 my_free:
     mov rax, 14
+    int 80h
+    ret
+
+my_create_process:
+    mov rax, 15
+    int 80h
+    ret
+
+my_kill:
+    mov rax, 16
+    int 80h
+    ret
+
+my_block:
+    mov rax, 17
+    int 80h
+    ret
+
+my_unblock:
+    mov rax, 18
     int 80h
     ret

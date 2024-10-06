@@ -7,6 +7,7 @@
 #include <time.h>
 #include <memory.h>
 #include <MemoryManager.h>
+#include <scheduler.h>
 
 /* File Descriptors*/
 #define STDIN 0
@@ -31,6 +32,10 @@
 
 #define MALLOC  13
 #define FREE    14
+#define CREATE_PROCESS 15
+#define KILL_PROC 16
+#define BLOCK_PROC 17
+#define UNBLOCK_PROC 18
 
 static uint8_t syscall_read(uint32_t fd);
 static void syscall_write(uint32_t fd, char c);
@@ -47,6 +52,10 @@ static void syscall_setFontColor(uint8_t r, uint8_t g, uint8_t b);
 static uint32_t syscall_getFontColor();
 static void *syscall_malloc(uint64_t size);
 static void syscall_free(void *ptr);
+static int32_t syscall_create_process(char * name, int8_t argc, char*argv[]);
+static int32_t syscall_kill(int32_t pid);
+static int32_t syscall_block(int32_t pid);
+static int32_t syscall_unblock(int32_t pid);
 
 
 uint64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
@@ -85,10 +94,18 @@ uint64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t a
         case GET_FONT_COLOR:
             return syscall_getFontColor();
         case MALLOC:
-            return syscall_malloc((uint64_t) arg0);
+            return (uint64_t) syscall_malloc((uint64_t) arg0);
         case FREE:
             syscall_free((void *)arg0);
             break;
+        case CREATE_PROCESS:
+            return syscall_create_process((char *) arg0, (int8_t) arg1,(char **) arg2);
+        case KILL_PROC:
+            return syscall_kill((int32_t) arg0);
+        case BLOCK_PROC:
+            return syscall_block((int32_t) arg0);
+        case UNBLOCK_PROC:
+            return syscall_unblock((int32_t) arg0);
     }
     return 0;
 }
@@ -185,4 +202,20 @@ static void *syscall_malloc(uint64_t size) {
 // Free
 static void syscall_free(void *ptr) {
      my_free(ptr);
+}
+
+static int32_t syscall_create_process(char * name, int8_t argc, char*argv[])
+{
+    return createProcess(name,argc,argv);
+}
+
+static int32_t syscall_kill(int32_t pid){
+    return kill(pid);
+}
+static int32_t syscall_block(int32_t pid){
+    return block(pid);
+}
+static int32_t syscall_unblock(int32_t pid)
+{
+    return unblock(pid);
 }
