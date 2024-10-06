@@ -1,6 +1,4 @@
-//
-// Created by Nep on 9/20/2024.
-//
+
 
 #ifndef TPE_SO_MEMORYMANAGER_H
 #define TPE_SO_MEMORYMANAGER_H

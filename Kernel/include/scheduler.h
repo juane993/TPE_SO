@@ -5,6 +5,8 @@
 #define MAX_PROCESSES 70
 
 #include <stdint.h>
+#include <process.h>
+
 
 typedef enum {
     READY,

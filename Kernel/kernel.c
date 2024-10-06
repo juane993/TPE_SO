@@ -4,6 +4,7 @@
 #include <interrupts.h>
 #include <video.h>
 #include <MemoryManager.h>
+#include <defs.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -44,7 +45,7 @@ void initializeKernelBinary()
 int main()
 {	
 	load_idt();
-    createMemoryManager(20);
+    createMemoryManager(MEM_BLOCK_SIZE);
 	((EntryPoint)sampleCodeModuleAddress)();
 
 	while(1) _hlt();

@@ -5,8 +5,28 @@ GLOBAL getKeyPressed
 GLOBAL startSound
 GLOBAL stopSound
 GLOBAL saveRegisters
+GLOBAL initProcessStack
 
 section .text
+
+
+%macro pushState 0
+	push rax
+	push rbx
+	push rcx
+	push rdx
+	push rbp
+	push rdi
+	push rsi
+	push r8
+	push r9
+	push r10
+	push r11
+	push r12
+	push r13
+	push r14
+	push r15
+%endmacro
     
 cpuVendor:
     push rbp
@@ -119,4 +139,23 @@ saveRegisters:
     call copyRegisters
     ret
 
+initProcessStack:
+    mov r8, rsp 	; Preservar rsp
+    mov r9, rbp		; Preservar rbp
+    mov rsp, rdx 	; Carga sp del proceso
+    mov rbp, rdx
+    push 0x0        ; Código de error (o 0 como valor inicial)
+    push rdx        ; Dirección de pila
+    push 0x202      ; Valor de FLAGS (0x202 habilita interrupciones)
+    push 0x8        ; Selector de segmento de código
+    push rdi        ; Dirección de retorno (RIP para el proceso)
+    mov rdi, rsi 	; Primer argumento de wrapper, RIP
+    mov rsi, rcx	; Segundo argumento, args
+    pushState
+    mov rax, rsp
+    mov rsp, r8
+    mov rbp, r9
+    ret
 
+
+;	process->stackPos = _initialize_stack_frame(&processWrapper, code, stackEnd, (void *) process->argv);

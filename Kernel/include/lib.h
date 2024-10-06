@@ -78,5 +78,8 @@ void saveRegisters();
  * @brief  Detiene la ejecucion del programa hasta que se produzca una interrupcion
  */
 void _hlt();
+
+void initProcessStack(void * main, void * stackBase,uint8_t argc, char ** argv);
+
 #endif
 
