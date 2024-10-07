@@ -37,6 +37,7 @@ int64_t test_processes(char *argv) {
         alive++;
       }
     }
+      printf("sucessfully created procesess\n");
 
     // Randomly kills, blocks or unblocks processes until every one has been killed
     while (alive > 0) {

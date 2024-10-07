@@ -8,7 +8,7 @@
 
 #define NULL ((void *)0)
 
-#define BLOCK_COUNT 20
+#define BLOCK_COUNT 70
 #define START_FREE_MEM 0x600000
 
 void createMemoryManager(int size);

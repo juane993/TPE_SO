@@ -48,11 +48,13 @@ uint8_t * scheduler(uint8_t * currentSP)
    return currentSP;
 }
 
-uint8_t createProcess(char * name,uint8_t argc, char * args[])
+int8_t createProcess(char * name,uint8_t argc, char * args[])
 {
+
     void * mainFunc;
     char found = 0;
     for (int i = 0; i < 1 && !found; ++i) {
+        char * auxi = sch->names[i].name;
         if(strcmp(name,sch->names[i].name) == 0)
         {
             mainFunc = sch->names[i].mainFunc;
@@ -65,6 +67,9 @@ uint8_t createProcess(char * name,uint8_t argc, char * args[])
 
     uint64_t * base;
     uint64_t * stackPointer = initProcess(mainFunc,argc,args, &base);
+    if(stackPointer == NULL){
+        return -1;
+    }
     sch->procesess[currentRunningProceses].state = READY;
     sch->procesess[currentRunningProceses].processPid = currentRunningProceses;
     sch->procesess[currentRunningProceses].RSP = stackPointer;
@@ -74,7 +79,6 @@ uint8_t createProcess(char * name,uint8_t argc, char * args[])
     currentRunningProceses++;
     return sch->procesess[currentRunningProceses].processPid;
     //sch->procesess[currentPid].RSP = currentSP;
-    return -1;
 }
 
 int32_t kill(int32_t pid){
