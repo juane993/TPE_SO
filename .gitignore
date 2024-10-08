@@ -22,3 +22,4 @@ Kernel/kernel.elf
 Userland/0000-sampleCodeModule.elf
 .bash_history
 *.elf
+compile.sh
