@@ -3,7 +3,12 @@
 //
 #include <process.h>
 
+void endlessLoop()
+{
+    while(1);
+}
 
+void (*endlessLoopPtr)() = endlessLoop;
 
 uint64_t initProcess(PCB * process ,void * mainFunc,uint8_t argc, char ** args, uint8_t currentRunningProcesses)
 {

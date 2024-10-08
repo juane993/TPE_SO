@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <stdio.h>
-#include "syscalls.h"
+#include <syscalls.h>
 
 // Random
 static uint32_t m_z = 362436069;
@@ -61,7 +61,9 @@ void bussy_wait(uint64_t n) {
 
 void endless_loop() {
   while (1)
-    ;
+  {
+      printf("endless loop\n");
+  }
 }
 
 void endless_loop_print(uint64_t wait) {

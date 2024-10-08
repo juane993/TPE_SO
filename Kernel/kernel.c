@@ -47,7 +47,7 @@ int main()
 {	
 	load_idt();
     createMemoryManager(MEM_BLOCK_SIZE);
-    initScheduler();
+   // initScheduler();
 	((EntryPoint)sampleCodeModuleAddress)();
 
 	while(1) _hlt();

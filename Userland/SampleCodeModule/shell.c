@@ -10,6 +10,7 @@
 #include <test_mm.h>
 #include <test_processes.h>
 
+
 /* Enum para la cantidad de argumentos recibidos */
 typedef enum {NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM} functionType;    
 #define QTY_BYTES 32 /* Cantidad de bytes de respuesta del printmem */
@@ -47,12 +48,13 @@ static void printMem(char * pos);
 static int getCommandIndex(char * command);
 
 
+
 static Command commands[QTY_COMMANDS];
 
 void init() {
     commands[0] = (Command){"help", "Listado de comandos", .f = (void*) &help, NO_PARAMS};
     commands[1] = (Command){ "man", "Manual de uso de los comandos", .g = (void*) &man, SINGLE_PARAM};
-    commands[2] = (Command){"inforeg", "Informacion de los registos que fueron capturados en un momento arbitrario de ejecucion del sistema", .f = (void*)&printInfoReg, NO_PARAMS}; 
+    commands[2] = (Command){"inforeg", "Informacion de los registos que fueron capturados en un momento arbitrario de ejecucion del sistema", .f = (void*)&printInfoReg, NO_PARAMS};
     commands[3] = (Command){"time", "Despliega la hora actual UTC - 3", .f = (void*) &time, NO_PARAMS};
     commands[4] = (Command){ "div", "Hace la division entera de dos numeros naturales enviados por parametro", .h = (void*) &div, DUAL_PARAM};
     commands[5] = (Command){ "kaboom", "Ejecuta una excepcion de Invalid Opcode", .f = (void*) &kaboom, NO_PARAMS};
@@ -65,6 +67,8 @@ void init() {
     commands[12] = (Command){ "testprocess", "test processes", .f = (void*) &test_processes, SINGLE_PARAM};
 }
 
+
+
 void run_shell() {
     init();
     int index;
@@ -74,7 +78,7 @@ void run_shell() {
         char command[MAX_CHARS] = {0};
         char arg1[MAX_CHARS];
         char arg2[MAX_CHARS];
-        int qtyParams = scanf("%s %s %s", command, arg1, arg2); 
+        int qtyParams = scanf("%s %s %s", command, arg1, arg2);
         index = getCommandIndex(command);
         if (index == -1) {
             if (command[0] != 0)
@@ -89,7 +93,7 @@ void run_shell() {
         }
         switch (commands[index].ftype)
         {
-            case NO_PARAMS: 
+            case NO_PARAMS:
                 commands[index].f();
                 break;
             case SINGLE_PARAM:
@@ -185,3 +189,5 @@ static void man(char * command){
     else
         printErr(INVALID_COMMAND);
 }
+
+

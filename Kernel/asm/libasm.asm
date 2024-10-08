@@ -139,7 +139,40 @@ saveRegisters:
     call copyRegisters
     ret
 
+%macro pushStateNoRax 0
+    push rbx
+    push rcx
+    push rdx
+    push rbp
+    push rdi
+    push rsi
+    push r8
+    push r9
+    push r10
+    push r11
+    push r12
+    push r13
+    push r14
+    push r15
+%endmacro
+
 initProcessStack:
+;; TODO: Alineamiento???
+;	mov r8, rsp
+;	mov rsp, rsi
+;	push 0x0
+;	push rdx
+;	push 0x202
+;	push 0x8
+;	push rdi
+;	mov rdi, rdi
+;	mov rsi, rcx
+;	push 0x0
+;	pushStateNoRax
+;	mov rax, rsp
+;	mov rsp, r8
+;	ret
+
     mov r8, rsp 	; Preservar rsp
     mov r9, rbp		; Preservar rbp
     mov rsp, rsi 	; Carga sp del proceso

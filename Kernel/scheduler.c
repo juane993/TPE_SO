@@ -1,34 +1,39 @@
 #include <scheduler.h>
 
-uint8_t currentRunningProceses = 1;
+uint8_t currentRunningProceses = 0;
 
 typedef struct  schedulerCDT{
     uint8_t currentPid;
     uint8_t nextUPid;
     PCB procesess[MAX_PROCESSES];
-    processNames names[1];
 }schedulerCDT;
 
 
 schedulerADT sch;
+char initialized = 0;
 
 void initScheduler()
 {
     sch = (schedulerADT) SCHEDULER_ADDRESS;
+    sch->currentPid = 0;
+    sch->nextUPid = 0;
     for (int i = 0; i < MAX_PROCESSES; ++i) {
         sch->procesess[i].state = NOT_EXISTS;
     }
-    sch->names[0].name = "endless_loop";
-    sch->names[0].mainFunc = (void *)0; //puntero a la funcion del proceso
+    initialized = 1;
 }
 
 uint8_t * scheduler(uint8_t * currentSP)
 {
-    return currentSP;
+    if(!initialized)
+    {
+        initScheduler();
+    }
    uint8_t currentPid = sch->currentPid;
-   sch->procesess[currentPid].RSP = currentSP;
-
-
+    if(currentRunningProceses>1)
+    {
+        sch->procesess[currentPid].RSP = currentSP;
+    }
    for (int i = currentPid + 1; i < currentRunningProceses; i++) {
         if(sch->procesess[i].state == READY)
         {
@@ -44,26 +49,11 @@ uint8_t * scheduler(uint8_t * currentSP)
            return sch->procesess[i].RSP;
        }
    }
-
    return currentSP;
 }
 
-int8_t createProcess(char * name,uint8_t argc, char * args[])
+int8_t createProcess(void * mainFunc,uint8_t argc, char * args[])
 {
-    void * mainFunc;
-    char found = 0;
-    for (int i = 0; i < 1 && !found; ++i) {
-        char * auxi = sch->names[i].name;
-        if(strcmp(name,sch->names[i].name) == 0)
-        {
-            mainFunc = sch->names[i].mainFunc;
-            found = 1;
-        }
-    }
-    if(!found){
-        return -1;
-    }
-
     uint8_t pid = initProcess(&(sch->procesess[currentRunningProceses]),mainFunc,argc,args,currentRunningProceses);
 
     if(pid >= 0) {

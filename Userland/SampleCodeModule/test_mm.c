@@ -9,7 +9,7 @@
 
 void createMemoryManager(void *p, int s);
 
-#define MAX_BLOCKS 20
+#define MAX_BLOCKS 70
 
 typedef struct MM_rq {
     void *address;

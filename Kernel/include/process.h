@@ -13,10 +13,7 @@ typedef enum {
     NOT_EXISTS
 } State;
 
-typedef struct processNames{
-    char * name;
-    void * mainFunc;
-}processNames;
+
 
 typedef struct PCB {
     uint8_t priority;

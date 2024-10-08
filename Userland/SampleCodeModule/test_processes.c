@@ -11,6 +11,14 @@ typedef struct P_rq {
   enum State state;
 } p_rq;
 
+void endless_loop2()
+{
+    while (1){
+       // printf("loop\n");
+       ;
+    }
+}
+
 int64_t test_processes(char *argv) {
   uint8_t rq;
   uint8_t alive = 0;
@@ -27,7 +35,7 @@ int64_t test_processes(char *argv) {
 
     // Create max_processes processes
     for (rq = 0; rq < max_processes; rq++) {
-      p_rqs[rq].pid = my_create_process("endless_loop", 0, argvAux);
+      p_rqs[rq].pid = my_create_process(endless_loop2, 0, argvAux);
         printf("%d \n", p_rqs[rq].pid);
 
       if (p_rqs[rq].pid == -1) {
