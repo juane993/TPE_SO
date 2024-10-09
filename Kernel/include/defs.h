@@ -17,7 +17,21 @@
 #define ACS_INT         ( ACS_PRESENT | ACS_INT_386 )
 
 #define MEM_BLOCK_SIZE 1000
+#define LOGIC_DOWN (void *)0x5
 
+typedef enum {
+    LOW = 1,
+    MEDIUM = 5,
+    HIGH = 10,
+    SHELL = 20
+} Priority;
+
+typedef enum {
+    READY,
+    BLOCK,
+    RUNNING,
+    NOT_EXISTS
+} State;
 
 #define ACS_CODE        (ACS_PRESENT | ACS_CSEG | ACS_READ)
 #define ACS_DATA        (ACS_PRESENT | ACS_DSEG | ACS_WRITE)

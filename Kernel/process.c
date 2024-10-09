@@ -2,7 +2,7 @@
 // Created by juan on 06/10/24.
 //
 #include <process.h>
-
+#include <MemoryManager.h>
 void endlessLoop()
 {
     while(1);
@@ -10,7 +10,7 @@ void endlessLoop()
 
 void (*endlessLoopPtr)() = endlessLoop;
 
-uint64_t initProcess(PCB * process ,void * mainFunc,uint8_t argc, char ** args, uint8_t newProcessPid)
+uint64_t initProcess(PCB * process ,void * mainFunc,uint8_t argc, char ** args, uint8_t newProcessPid, Priority prio)
 {
 
     uint64_t *stackBase = allocMemory(MEM_BLOCK_SIZE);
@@ -21,6 +21,7 @@ uint64_t initProcess(PCB * process ,void * mainFunc,uint8_t argc, char ** args, 
     if(rsp == NULL){
         return -1;
     }
+    process->priority = prio;
     process->state = READY;
     process->processPid = newProcessPid;
     process->RSP = rsp;

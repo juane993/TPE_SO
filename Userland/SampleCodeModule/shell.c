@@ -9,6 +9,7 @@
 #include <libasm.h>
 #include <test_mm.h>
 #include <test_processes.h>
+#include <test_prio.h>
 
 
 /* Enum para la cantidad de argumentos recibidos */
@@ -65,6 +66,7 @@ void init() {
     commands[10] = (Command){ "clear", "Limpia toda la pantalla", .f = (void*) &clear, NO_PARAMS};
     commands[11] = (Command){ "memtest", "mem test", .f = (void*) &test_mm, NO_PARAMS};
     commands[12] = (Command){ "testprocess", "test processes", .f = (void*) &test_processes, SINGLE_PARAM};
+    commands[13] = (Command){ "testprio", "test priorities", .f = (void*) &test_prio, NO_PARAMS};
 }
 
 void createShellProc()

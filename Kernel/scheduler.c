@@ -1,6 +1,7 @@
 #include <scheduler.h>
 
 void deleteProcessPointers(uint32_t pid);
+void asignPriority(int32_t pid, Priority newPrio);
 
 uint8_t currentRoundRobbinPointers = 0;
 uint8_t shellRunning = 0;
@@ -108,19 +109,12 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio)
     if(!foundSpace){
         return -1;
     }
-    uint8_t pid = initProcess(&(sch->procesess[newProcessPid]),mainFunc,argc,args,newProcessPid);
+    uint8_t pid = initProcess(&(sch->procesess[newProcessPid]),mainFunc,argc,args,newProcessPid,prio);
 //    for (int i = currentRoundRobbinPointers; i < currentRoundRobbinPointers + prio; ++i) {
 //        sch->roundRobbinPointers[i] = &(sch->procesess[newProcessPid]);
 //    }
 
-    int ptrsLeftToAssign = prio;
-    for (int i = 0; i < MAX_PROCESSES * PRIORITY_LEVELS && ptrsLeftToAssign > 0; ++i) {
-        if(sch->roundRobbinPointers[i] == NULL)
-        {
-            sch->roundRobbinPointers[i] = &(sch->procesess[newProcessPid]);
-            ptrsLeftToAssign--;
-        }
-    }
+    asignPriority(pid,prio);
     if(pid >= 0) {
         currentRoundRobbinPointers += prio;
     }
@@ -157,6 +151,29 @@ int32_t block(int32_t pid){
     sch->procesess[pid].state = BLOCK;
     return pid;
 }
+
+int32_t nice(int32_t pid, Priority newPrio)
+{
+   if(sch->procesess[pid].state == NOT_EXISTS){
+       return -1;
+   }
+    deleteProcessPointers(pid);
+    asignPriority(pid,newPrio);
+    return pid;
+}
+
+void asignPriority(int32_t pid, Priority newPrio)
+{
+    int ptrsLeftToAssign = newPrio;
+    for (int i = 0; i < MAX_PROCESSES * PRIORITY_LEVELS && ptrsLeftToAssign > 0; ++i) {
+        if(sch->roundRobbinPointers[i] == NULL)
+        {
+            sch->roundRobbinPointers[i] = &(sch->procesess[pid]);
+            ptrsLeftToAssign--;
+        }
+    }
+}
+
 int32_t unblock(int32_t pid){
     if(sch->procesess[pid].state == NOT_EXISTS)
     {
@@ -165,6 +182,8 @@ int32_t unblock(int32_t pid){
     sch->procesess[pid].state = READY;
     return pid;
 }
+
+
 
 
 

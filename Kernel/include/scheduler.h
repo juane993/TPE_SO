@@ -8,13 +8,7 @@
 #include <stdint.h>
 #include <process.h>
 #include <string.h>
-
-typedef enum {
-  LOW = 1,
-  MEDIUM = 5,
-  HIGH = 10,
-  SHELL = 20
-} Priority;
+#include <defs.h>
 
 typedef struct schedulerCDT  *schedulerADT;
 uint8_t * scheduler(uint8_t * currentSP);
@@ -23,4 +17,5 @@ int8_t createProcess(void * name, uint8_t argc, char * args[], Priority prio);
 int32_t kill(int32_t pid);
 int32_t block(int32_t pid);
 int32_t unblock(int32_t pid);
+int32_t nice(int32_t pid, Priority newPrio);
 #endif

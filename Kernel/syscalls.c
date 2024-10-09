@@ -36,6 +36,7 @@
 #define KILL_PROC 16
 #define BLOCK_PROC 17
 #define UNBLOCK_PROC 18
+#define NICE_PROC 19
 
 static uint8_t syscall_read(uint32_t fd);
 static void syscall_write(uint32_t fd, char c);
@@ -56,6 +57,7 @@ static int32_t syscall_create_process(char * name, int8_t argc, char*argv[], Pri
 static int32_t syscall_kill(int32_t pid);
 static int32_t syscall_block(int32_t pid);
 static int32_t syscall_unblock(int32_t pid);
+static int32_t syscall_nice(int32_t pid, Priority prio);
 
 
 int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
@@ -106,6 +108,8 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
             return syscall_block((int32_t) arg0);
         case UNBLOCK_PROC:
             return syscall_unblock((int32_t) arg0);
+        case NICE_PROC:
+            return syscall_nice((int32_t) arg0, (Priority) arg2);
     }
     return 0;
 }
@@ -218,4 +222,9 @@ static int32_t syscall_block(int32_t pid){
 static int32_t syscall_unblock(int32_t pid)
 {
     return unblock(pid);
+}
+
+static int32_t syscall_nice(int32_t pid, Priority prio)
+{
+    return nice(pid, prio);
 }

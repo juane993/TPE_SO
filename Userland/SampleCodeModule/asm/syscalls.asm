@@ -18,6 +18,7 @@ GLOBAL my_create_process
 GLOBAL my_kill
 GLOBAL my_block
 GLOBAL my_unblock
+GLOBAL my_nice
 
 
 read:
@@ -113,5 +114,10 @@ my_block:
 
 my_unblock:
     mov rax, 18
+    int 80h
+    ret
+
+my_nice:
+    mov rax, 19
     int 80h
     ret

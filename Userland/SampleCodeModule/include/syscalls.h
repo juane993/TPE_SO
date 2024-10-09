@@ -118,4 +118,6 @@ int32_t my_block(int32_t pid);
 
 int32_t my_unblock(int32_t pid);
 
+int32_t my_nice(int32_t pid, Priority prio);
+
 #endif
