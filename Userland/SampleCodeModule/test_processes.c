@@ -27,16 +27,16 @@ int64_t test_processes(char *argv) {
   char *argvAux[] = {0};
 
   if ((max_processes = satoi(argv)) <= 0)
-    max_processes = 70;
+    max_processes = 69;
 
   p_rq p_rqs[max_processes];
-
-  while (1) {
+  char loops = 0;
+  while (loops < 70) {
 
     // Create max_processes processes
     for (rq = 0; rq < max_processes; rq++) {
       p_rqs[rq].pid = my_create_process(endless_loop2, 0, argvAux, LOW);
-        printf("%d \n", p_rqs[rq].pid);
+      //  printf("%d \n", p_rqs[rq].pid);
 
       if (p_rqs[rq].pid == -1) {
         printf("test_processes: ERROR creating process\n");
@@ -88,5 +88,8 @@ int64_t test_processes(char *argv) {
           p_rqs[rq].state = RUNNING;
         }
     }
+      printf("finished loop %d\n", loops);
+    loops++;
   }
+    return 0;
 }

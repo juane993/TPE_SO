@@ -28,5 +28,5 @@ typedef struct PCB {
 
 
 uint64_t initProcess(PCB * process, void * mainFunc,uint8_t argc, char ** args, uint8_t newProcessPid);
-
+uint32_t killProcess(PCB * process);
 #endif //TPE_SO_PROCESS_H

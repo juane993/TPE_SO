@@ -29,3 +29,14 @@ uint64_t initProcess(PCB * process ,void * mainFunc,uint8_t argc, char ** args, 
     process->argv = args;
     return process->processPid;
 }
+
+uint32_t killProcess(PCB * process)
+{
+    if(process->state == NOT_EXISTS)
+    {
+        return -1;
+    }
+    my_free(process->stackBase);
+    process->state = NOT_EXISTS;
+    return process->processPid;
+}

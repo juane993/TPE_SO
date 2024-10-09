@@ -1,8 +1,9 @@
 #include <scheduler.h>
 
-uint8_t currentRunningProceses = 0;
-uint8_t currentRoundRobbinPointers = 0;
+void deleteProcessPointers(uint32_t pid);
 
+uint8_t currentRoundRobbinPointers = 0;
+uint8_t shellRunning = 0;
 typedef struct  schedulerCDT{
     uint8_t currentPid;
     uint8_t nextUPid;
@@ -23,6 +24,9 @@ void initScheduler()
     for (int i = 0; i < MAX_PROCESSES; ++i) {
         sch->procesess[i].state = NOT_EXISTS;
     }
+    for (int i = 0; i < PRIORITY_LEVELS * MAX_PROCESSES; ++i) {
+        sch->roundRobbinPointers[i] = NULL;
+    }
     initialized = 1;
 }
 
@@ -32,7 +36,7 @@ uint8_t * scheduler(uint8_t * currentSP)
     {
         initScheduler();
     }
-    if(currentRunningProceses == 0)
+    if(!shellRunning)
     {
         return currentSP;
     }
@@ -40,7 +44,7 @@ uint8_t * scheduler(uint8_t * currentSP)
     sch->procesess[currentPid].RSP = currentSP;
     uint8_t roundRobinIndex = sch->currentRoundRobbinIndex;
     for (int i = roundRobinIndex + 1; i < currentRoundRobbinPointers; i++) {
-        if((*(sch->roundRobbinPointers[i])).state == READY)
+        if(sch->roundRobbinPointers[i] != NULL && (*(sch->roundRobbinPointers[i])).state == READY)
         {
             sch->currentRoundRobbinIndex = i;
             sch->currentPid = (*(sch->roundRobbinPointers[i])).processPid;
@@ -48,7 +52,7 @@ uint8_t * scheduler(uint8_t * currentSP)
         }
     }
        for (int i = 0; i < roundRobinIndex; i++) {
-           if((*(sch->roundRobbinPointers[i])).state == READY)
+           if(sch->roundRobbinPointers[i] != NULL &&(*(sch->roundRobbinPointers[i])).state == READY)
            {
                sch->currentRoundRobbinIndex = i;
                sch->currentPid = (*(sch->roundRobbinPointers[i])).processPid;
@@ -92,12 +96,7 @@ uint8_t * scheduler(uint8_t * currentSP)
 
 int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio)
 {
-
     uint8_t newProcessPid = 0;
-    if(currentRunningProceses >= MAX_PROCESSES)
-    {
-        return -1;
-    }
     char foundSpace = 0;
     for (int i = 0; i < MAX_PROCESSES && !foundSpace; ++i) {
         if(sch->procesess[i].state == NOT_EXISTS)
@@ -106,25 +105,65 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio)
             foundSpace = 1;
         }
     }
+    if(!foundSpace){
+        return -1;
+    }
     uint8_t pid = initProcess(&(sch->procesess[newProcessPid]),mainFunc,argc,args,newProcessPid);
-    for (int i = currentRoundRobbinPointers; i < currentRoundRobbinPointers + prio; ++i) {
-        sch->roundRobbinPointers[i] = &(sch->procesess[newProcessPid]);
+//    for (int i = currentRoundRobbinPointers; i < currentRoundRobbinPointers + prio; ++i) {
+//        sch->roundRobbinPointers[i] = &(sch->procesess[newProcessPid]);
+//    }
+
+    int ptrsLeftToAssign = prio;
+    for (int i = 0; i < MAX_PROCESSES * PRIORITY_LEVELS && ptrsLeftToAssign > 0; ++i) {
+        if(sch->roundRobbinPointers[i] == NULL)
+        {
+            sch->roundRobbinPointers[i] = &(sch->procesess[newProcessPid]);
+            ptrsLeftToAssign--;
+        }
     }
     if(pid >= 0) {
-        currentRunningProceses++;
         currentRoundRobbinPointers += prio;
+    }
+    if(prio == SHELL){
+        shellRunning = 1;
     }
     return pid;
 }
-
 int32_t kill(int32_t pid){
-    return -1;
+    if(pid == 0){
+        return -1;
+    }
+    uint32_t value = killProcess(&(sch->procesess[pid]));
+    if(value == -1){
+        return -1;
+    }
+    deleteProcessPointers(pid);
+    return pid;
+}
+void deleteProcessPointers(uint32_t pid)
+{
+    for (int i = 0; i < MAX_PROCESSES * PRIORITY_LEVELS; ++i) {
+        if(sch->roundRobbinPointers[i] == &(sch->procesess[pid]))
+        {
+            sch->roundRobbinPointers[i] = NULL;
+        }
+    }
 }
 int32_t block(int32_t pid){
-    return -1;
+    if(sch->procesess[pid].state == NOT_EXISTS)
+    {
+        return -1;
+    }
+    sch->procesess[pid].state = BLOCK;
+    return pid;
 }
 int32_t unblock(int32_t pid){
-    return -1;
+    if(sch->procesess[pid].state == NOT_EXISTS)
+    {
+        return -1;
+    }
+    sch->procesess[pid].state = READY;
+    return pid;
 }
 
 
