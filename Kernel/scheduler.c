@@ -30,14 +30,15 @@ uint8_t * scheduler(uint8_t * currentSP)
         initScheduler();
     }
    uint8_t currentPid = sch->currentPid;
-    if(currentRunningProceses>1)
-    {
-        sch->procesess[currentPid].RSP = currentSP;
-    }
+//    if(currentRunningProceses>1)
+//    {
+//        sch->procesess[currentPid].RSP = currentSP;
+//    }
    for (int i = currentPid + 1; i < currentRunningProceses; i++) {
         if(sch->procesess[i].state == READY)
         {
-            currentPid = i;
+            currentPid = i; //innecesario esta asignacion
+            sch->currentPid = i;
             return sch->procesess[i].RSP;
            // sch->procesess[i].state = RUNNING;
         }
@@ -46,6 +47,7 @@ uint8_t * scheduler(uint8_t * currentSP)
        if(sch->procesess[i].state == READY)
        {
            currentPid = i;
+           sch->currentPid = i;
            return sch->procesess[i].RSP;
        }
    }
