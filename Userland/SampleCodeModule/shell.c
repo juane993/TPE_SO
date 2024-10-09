@@ -67,7 +67,10 @@ void init() {
     commands[12] = (Command){ "testprocess", "test processes", .f = (void*) &test_processes, SINGLE_PARAM};
 }
 
-
+void createShellProc()
+{
+    my_create_process(run_shell, 1, (void *)5, SHELL);
+}
 
 void run_shell() {
     init();

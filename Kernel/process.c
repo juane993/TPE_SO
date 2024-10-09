@@ -10,7 +10,7 @@ void endlessLoop()
 
 void (*endlessLoopPtr)() = endlessLoop;
 
-uint64_t initProcess(PCB * process ,void * mainFunc,uint8_t argc, char ** args, uint8_t currentRunningProcesses)
+uint64_t initProcess(PCB * process ,void * mainFunc,uint8_t argc, char ** args, uint8_t newProcessPid)
 {
 
     uint64_t *stackBase = allocMemory(MEM_BLOCK_SIZE);
@@ -22,7 +22,7 @@ uint64_t initProcess(PCB * process ,void * mainFunc,uint8_t argc, char ** args, 
         return -1;
     }
     process->state = READY;
-    process->processPid = currentRunningProcesses;
+    process->processPid = newProcessPid;
     process->RSP = rsp;
     process->stackBase = stackBase;
     process->argc = argc;

@@ -4,6 +4,15 @@
 #include <stdint.h>
 #include <color.h>
 
+typedef enum {
+    LOW = 1,
+    MEDIUM = 5,
+    HIGH = 10,
+    SHELL = 20
+} Priority;
+
+
+
 /**
  * @brief Escribe a partir del descriptor recibido un caracter
  * @param fd: FileDescriptor (STDOUT | STDERR)
@@ -101,14 +110,12 @@ void * allocMemory (uint64_t size);
 
 void my_free(void * p);
 
-int32_t my_create_process(void * mainFunc, int8_t argc, char*argv[]);
+int32_t my_create_process(void * mainFunc, int8_t argc, char*argv[], Priority prio);
 
 int32_t my_kill(int32_t pid);
 
 int32_t my_block(int32_t pid);
 
 int32_t my_unblock(int32_t pid);
-
-
 
 #endif

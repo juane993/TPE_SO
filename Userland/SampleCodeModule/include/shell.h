@@ -7,4 +7,5 @@
  */
 void run_shell();
 
+void createShellProc();
 #endif
