@@ -81,5 +81,7 @@ void _hlt();
 
 uint64_t * initProcessStack(void * main, void * stackBase,uint8_t argc, char ** argv);
 
+void yield();
+
 #endif
 

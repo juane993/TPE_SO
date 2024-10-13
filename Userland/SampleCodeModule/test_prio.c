@@ -68,5 +68,5 @@ void test_prio() {
         my_kill(pids[i]);
 
         printf("\nTEST FINISHED\n");
-
+        my_exit();
 }

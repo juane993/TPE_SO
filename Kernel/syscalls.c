@@ -37,6 +37,8 @@
 #define BLOCK_PROC 17
 #define UNBLOCK_PROC 18
 #define NICE_PROC 19
+#define EXIT 20
+#define YIELD 21
 
 static uint8_t syscall_read(uint32_t fd);
 static void syscall_write(uint32_t fd, char c);
@@ -58,6 +60,9 @@ static int32_t syscall_kill(int32_t pid);
 static int32_t syscall_block(int32_t pid);
 static int32_t syscall_unblock(int32_t pid);
 static int32_t syscall_nice(int32_t pid, Priority prio);
+static void syscall_exit();
+static void syscall_yield();
+
 
 
 int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
@@ -110,6 +115,12 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
             return syscall_unblock((int32_t) arg0);
         case NICE_PROC:
             return syscall_nice((int32_t) arg0, (Priority) arg2);
+        case EXIT:
+            syscall_exit();
+            break;
+        case YIELD:
+            syscall_yield();
+            break;
     }
     return 0;
 }
@@ -199,7 +210,7 @@ static uint32_t syscall_getFontColor(){
 }
 
 // Malloc i
-static void *syscall_malloc(uint64_t size) {
+static void * syscall_malloc(uint64_t size) {
     return allocMemory(size);
 }
 
@@ -227,4 +238,12 @@ static int32_t syscall_unblock(int32_t pid)
 static int32_t syscall_nice(int32_t pid, Priority prio)
 {
     return nice(pid, prio);
+}
+
+static void syscall_exit(){
+    my_exit();
+}
+
+static void syscall_yield(){
+    yield();
 }

@@ -3,6 +3,7 @@
 void deleteProcessPointers(uint32_t pid);
 void asignPriority(int32_t pid, Priority newPrio);
 
+
 uint8_t currentRoundRobbinPointers = 0;
 uint8_t shellRunning = 0;
 typedef struct  schedulerCDT{
@@ -172,6 +173,12 @@ void asignPriority(int32_t pid, Priority newPrio)
             ptrsLeftToAssign--;
         }
     }
+}
+
+void my_exit()
+{
+    kill(sch->currentPid);
+    yield();
 }
 
 int32_t unblock(int32_t pid){

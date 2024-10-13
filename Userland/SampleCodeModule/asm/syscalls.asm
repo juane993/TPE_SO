@@ -19,7 +19,7 @@ GLOBAL my_kill
 GLOBAL my_block
 GLOBAL my_unblock
 GLOBAL my_nice
-
+GLOBAL my_exit
 
 read:
     mov rax, 0
@@ -119,5 +119,15 @@ my_unblock:
 
 my_nice:
     mov rax, 19
+    int 80h
+    ret
+
+my_exit:
+    mov rax, 20
+    int 80h
+    ret
+
+yield:
+    mov rax, 21
     int 80h
     ret

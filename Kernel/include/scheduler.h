@@ -9,6 +9,7 @@
 #include <process.h>
 #include <string.h>
 #include <defs.h>
+#include <lib.h>
 
 typedef struct schedulerCDT  *schedulerADT;
 uint8_t * scheduler(uint8_t * currentSP);
@@ -18,4 +19,5 @@ int32_t kill(int32_t pid);
 int32_t block(int32_t pid);
 int32_t unblock(int32_t pid);
 int32_t nice(int32_t pid, Priority newPrio);
+void my_exit();
 #endif

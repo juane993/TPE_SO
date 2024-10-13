@@ -120,4 +120,6 @@ int32_t my_unblock(int32_t pid);
 
 int32_t my_nice(int32_t pid, Priority prio);
 
+void my_exit();
+
 #endif

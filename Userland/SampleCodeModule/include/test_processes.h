@@ -2,6 +2,7 @@
 #define TPE_SO_TEST_PROCESSES_H
 
 #include <stdint.h>
+#include <syscalls.h>
 
 int64_t test_processes( char *argv);
 

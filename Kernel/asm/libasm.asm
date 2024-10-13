@@ -6,6 +6,7 @@ GLOBAL startSound
 GLOBAL stopSound
 GLOBAL saveRegisters
 GLOBAL initProcessStack
+GLOBAL yield
 
 section .text
 
@@ -133,6 +134,10 @@ stopSound:
 	and al, 0xFC
 	out 61h, al
   	ret
+
+yield:
+    int 20h
+    ret
 
 saveRegisters:
     mov rdi, rbp 

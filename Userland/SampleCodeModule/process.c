@@ -5,7 +5,7 @@ procesess proc[QTY_PROC];
 void initProcesess()
 {
 
-    proc[0].name = "testprocesses";
+    proc[0].name = "testproc";
     proc[0].entryPoint = test_processes;
 
     proc[1].name = "testprio";
