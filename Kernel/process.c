@@ -1,7 +1,7 @@
 #include <process.h>
 #include <MemoryManager.h>
 
-uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio) {
+uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio, BackgroundState bgState) {
     uint64_t *stackBase = allocMemory(MEM_BLOCK_SIZE);
     if (stackBase == NULL) {
         return -1;
@@ -19,6 +19,7 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
     process->stackBase = stackBase;
     process->argc = argc;
     process->argv = args;
+    process->bgState = bgState;
 
     return process->processPid;
 }

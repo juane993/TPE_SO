@@ -62,7 +62,7 @@ void bussy_wait(uint64_t n) {
 void endless_loop() {
   while (1)
   {
-      printf("endless loop\n");
+      printf("endless loop chuan\n");
   }
 }
 

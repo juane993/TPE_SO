@@ -110,7 +110,7 @@ void * allocMemory (uint64_t size);
 
 void my_free(void * p);
 
-int32_t my_create_process(void * mainFunc, int8_t argc, char*argv[], Priority prio);
+int32_t my_create_process(void * mainFunc, int8_t argc, char*argv[], Priority prio,char bgState);
 
 int32_t my_kill(int32_t pid);
 

@@ -53,7 +53,7 @@ static void syscall_setFontColor(uint8_t r, uint8_t g, uint8_t b);
 static uint32_t syscall_getFontColor();
 static void *syscall_malloc(uint64_t size);
 static void syscall_free(void *ptr);
-static int32_t syscall_create_process(char * name, int8_t argc, char*argv[], Priority prio);
+static int32_t syscall_create_process(char * name, int8_t argc, char*argv[], Priority prio, BackgroundState bgState);
 static int32_t syscall_kill(int32_t pid);
 static int32_t syscall_block(int32_t pid);
 static int32_t syscall_unblock(int32_t pid);
@@ -101,7 +101,7 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
             syscall_free((void *)arg0);
             break;
         case CREATE_PROCESS:
-            return syscall_create_process((char *) arg0, (int8_t) arg1,(char **) arg2, (Priority) arg3);
+            return syscall_create_process((char *) arg0, (int8_t) arg1,(char **) arg2, (Priority) arg3, (BackgroundState) arg4);
         case KILL_PROC:
             return syscall_kill((int32_t) arg0);
         case BLOCK_PROC:
@@ -208,9 +208,9 @@ static void syscall_free(void *ptr) {
      my_free(ptr);
 }
 
-static int32_t syscall_create_process(char * name, int8_t argc, char*argv[], Priority prio)
+static int32_t syscall_create_process(char * name, int8_t argc, char*argv[], Priority prio, BackgroundState bgState)
 {
-    return createProcess(name,argc,argv, prio);
+    return createProcess(name,argc,argv, prio, bgState);
 }
 
 static int32_t syscall_kill(int32_t pid){

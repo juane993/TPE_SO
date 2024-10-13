@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <syscalls.h>
 #include <test_util.h>
+#include <process.h>
 
 enum State { RUNNING,
              BLOCKED,
@@ -35,7 +36,7 @@ int64_t test_processes(char *argv) {
 
     // Create max_processes processes
     for (rq = 0; rq < max_processes; rq++) {
-      p_rqs[rq].pid = my_create_process(endless_loop2, 0, argvAux, LOW);
+      p_rqs[rq].pid = my_create_process(endless_loop2, 0, argvAux, LOW, BACKGROUND);
       //  printf("%d \n", p_rqs[rq].pid);
 
       if (p_rqs[rq].pid == -1) {

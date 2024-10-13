@@ -95,7 +95,7 @@ uint8_t * scheduler(uint8_t * currentSP)
 //   return sch->procesess[currentPid].RSP;
 //}
 
-int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio)
+int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio, BackgroundState bgState)
 {
     uint8_t newProcessPid = 0;
     char foundSpace = 0;
@@ -109,7 +109,7 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio)
     if(!foundSpace){
         return -1;
     }
-    uint8_t pid = initProcess(&(sch->procesess[newProcessPid]),mainFunc,argc,args,newProcessPid,prio);
+    uint8_t pid = initProcess(&(sch->procesess[newProcessPid]),mainFunc,argc,args,newProcessPid,prio, bgState);
 //    for (int i = currentRoundRobbinPointers; i < currentRoundRobbinPointers + prio; ++i) {
 //        sch->roundRobbinPointers[i] = &(sch->procesess[newProcessPid]);
 //    }

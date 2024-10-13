@@ -10,10 +10,11 @@
 #include <test_mm.h>
 #include <test_processes.h>
 #include <test_prio.h>
+#include <process.h>
 
 
 /* Enum para la cantidad de argumentos recibidos */
-typedef enum {NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM} functionType;    
+typedef enum {NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM, THREE_PARAM} functionType;
 #define QTY_BYTES 32 /* Cantidad de bytes de respuesta del printmem */
 #define DEFAULT_FONT_SIZE 1
 #define MIN_FONT_SIZE 1
@@ -33,6 +34,7 @@ typedef struct {
        int (*f)(void);
        int (*g)(char *);
        int (*h)(char *, char *);
+       int (*i)(char *, char *, char *);
     };
     functionType ftype;             // Cantidad de argumentos del comando
 } Command;
@@ -53,6 +55,7 @@ static int getCommandIndex(char * command);
 static Command commands[QTY_COMMANDS];
 
 void init() {
+    initProcesess();
     commands[0] = (Command){"help", "Listado de comandos", .f = (void*) &help, NO_PARAMS};
     commands[1] = (Command){ "man", "Manual de uso de los comandos", .g = (void*) &man, SINGLE_PARAM};
     commands[2] = (Command){"inforeg", "Informacion de los registos que fueron capturados en un momento arbitrario de ejecucion del sistema", .f = (void*)&printInfoReg, NO_PARAMS};
@@ -65,13 +68,14 @@ void init() {
     commands[9] = (Command){ "printmem", "Realiza un vuelco de memoria de los 32 bytes posteriores a una direccion de memoria en formato hexadecimal enviada por parametro", .g = (void*) &printMem, SINGLE_PARAM};
     commands[10] = (Command){ "clear", "Limpia toda la pantalla", .f = (void*) &clear, NO_PARAMS};
     commands[11] = (Command){ "memtest", "mem test", .f = (void*) &test_mm, NO_PARAMS};
-    commands[12] = (Command){ "testprocess", "test processes", .f = (void*) &test_processes, SINGLE_PARAM};
+    commands[12] = (Command){ "testprocess", "test processes", .g = (void*) &test_processes, SINGLE_PARAM};
     commands[13] = (Command){ "testprio", "test priorities", .f = (void*) &test_prio, NO_PARAMS};
+    commands[14] = (Command){ "runproc", "run a process", .i = (void*) &runProcess, THREE_PARAM};
 }
 
 void createShellProc()
 {
-    my_create_process(run_shell, 1, (void *)5, SHELL);
+    my_create_process(run_shell, 1, (void *)5, SHELL,FOREGROUND);
 }
 
 void run_shell() {
@@ -83,7 +87,8 @@ void run_shell() {
         char command[MAX_CHARS] = {0};
         char arg1[MAX_CHARS];
         char arg2[MAX_CHARS];
-        int qtyParams = scanf("%s %s %s", command, arg1, arg2);
+        char arg3[MAX_CHARS];
+        int qtyParams = scanf("%s %s %s %s", command, arg1, arg2, arg3);
         index = getCommandIndex(command);
         if (index == -1) {
             if (command[0] != 0)
@@ -106,6 +111,9 @@ void run_shell() {
                 break;
             case DUAL_PARAM:
                 commands[index].h(arg1, arg2);
+                break;
+            case THREE_PARAM:
+                commands[index].i(arg1, arg2, arg3);
                 break;
         }
     }
