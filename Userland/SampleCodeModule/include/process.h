@@ -24,7 +24,10 @@ typedef enum {
 
 
 int8_t runProcess(char *name,char * bgState, char *argv[]);
+int8_t kill(char *pid);
 
 void initProcesess();
+
+//void psPrint();
 
 #endif //TPE_SO_PROCESS_H

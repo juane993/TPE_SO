@@ -71,6 +71,9 @@ void init() {
     commands[12] = (Command){ "testprocess", "test processes", .g = (void*) &test_processes, SINGLE_PARAM};
     commands[13] = (Command){ "testprio", "test priorities", .f = (void*) &test_prio, NO_PARAMS};
     commands[14] = (Command){ "runproc", "run a process", .i = (void*) &runProcess, THREE_PARAM};
+    commands[15] = (Command){ "kill", "kill a process with pid ", .g = (void*) &kill, SINGLE_PARAM};
+//    commands[16] = (Command){"ps", "ps", .f = (void *) &psPrint, NO_PARAMS};
+
 }
 
 void createShellProc()
