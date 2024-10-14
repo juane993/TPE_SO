@@ -124,4 +124,6 @@ void my_exit();
 
 char * my_ps();
 
+void my_yield();
+
 #endif
