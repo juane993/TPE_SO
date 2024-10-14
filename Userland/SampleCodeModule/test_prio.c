@@ -11,7 +11,6 @@
 
 int64_t prio[TOTAL_PROCESSES] = {LOWEST, MEDIUM, HIGHEST};
 
-
 void bussy_wait2(uint64_t n) {
     uint64_t i;
     for (i = 0; i < n; i++)
@@ -27,8 +26,6 @@ void endless_loop_print2(uint64_t wait) {
         bussy_wait2(wait);
     }
 }
-
-
 
 void test_prio() {
    

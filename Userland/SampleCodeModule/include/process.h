@@ -27,6 +27,8 @@ int8_t runProcess(char *name,char * bgState, char *argv[]);
 int8_t kill(char *pid);
 
 void initProcesess();
+void run_test_proc(char * argv);
+void run_test_prio();
 
 //void psPrint();
 

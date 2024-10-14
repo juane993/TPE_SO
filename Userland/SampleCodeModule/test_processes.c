@@ -20,19 +20,19 @@ void endless_loop2()
     }
 }
 
-int64_t test_processes(char *argv) {
+int64_t test_processes(int argc,char *argv[]) {
   uint8_t rq;
   uint8_t alive = 0;
   uint8_t action;
   uint64_t max_processes;
   char *argvAux[] = {0};
 
-  if ((max_processes = satoi(argv)) <= 0)
+  if ((max_processes = satoi(argv[0])) <= 0)
     max_processes = 68;
 
   p_rq p_rqs[max_processes];
   char loops = 0;
-  while (loops < 70) {
+  while (loops <= 70) {
 
     // Create max_processes processes
     for (rq = 0; rq < max_processes; rq++) {
@@ -47,7 +47,7 @@ int64_t test_processes(char *argv) {
         alive++;
       }
     }
-      printf("sucessfully created procesess\n");
+
 
     // Randomly kills, blocks or unblocks processes until every one has been killed
     while (alive > 0) {
@@ -96,5 +96,6 @@ int64_t test_processes(char *argv) {
     loops++;
   }
     //return 0;
+    printf("finished with %d processes per loop\n", max_processes);
     my_exit();
 }

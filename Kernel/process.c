@@ -6,9 +6,19 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
     if (stackBase == NULL) {
         return -1;
     }
-
-    uint64_t *rsp = initProcessStack(mainFunc, stackBase, argc, args);
+    process->argc = argc;
+    process->argv = allocMemory(699);
+    for (int i = 0; i < argc; ++i) {
+        process->argv[i] = allocMemory(20);
+        memcpy(process->argv[i], args[i], 20);
+    }
+    uint64_t *rsp = initProcessStack(mainFunc, stackBase, argc, process->argv);
     if (rsp == NULL) {
+        for (int i = 0; i < argc; ++i) {
+            my_free(process->argv[i]);
+        }
+        my_free(process->argv);
+        my_free(stackBase);
         return -1;
     }
 
@@ -17,8 +27,8 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
     process->processPid = newProcessPid;
     process->RSP = rsp;
     process->stackBase = stackBase;
-    process->argc = argc;
-    process->argv = args;
+
+    //process->argv = args;
     process->bgState = bgState;
 
     return process->processPid;
@@ -28,9 +38,11 @@ uint32_t killProcess(PCB *process) {
     if (process->state == NOT_EXISTS) {
         return -1;
     }
-
+    for (int i = 0; i < process->argc; ++i) {
+        my_free(process->argv[i]);
+    }
+    my_free(process->argv);
     my_free(process->stackBase);
     process->state = NOT_EXISTS;
-
     return process->processPid;
 }

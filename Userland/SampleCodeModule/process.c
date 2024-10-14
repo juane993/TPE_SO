@@ -51,3 +51,12 @@ int8_t kill(char *pid)
     return 0;
 }
 
+void run_test_proc(char * argv)
+{
+    my_create_process(test_processes, 1, &argv, HIGH, FOREGROUND);
+}
+
+void run_test_prio(){
+    my_create_process(test_prio, 0, (void *) 0, HIGH, FOREGROUND);
+}
+

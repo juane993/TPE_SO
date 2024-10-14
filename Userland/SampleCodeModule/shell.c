@@ -69,17 +69,17 @@ void init() {
     commands[9] = (Command){ "printmem", "Realiza un vuelco de memoria de los 32 bytes posteriores a una direccion de memoria en formato hexadecimal enviada por parametro", .g = (void*) &printMem, SINGLE_PARAM};
     commands[10] = (Command){ "clear", "Limpia toda la pantalla", .f = (void*) &clear, NO_PARAMS};
     commands[11] = (Command){ "memtest", "mem test", .f = (void*) &test_mm, NO_PARAMS};
-    commands[12] = (Command){ "testprocess", "test processes", .g = (void*) &test_processes, SINGLE_PARAM};
-    commands[13] = (Command){ "testprio", "test priorities", .f = (void*) &test_prio, NO_PARAMS};
-    commands[14] = (Command){ "runproc", "run a process", .i = (void*) &runProcess, THREE_PARAM};
-    commands[15] = (Command){ "kill", "kill a process with pid ", .g = (void*) &kill, SINGLE_PARAM};
-    commands[16] = (Command){ "ps", "program status ", .f = (void*) &sys_ps, NO_PARAMS};
+    commands[12] = (Command){ "testprocess", "test processes", .g = (void*) &run_test_proc, SINGLE_PARAM};
+    commands[13] = (Command){ "testprio", "test priorities", .f = (void*) &run_test_prio, NO_PARAMS};
+    //commands[14] = (Command){ "runproc", "run a process", .i = (void*) &runProcess, THREE_PARAM};         TO-Implement
+    commands[14] = (Command){ "kill", "kill a process with pid ", .g = (void*) &kill, SINGLE_PARAM};
+    commands[15] = (Command){ "ps", "program status ", .f = (void*) &sys_ps, NO_PARAMS};
 
 }
 
 void createShellProc()
 {
-    my_create_process(run_shell, 1, (void *)5, SHELL,FOREGROUND);
+    my_create_process(run_shell, 0, (void *)0, SHELL,FOREGROUND);
 }
 
 void run_shell() {
