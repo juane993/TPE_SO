@@ -28,7 +28,7 @@ int64_t test_processes(char *argv) {
   char *argvAux[] = {0};
 
   if ((max_processes = satoi(argv)) <= 0)
-    max_processes = 69;
+    max_processes = 68;
 
   p_rq p_rqs[max_processes];
   char loops = 0;

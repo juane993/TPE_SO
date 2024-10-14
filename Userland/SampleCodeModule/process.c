@@ -29,7 +29,7 @@ int8_t runProcess(char *name,char * bgState, char *argv[] )
         if (strcmp(proc[i].name, name) == 0)
         {
 
-            char pid = my_create_process(proc[i].entryPoint, 0, argv, LOW, bg);
+            char pid = my_create_process(proc[i].entryPoint, 0, argv, HIGH, bg);
             printf("Creating process...with pid chuan: %d\n",pid);
             return pid;
         }
@@ -50,3 +50,4 @@ int8_t kill(char *pid)
     }
     return 0;
 }
+

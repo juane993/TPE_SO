@@ -122,4 +122,6 @@ int32_t my_nice(int32_t pid, Priority prio);
 
 void my_exit();
 
+char * my_ps();
+
 #endif

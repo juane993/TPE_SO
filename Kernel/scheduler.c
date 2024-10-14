@@ -4,14 +4,14 @@ void deleteProcessPointers(uint32_t pid);
 void asignPriority(int32_t pid, Priority newPrio);
 
 
-uint8_t currentRoundRobbinPointers = 0;
+uint16_t currentRoundRobbinPointers = 0;
 uint8_t shellRunning = 0;
 typedef struct  schedulerCDT{
     uint8_t currentPid;
     uint8_t nextUPid;
     uint8_t currentRoundRobbinIndex;
     PCB procesess[MAX_PROCESSES];
-    PCB * roundRobbinPointers[PRIORITY_LEVELS * MAX_PROCESSES]; //suficientemente grande
+    PCB * roundRobbinPointers[MAX_PRIO_LEVELS * MAX_PROCESSES + 10]; //suficientemente grande
 }schedulerCDT;
 
 schedulerADT sch;
@@ -26,7 +26,7 @@ void initScheduler()
     for (int i = 0; i < MAX_PROCESSES; ++i) {
         sch->procesess[i].state = NOT_EXISTS;
     }
-    for (int i = 0; i < PRIORITY_LEVELS * MAX_PROCESSES; ++i) {
+    for (int i = 0; i < MAX_PRIO_LEVELS * MAX_PROCESSES + 10; ++i) {
         sch->roundRobbinPointers[i] = NULL;
     }
     initialized = 1;
@@ -116,7 +116,7 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio,
 //    }
 
     asignPriority(pid,prio);
-    if(pid >= 0) {
+    if(pid >= 0 && currentRoundRobbinPointers < MAX_PROCESSES * MAX_PRIO_LEVELS + 10) {
         currentRoundRobbinPointers += prio;
     }
     if(prio == SHELL){
@@ -137,7 +137,7 @@ int32_t kill(int32_t pid){
 }
 void deleteProcessPointers(uint32_t pid)
 {
-    for (int i = 0; i < MAX_PROCESSES * PRIORITY_LEVELS; ++i) {
+    for (int i = 0; i < MAX_PROCESSES * MAX_PRIO_LEVELS + 10; ++i) {
         if(sch->roundRobbinPointers[i] == &(sch->procesess[pid]))
         {
             sch->roundRobbinPointers[i] = NULL;
@@ -166,7 +166,7 @@ int32_t nice(int32_t pid, Priority newPrio)
 void asignPriority(int32_t pid, Priority newPrio)
 {
     int ptrsLeftToAssign = newPrio;
-    for (int i = 0; i < MAX_PROCESSES * PRIORITY_LEVELS && ptrsLeftToAssign > 0; ++i) {
+    for (int i = 0; i < MAX_PROCESSES * MAX_PRIO_LEVELS + 10 && ptrsLeftToAssign > 0; ++i) {
         if(sch->roundRobbinPointers[i] == NULL)
         {
             sch->roundRobbinPointers[i] = &(sch->procesess[pid]);
@@ -188,6 +188,32 @@ int32_t unblock(int32_t pid){
     }
     sch->procesess[pid].state = READY;
     return pid;
+}
+
+char * ps()
+{
+    char * buffer = (char *) allocMemory(1000);
+    char * aux = buffer;
+    char itoaBuffer[5] = {0};
+    for (int i = 0; i < MAX_PROCESSES; ++i) {
+        if(sch->procesess[i].state != NOT_EXISTS)
+        {
+            strcpy(aux,"PID: ");
+            aux+= 5;
+            char len = itoa(i,itoaBuffer,10);
+            strcpy(aux,itoaBuffer);
+            aux+=len;
+            strcpy(aux,", State: ");
+            aux+= 9;
+            len = itoa(sch->procesess[i].state,itoaBuffer,10);
+            strcpy(aux,itoaBuffer);
+            aux+=len;
+            *aux = '\n';
+            aux++;
+            // aux += sprintf(aux,"PID: %d, Name: %s, Priority: %d, State: %d\n",i,sch->procesess[i].name,sch->procesess[i].priority,sch->procesess[i].state);
+        }
+    }
+    return buffer;
 }
 
 

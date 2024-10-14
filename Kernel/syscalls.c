@@ -39,6 +39,7 @@
 #define NICE_PROC 19
 #define EXIT 20
 #define YIELD 21
+#define PS 22
 
 static uint8_t syscall_read(uint32_t fd);
 static void syscall_write(uint32_t fd, char c);
@@ -62,6 +63,7 @@ static int32_t syscall_unblock(int32_t pid);
 static int32_t syscall_nice(int32_t pid, Priority prio);
 static void syscall_exit();
 static void syscall_yield();
+static char * syscall_ps();
 
 
 
@@ -121,6 +123,8 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
         case YIELD:
             syscall_yield();
             break;
+        case PS:
+            return syscall_ps();
     }
     return 0;
 }
@@ -246,4 +250,8 @@ static void syscall_exit(){
 
 static void syscall_yield(){
     yield();
+}
+
+static char * syscall_ps(){
+    return ps();
 }

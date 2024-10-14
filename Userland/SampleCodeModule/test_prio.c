@@ -23,7 +23,7 @@ void endless_loop_print2(uint64_t wait) {
     int64_t pid = 3;
 
     while (1) {
-        printf("%d ", pid);
+
         bussy_wait2(wait);
     }
 }

@@ -20,6 +20,8 @@ GLOBAL my_block
 GLOBAL my_unblock
 GLOBAL my_nice
 GLOBAL my_exit
+GLOBAL my_yield
+GLOBAL my_ps
 
 read:
     mov rax, 0
@@ -127,7 +129,12 @@ my_exit:
     int 80h
     ret
 
-yield:
+my_yield:
     mov rax, 21
+    int 80h
+    ret
+
+my_ps:
+    mov rax, 22
     int 80h
     ret

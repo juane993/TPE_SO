@@ -49,6 +49,7 @@ static void tronZen();
 static void fontSize(char * size);
 static void printMem(char * pos);
 static int getCommandIndex(char * command);
+static void sys_ps();
 
 
 
@@ -72,7 +73,7 @@ void init() {
     commands[13] = (Command){ "testprio", "test priorities", .f = (void*) &test_prio, NO_PARAMS};
     commands[14] = (Command){ "runproc", "run a process", .i = (void*) &runProcess, THREE_PARAM};
     commands[15] = (Command){ "kill", "kill a process with pid ", .g = (void*) &kill, SINGLE_PARAM};
-//    commands[16] = (Command){"ps", "ps", .f = (void *) &psPrint, NO_PARAMS};
+    commands[16] = (Command){ "ps", "program status ", .f = (void*) &sys_ps, NO_PARAMS};
 
 }
 
@@ -205,5 +206,12 @@ static void man(char * command){
     else
         printErr(INVALID_COMMAND);
 }
+
+static void sys_ps(){
+    char * ps = my_ps();
+    printf("%s", ps);
+    my_free((void *)ps);
+}
+
 
 
