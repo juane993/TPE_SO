@@ -24,4 +24,5 @@ int32_t unblock(int32_t pid);
 int32_t nice(int32_t pid, Priority newPrio);
 void my_exit();
 char * ps();
+int8_t my_get_pid();
 #endif

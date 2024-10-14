@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <syscalls.h>
 #include <process.h>
+#include <test_processes.h>
 
 void test_prio();
 

@@ -40,6 +40,7 @@
 #define EXIT 20
 #define YIELD 21
 #define PS 22
+#define GET_PID 23
 
 static uint8_t syscall_read(uint32_t fd);
 static void syscall_write(uint32_t fd, char c);
@@ -64,8 +65,7 @@ static int32_t syscall_nice(int32_t pid, Priority prio);
 static void syscall_exit();
 static void syscall_yield();
 static char * syscall_ps();
-
-
+static int8_t syscall_getpid();
 
 int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
     switch (nr) {
@@ -125,6 +125,8 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
             break;
         case PS:
             return syscall_ps();
+        case GET_PID:
+            return syscall_getpid();
     }
     return 0;
 }
@@ -254,4 +256,8 @@ static void syscall_yield(){
 
 static char * syscall_ps(){
     return ps();
+}
+
+static int8_t syscall_getpid(){
+    return my_get_pid();
 }

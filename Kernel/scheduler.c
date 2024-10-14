@@ -236,6 +236,10 @@ char * ps()
     return buffer;
 }
 
+int8_t my_get_pid(){
+    return sch->currentPid;
+}
+
 
 
 

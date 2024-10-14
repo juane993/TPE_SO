@@ -5,27 +5,13 @@
 #define WAIT 10000000      // TODO: Change this value to make the wait long enough to see theese processes beeing run at least twice
 
 #define TOTAL_PROCESSES 3
-#define LOWEST 0  // TODO: Change as required
+#define LOWEST 1  // TODO: Change as required
 #define MEDIUM 5  // TODO: Change as required
 #define HIGHEST 10 // TODO: Change as required
 
 int64_t prio[TOTAL_PROCESSES] = {LOWEST, MEDIUM, HIGHEST};
 
-void bussy_wait2(uint64_t n) {
-    uint64_t i;
-    for (i = 0; i < n; i++)
-        ;
-}
 
-void endless_loop_print2(uint64_t wait) {
-    //int64_t pid = my_getpid();
-    int64_t pid = 3;
-
-    while (1) {
-
-        bussy_wait2(wait);
-    }
-}
 
 void test_prio() {
    
@@ -34,15 +20,15 @@ void test_prio() {
       uint64_t i;
 
       for (i = 0; i < TOTAL_PROCESSES; i++)
-        pids[i] = my_create_process(endless_loop_print2, 0, argv,LOW,BACKGROUND);
+        pids[i] = my_create_process(endless_loop_print, 0, argv,LOW,BACKGROUND);
 
-      bussy_wait2(WAIT);
+      bussy_wait(WAIT);
       printf("\nCHANGING PRIORITIES...\n");
 
       for (i = 0; i < TOTAL_PROCESSES; i++)
         my_nice(pids[i], prio[i]);
 
-      bussy_wait2(WAIT);
+      bussy_wait(WAIT);
       printf("\nBLOCKING...\n");
 
       for (i = 0; i < TOTAL_PROCESSES; i++)
@@ -58,7 +44,7 @@ void test_prio() {
       for (i = 0; i < TOTAL_PROCESSES; i++)
         my_unblock(pids[i]);
 
-      bussy_wait2(WAIT);
+      bussy_wait(WAIT);
       printf("\nKILLING...\n");
 
       for (i = 0; i < TOTAL_PROCESSES; i++)

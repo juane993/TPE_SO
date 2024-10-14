@@ -126,4 +126,6 @@ char * my_ps();
 
 void my_yield();
 
+int8_t my_getPid();
+
 #endif

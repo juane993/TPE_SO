@@ -22,6 +22,7 @@ GLOBAL my_nice
 GLOBAL my_exit
 GLOBAL my_yield
 GLOBAL my_ps
+GLOBAL my_getPid
 
 read:
     mov rax, 0
@@ -136,5 +137,10 @@ my_yield:
 
 my_ps:
     mov rax, 22
+    int 80h
+    ret
+
+my_getPid:
+    mov rax,23
     int 80h
     ret
