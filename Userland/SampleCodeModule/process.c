@@ -30,7 +30,7 @@ int8_t runProcess(char *name,char * bgState, char *argv[] )
         {
 
             char pid = my_create_process(proc[i].entryPoint, 0, argv, HIGH, bg);
-            printf("Creating process...with pid chuan: %d\n",pid);
+            printf("Creating process...with pid%d\n",pid);
             return pid;
         }
     }

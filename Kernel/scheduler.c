@@ -193,24 +193,44 @@ int32_t unblock(int32_t pid){
 char * ps()
 {
     char * buffer = (char *) allocMemory(1000);
-    char * aux = buffer;
-    char itoaBuffer[5] = {0};
+    char * currentBufPos = buffer;
+    char itoaBuffer[10] = {0};
     for (int i = 0; i < MAX_PROCESSES; ++i) {
         if(sch->procesess[i].state != NOT_EXISTS)
         {
-            strcpy(aux,"PID: ");
-            aux+= 5;
+            strcpy(currentBufPos,"PID: ");
+            currentBufPos+= 5;
             char len = itoa(i,itoaBuffer,10);
-            strcpy(aux,itoaBuffer);
-            aux+=len;
-            strcpy(aux,", State: ");
-            aux+= 9;
+            strcpy(currentBufPos,itoaBuffer);
+            currentBufPos+=len;
+            strcpy(currentBufPos,", State: ");
+            currentBufPos+= 9;
             len = itoa(sch->procesess[i].state,itoaBuffer,10);
-            strcpy(aux,itoaBuffer);
-            aux+=len;
-            *aux = '\n';
-            aux++;
-            // aux += sprintf(aux,"PID: %d, Name: %s, Priority: %d, State: %d\n",i,sch->procesess[i].name,sch->procesess[i].priority,sch->procesess[i].state);
+            strcpy(currentBufPos,itoaBuffer);
+            currentBufPos+=len;
+            strcpy(currentBufPos,", Priority: ");
+            currentBufPos+= 12;
+            len = itoa(sch->procesess[i].priority,itoaBuffer,10);
+            strcpy(currentBufPos,itoaBuffer);
+            currentBufPos+=len;
+            strcpy(currentBufPos,", BasePointer: ");
+            currentBufPos+= 15;
+            len = itoa(sch->procesess[i].stackBase,itoaBuffer,16);
+            strcpy(currentBufPos,itoaBuffer);
+            currentBufPos+=len;
+            strcpy(currentBufPos,", StackPointer: ");
+            currentBufPos+= 16;
+            len = itoa(sch->procesess[i].RSP,itoaBuffer,16);
+            strcpy(currentBufPos,itoaBuffer);
+            currentBufPos+=len;
+            strcpy(currentBufPos,", BGState: ");
+            currentBufPos+= 11;
+            len = itoa(sch->procesess[i].bgState,itoaBuffer,10);
+            strcpy(currentBufPos,itoaBuffer);
+            currentBufPos+=len;
+            *currentBufPos = '\n';
+            currentBufPos++;
+
         }
     }
     return buffer;
