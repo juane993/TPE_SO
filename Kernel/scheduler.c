@@ -32,6 +32,23 @@ void initScheduler()
     initialized = 1;
 }
 
+schedulerADT getScheduler()
+{
+    return sch;
+}
+PCB * getProcessCurrentPid()
+{
+    return &(sch->procesess[sch->currentPid]);
+}
+PCB * getProcess(uint8_t pid)
+{
+    return &(sch->procesess[pid]);
+}
+uint8_t getCurrentPid()
+{
+    return sch->currentPid;
+}
+
 uint8_t * scheduler(uint8_t * currentSP)
 {
     if(!initialized)

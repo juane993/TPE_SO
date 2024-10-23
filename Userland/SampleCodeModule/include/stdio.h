@@ -5,6 +5,8 @@
 #define STDOUT 1
 #define STDERR 2
 #define KBDIN 3
+#define NULL (void *)0
+
 
 /* Cantidad maxima de caracteres para los buffers */
 #define MAX_CHARS 256
@@ -83,6 +85,8 @@ void printRegisters(const uint64_t * rsp);
  * @param fmt: Formato de lo que se desea escribir de STDOUT
  * @param ... 
  */
-void printfc(Color color, char * fmt, ...);    
+void printfc(Color color, char * fmt, ...);
+
+
 
 #endif

@@ -25,4 +25,9 @@ int32_t nice(int32_t pid, Priority newPrio);
 void my_exit();
 char * ps();
 int8_t my_get_pid();
+schedulerADT getScheduler();
+PCB * getProcessCurrentPid();
+PCB * getProcess(uint8_t pid);
+uint8_t getCurrentPid();
+
 #endif

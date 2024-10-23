@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <color.h>
+#include <semaphore.h>
 
 typedef enum {
     LOW = 1,
@@ -127,5 +128,13 @@ char * my_ps();
 void my_yield();
 
 int8_t my_getPid();
+
+int8_t my_semInit(uint8_t sem, uint8_t value);
+
+void my_wait(uint8_t sem);
+
+void my_post(uint8_t sem);
+
+void my_semClose(uint8_t sem);
 
 #endif

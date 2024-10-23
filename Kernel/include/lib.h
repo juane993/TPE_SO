@@ -83,5 +83,9 @@ uint64_t * initProcessStack(void * main, void * stackBase,uint8_t argc, char ** 
 
 void yield();
 
+void acquire(uint8_t * lock);
+
+void release(uint8_t * lock);
+
 #endif
 

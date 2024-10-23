@@ -6,6 +6,7 @@
 #include <MemoryManager.h>
 #include <defs.h>
 #include <scheduler.h>
+#include <semaphore.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -47,8 +48,10 @@ int main()
 {	
 	load_idt();
     createMemoryManager(MEM_BLOCK_SIZE);
+    initSemaphores();
    // initScheduler();
 	((EntryPoint)sampleCodeModuleAddress)();
+
 
 	while(1) _hlt();
 	return 0;

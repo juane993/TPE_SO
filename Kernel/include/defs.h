@@ -19,6 +19,9 @@
 #define MEM_BLOCK_SIZE 1000
 #define LOGIC_DOWN (void *)0x5
 
+#define NULL ((void *)0)
+#define EOF (-1)
+
 typedef enum {
     LOW = 1,
     MEDIUM = 5,

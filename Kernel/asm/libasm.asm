@@ -7,6 +7,8 @@ GLOBAL stopSound
 GLOBAL saveRegisters
 GLOBAL initProcessStack
 GLOBAL yield
+GLOBAL acquire
+GLOBAL release
 
 section .text
 
@@ -91,6 +93,20 @@ getKeyPressed:
 
     mov rsp, rbp
     pop rbp
+    ret
+
+
+acquire:
+    mov al, 0
+.retry:
+    xchg [rdi], al
+    test al, al
+    jz .retry
+    ret
+
+
+release:
+    mov byte [rdi], 0
     ret
 
 int_80:
