@@ -23,8 +23,8 @@ GLOBAL my_exit
 GLOBAL my_yield
 GLOBAL my_ps
 GLOBAL my_getPid
-GLOBAL my_wait
-GLOBAL my_post
+GLOBAL my_semWait
+GLOBAL my_semPost
 GLOBAL my_semInit
 GLOBAL my_semClose
 
@@ -150,13 +150,13 @@ my_getPid:
     int 80h
     ret
 
-my_wait:
+my_semWait:
     mov rax, 24
     int 80h
     call my_yield
     ret
 
-my_post:
+my_semPost:
     mov rax, 25
     int 80h
     ret

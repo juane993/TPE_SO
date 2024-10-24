@@ -74,6 +74,7 @@ void init() {
     //commands[14] = (Command){ "runproc", "run a process", .i = (void*) &runProcess, THREE_PARAM};         TO-Implement
     commands[14] = (Command){ "kill", "kill a process with pid ", .g = (void*) &kill, SINGLE_PARAM};
     commands[15] = (Command){ "ps", "program status ", .f = (void*) &sys_ps, NO_PARAMS};
+    commands[16] = (Command){ "testsync", "test de sincronizacion", .g = (void*) &run_test_sync, THREE_PARAM};
 
 }
 

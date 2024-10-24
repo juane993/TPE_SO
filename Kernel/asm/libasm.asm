@@ -106,8 +106,20 @@ acquire:
 
 
 release:
-    mov byte [rdi], 0
+    mov byte [rdi], 1
     ret
+
+;acquire:
+;    mov al, 1           ; Queremos bloquear con valor 1
+;.retry:
+;    xchg al, [rdi]       ; Intercambiamos al (1) con el lock
+;    test al, al          ; Verificamos el valor anterior
+;    jnz .retry           ; Si no era 0, significa que estaba bloqueado, reintentamos
+;    ret                  ; Si era 0, hemos adquirido el lock, regresamos
+;
+;release:
+;    mov byte [rdi], 0    ; Liberamos el lock escribiendo 0
+;    ret
 
 int_80:
     push rbp

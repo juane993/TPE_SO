@@ -131,9 +131,9 @@ int8_t my_getPid();
 
 int8_t my_semInit(uint8_t sem, uint8_t value);
 
-void my_wait(uint8_t sem);
+void my_semWait(uint8_t sem);
 
-void my_post(uint8_t sem);
+void my_semPost(uint8_t sem);
 
 void my_semClose(uint8_t sem);
 

@@ -9,8 +9,9 @@
 #include <test_util.h>
 #include <test_prio.h>
 #include <test_processes.h>
+#include <test_sync.h>
 
-#define QTY_PROC 3
+#define QTY_PROC 4
 
 typedef struct procesess{
     char * name;
@@ -29,6 +30,7 @@ int8_t kill(char *pid);
 void initProcesess();
 void run_test_proc(char * argv);
 void run_test_prio();
+void run_test_sync(char * arg1, char * arg2, char * arg3);
 
 //void psPrint();
 

@@ -22,6 +22,7 @@ int8_t sem_init(uint8_t semIndex, uint8_t value)
     {
         return -1;
     }
+    sem->id = semIndex;
     sem->value = value;
     sem->lock = value?1:0;
     sem->waitingIndex = 0;

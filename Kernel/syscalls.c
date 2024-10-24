@@ -43,8 +43,8 @@
 #define YIELD 21
 #define PS 22
 #define GET_PID 23
-#define WAIT 24
-#define POST 25
+#define SEMWAIT 24
+#define SEMPOST 25
 #define SEMINIT 26
 #define SEMFREE 27
 
@@ -74,8 +74,8 @@ static void syscall_yield();
 static char * syscall_ps();
 static int8_t syscall_getpid();
 
-static void syscall_wait(uint8_t id);
-static void syscall_post(uint8_t id);
+static void syscall_semWait(uint8_t id);
+static void syscall_semPost(uint8_t id);
 static int8_t syscall_semInit(uint8_t id, uint8_t value);
 static void syscall_semFree(uint8_t id);
 
@@ -139,11 +139,11 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
             return syscall_ps();
         case GET_PID:
             return syscall_getpid();
-        case WAIT:
-            syscall_wait((uint8_t) arg0);
+        case SEMWAIT:
+            syscall_semWait((uint8_t) arg0);
             break;
-        case POST:
-            syscall_post((uint8_t) arg0);
+        case SEMPOST:
+            syscall_semPost((uint8_t) arg0);
             break;
         case SEMINIT:
             return syscall_semInit((uint8_t) arg0, (uint8_t) arg1);
@@ -285,11 +285,11 @@ static int8_t syscall_getpid(){
     return my_get_pid();
 }
 
-static void syscall_wait(uint8_t id){
+static void syscall_semWait(uint8_t id){
      sem_wait(id);
 }
 
-static void syscall_post(uint8_t id){
+static void syscall_semPost(uint8_t id){
      sem_post(id);
 }
 

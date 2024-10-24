@@ -1,4 +1,4 @@
-#include "include/process.h"
+#include <process.h>
 
 procesess proc[QTY_PROC];
 
@@ -14,6 +14,8 @@ void initProcesess()
     proc[2].name = "endlessloop";
     proc[2].entryPoint = endless_loop;
 
+    proc[3].name = "testsync";
+    proc[3].entryPoint = test_sync;
 }
 
 int8_t runProcess(char *name,char * bgState, char *argv[] )
@@ -58,5 +60,10 @@ void run_test_proc(char * argv)
 
 void run_test_prio(){
     my_create_process(test_prio, 0, (void *) 0, HIGH, FOREGROUND);
+}
+
+void run_test_sync(char * arg1, char * argv2, char * argv3){
+    char * argv[] = {arg1, argv2, argv3};
+    my_create_process(test_sync, 3, argv, HIGH, FOREGROUND);
 }
 
