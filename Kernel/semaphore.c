@@ -1,14 +1,18 @@
 
 #include <semaphore.h>
 
+typedef struct semaphoreCDT{
+    sem_t semaphores[MAX_SEMAPHORES];
+} semaphoreCDT;
 
-sem_t * semaphores[MAX_SEMAPHORES];
-
+semaphoreADT semManager;
 
 void initSemaphores()
 {
+    semManager = (semaphoreADT) SEMPAHORE_MANAGER_ADDRESS;
     for (uint8_t i = 0; i < MAX_SEMAPHORES; i++) {
-        semaphores[i] = NULL;
+        //semManager->semaphores[i] = NULL;
+        semManager->semaphores[i].id = NOT_USED;
     }
     sem_init(MUTEX,1);
 }
@@ -16,9 +20,9 @@ void initSemaphores()
 
 int8_t sem_init(uint8_t semIndex, uint8_t value)
 {
-    semaphores[semIndex] = allocMemory(MAX_SEMAPHORES * sizeof(sem_t *));
-    sem_t * sem = semaphores[semIndex];
-    if(sem == NULL)
+   // semManager->semaphores[semIndex] = allocMemory( sizeof(sem_t *));
+    sem_t * sem = &(semManager->semaphores[semIndex]);
+    if(semIndex >= MAX_SEMAPHORES || sem->id != NOT_USED)
     {
         return -1;
     }
@@ -36,25 +40,26 @@ int8_t sem_init(uint8_t semIndex, uint8_t value)
 
 int8_t sem_free(uint8_t semIndex)
 {
-    sem_t * sem = semaphores[semIndex];
-    if(sem == NULL)
+    sem_t * sem = &(semManager->semaphores[semIndex]);
+    if(semIndex < 0 || semIndex >= MAX_SEMAPHORES || sem->id == NOT_USED)
     {
         return -1;
     }
-    my_free(sem->waiting);
-    my_free(sem);
-    semaphores[semIndex] = NULL;
+    //my_free(sem->waiting);
+    //my_free(sem);
+    sem->id = NOT_USED;
+    //semManager->semaphores[semIndex] = NULL;
     return 0;
 }
 
 void sem_wait(uint8_t semIndex)
 {
-    sem_t * sem = semaphores[semIndex];
-    if(sem == NULL)
+    sem_t * sem = &(semManager->semaphores[semIndex]);
+    if(semIndex < 0 || semIndex >= MAX_SEMAPHORES || sem->id == NOT_USED)
     {
         return;
     }
-    acquire(&(semaphores[MUTEX]->lock));
+    acquire(&(semManager->semaphores[MUTEX].lock));
 
     switch (sem->value) {
 
@@ -75,16 +80,16 @@ void sem_wait(uint8_t semIndex)
             sem->value--;
             break;
     }
-    release(&(semaphores[MUTEX]->lock));
+    release(&(semManager->semaphores[MUTEX].lock));
 }
 
 void sem_post(uint8_t semIndex)
 {
-    sem_t * sem = semaphores[semIndex];
-    if (sem == NULL) {
+    sem_t * sem = &(semManager->semaphores[semIndex]);
+    if (semIndex < 0 || semIndex >= MAX_SEMAPHORES || sem->id == NOT_USED) {
         return;
     }
-    acquire(&(semaphores[MUTEX]->lock));
+    acquire(&(semManager->semaphores[MUTEX].lock));
     switch (sem->value) {
         case 0:
             if(sem->waitingIndex == sem->postingIndex)
@@ -108,5 +113,5 @@ void sem_post(uint8_t semIndex)
             sem->value++;
             break;
     }
-    release(&(semaphores[MUTEX]->lock));
+    release(&(semManager->semaphores[MUTEX].lock));
 }

@@ -11,10 +11,13 @@
 int64_t global; // shared memory
 
 void slowInc(int64_t *p, int64_t inc) {
-  uint64_t aux = *p;
+    printf( "%d by process with pid: %d before \n", *p,my_getPid());
+  int64_t aux = *p;
   my_yield(); // This makes the race condition highly probable
   aux += inc;
+
   *p = aux;
+    printf( "%d by process with pid: %d after \n", *p,my_getPid());
 }
 
 uint64_t my_process_inc(uint64_t argc, char *argv[]) {
@@ -45,28 +48,21 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
     return -1;
   }
 
+  char pid = my_getPid();
 
-  if (use_sem)
-    if (my_semInit(SEM_ID, 1) == -1) {
-      printf("test_sync: ERROR opening semaphore\n");
-      my_exit();
-      return -1;
-    }
 
   uint64_t i;
   for (i = 0; i < n; i++) {
     if (use_sem)
-
         my_semWait(SEM_ID);
-    printf( "%d by process with pid: %d \n", global,my_getPid());
+
     slowInc(&global, inc);
     if (use_sem)
       my_semPost(SEM_ID);
   }
 
-  if (use_sem)
-   my_semClose(SEM_ID);
-    printf("Process %d finished\n", my_getPid());
+
+    printf("Process %d finished\n", pid);
   my_exit();
   return 0;
 }
@@ -78,6 +74,20 @@ uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
         my_exit();
         return -1;
     }
+
+    int8_t use_sem;
+    if ((use_sem = satoi(argv[2])) < 0)
+    {
+        my_exit();
+        return -1;
+    }
+
+//    if (use_sem)
+        if (my_semInit(SEM_ID, 1) == -1) {
+            printf("test_sync: ERROR opening semaphore\n");
+            my_exit();
+            return -1;
+        }
 
   char *argvDec[] = {argv[0], "-1", argv[1], NULL};
   char *argvInc[] = {argv[0], "1", argv[1], NULL};
@@ -97,6 +107,11 @@ uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
 //  }
 
   printf("Final value: %d\n", global);
+
+    if (use_sem){
+        //my_semClose(SEM_ID);
+    }
+
     my_exit();
 //  return 0;
 }
