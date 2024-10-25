@@ -206,7 +206,8 @@ initProcessStack:
 ;	mov rsp, r8
 ;	ret
 
-    mov r8, rsp 	; Preservar rsp
+
+    mov r10, rsp 	; Preservar rsp
     mov r9, rbp		; Preservar rbp
     mov rsp, rsi 	; Carga sp del proceso
     mov rbp, rsi
@@ -217,9 +218,10 @@ initProcessStack:
     push rdi        ; Dirección de retorno (RIP para el proceso)
     mov rdi, rdx 	; Primer argumento, argc
     mov rsi, rcx	; Segundo argumento, args
+    mov rdx, r8
     pushState
     mov rax, rsp
-    mov rsp, r8
+    mov rsp, r10
     mov rbp, r9
     ret
 

@@ -1,5 +1,6 @@
 #include <process.h>
 #include <MemoryManager.h>
+#include <scheduler.h>
 
 uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio, BackgroundState bgState) {
     uint64_t *stackBase = allocMemory(MEM_BLOCK_SIZE);
@@ -12,7 +13,7 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
         process->argv[i] = allocMemory(20);
         memcpy(process->argv[i], args[i], 20);
     }
-    uint64_t *rsp = initProcessStack(mainFunc, stackBase, argc, process->argv);
+    uint64_t *rsp = initProcessStack(processWrapper, stackBase, argc, process->argv, mainFunc);
     if (rsp == NULL) {
         for (int i = 0; i < argc; ++i) {
             my_free(process->argv[i]);
@@ -45,4 +46,12 @@ uint32_t killProcess(PCB *process) {
     my_free(process->stackBase);
     process->state = NOT_EXISTS;
     return process->processPid;
+}
+
+void processWrapper(char argc, char *argv[], void *mainFunc) {
+    uint64_t ret = ((int (*)(int, char **))mainFunc)(argc, argv);
+    while (1){
+        ;
+    }
+    killProcess(getCurrentPid());
 }
