@@ -265,22 +265,15 @@ int8_t my_get_pid(){
     return sch->currentPid;
 }
 
-//void waitForChildren(uint8_t pid)
+
+/// TODO implement
+//void waitForChildren()
 //{
-//    for (int i = 0; i < MAX_PROCESSES; ++i) {
-//        if(sch->procesess[i].parentPid == pid)
-//        {
-//            sch->procesess[i].waitingFor = ZOMBIE;
-//        }
+//    for (int i = 1; i < MAX_PROCESSES; ++i) {
+//        sch->procesess[i].waitingForMe[sch->procesess[i].waitingIndex] = getProcessCurrentPid();
+//        sch->procesess[i].waitingIndex++;
 //    }
 //}
-void waitForChildren()
-{
-    for (int i = 1; i < MAX_PROCESSES; ++i) {
-        sch->procesess[i].waitingForMe[sch->procesess[i].waitingIndex] = getProcessCurrentPid();
-        sch->procesess[i].waitingIndex++;
-    }
-}
 
 int8_t waitPid(uint8_t pid)
 {

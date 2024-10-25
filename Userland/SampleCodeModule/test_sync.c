@@ -74,6 +74,17 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
   return 0;
 }
 
+void shellWaitTest(){
+    printf("running testSync\n");
+    int a = 0;
+    for (uint64_t i = 0; i < 500000000; ++i) {
+        if(i == 250000000)
+            printf("mid Point\n");
+    }
+    printf("finished running testSync\n");
+    return 16;
+}
+
 uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
 
   uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
@@ -82,14 +93,11 @@ uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
       my_exit();
       return -1;
   }
-    printf("running testSync\n");
-  int a = 0;
-    for (uint64_t i = 0; i < 500000000; ++i) {
-        if(i == 250000000)
-            printf("mid Point\n");
-    }
-    printf("finished running testSync\n");
-    return 16;
+
+  shellWaitTest();
+   return 17;
+
+
 
 
   char *argvDec[] = {argv[0], "-1", argv[1],argv[2], NULL};
@@ -105,14 +113,12 @@ uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
   }
 
 
-
-  //falta implementar / to implement
+//  falta implementar / to implement
 //  for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-//    my_wait(pids[i]);
-//    my_wait(pids[i + TOTAL_PAIR_PROCESSES]);
+//    my_waitPid(pids[i]);
+//    my_waitPid(pids[i + TOTAL_PAIR_PROCESSES]);
 //  }
 
   printf("Final value: %d\n", global);
-my_exit();
   return 0;
 }
