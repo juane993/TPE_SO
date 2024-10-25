@@ -70,8 +70,7 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
 //  if (use_sem)
 //    my_sem_close(SEM_ID);
     printf("Process %d finished\n", pid);
-    my_exit();
-  return 0;
+    return 0;
 }
 
 void shellWaitTest(){
@@ -94,8 +93,8 @@ uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
       return -1;
   }
 
-  shellWaitTest();
-   return 17;
+//  shellWaitTest();
+//   return 17;
 
 
 
@@ -114,10 +113,15 @@ uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
 
 
 //  falta implementar / to implement
-//  for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-//    my_waitPid(pids[i]);
-//    my_waitPid(pids[i + TOTAL_PAIR_PROCESSES]);
-//  }
+
+
+
+  for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
+    my_waitPid(pids[i]);
+      printf("waiting for children with pid: %d\n",pids[0]);
+    my_waitPid(pids[i + TOTAL_PAIR_PROCESSES]);
+      printf("waiting for children with pid: %d\n",pids[i + TOTAL_PAIR_PROCESSES]);
+  }
 
   printf("Final value: %d\n", global);
   return 0;

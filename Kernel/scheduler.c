@@ -150,6 +150,7 @@ int32_t kill(int32_t pid){
         return -1;
     }
     deleteProcessPointers(pid);
+
     return pid;
 }
 void deleteProcessPointers(uint32_t pid)
@@ -292,9 +293,10 @@ int8_t waitPid(uint8_t pid)
 
 void unblockWaiters(uint8_t pid)
 {
-    for (int i = 0; i < MAX_PROCESSES; ++i) {
+    uint8_t waitingInex = sch->procesess[pid].waitingIndex;
+    for (int i = 0; i < waitingInex; ++i) {
         PCB * proc = sch->procesess[pid].waitingForMe[i];
-        if(proc != NULL)
+        if(proc != NULL && proc->state != NOT_EXISTS)
         {
             proc->state = READY;
         }
