@@ -127,7 +127,7 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio,
     if(!foundSpace){
         return -1;
     }
-    uint8_t pid = initProcess(&(sch->procesess[newProcessPid]),mainFunc,argc,args,newProcessPid,prio, bgState);
+    uint8_t pid = initProcess(&(sch->procesess[newProcessPid]),mainFunc,argc,args,newProcessPid,prio, bgState,sch->currentPid);
 //    for (int i = currentRoundRobbinPointers; i < currentRoundRobbinPointers + prio; ++i) {
 //        sch->roundRobbinPointers[i] = &(sch->procesess[newProcessPid]);
 //    }
@@ -167,6 +167,14 @@ int32_t block(int32_t pid){
         return -1;
     }
     sch->procesess[pid].state = BLOCK;
+    return pid;
+}
+int32_t zombie(int32_t pid){
+    if(sch->procesess[pid].state == NOT_EXISTS)
+    {
+        return -1;
+    }
+    sch->procesess[pid].state = ZOMBIE;
     return pid;
 }
 
@@ -256,6 +264,16 @@ char * ps()
 int8_t my_get_pid(){
     return sch->currentPid;
 }
+
+//void waitForChildren(uint8_t pid)
+//{
+//    for (int i = 0; i < MAX_PROCESSES; ++i) {
+//        if(sch->procesess[i].parentPid == pid)
+//        {
+//            sch->procesess[i].waitingFor = ZOMBIE;
+//        }
+//    }
+//}
 
 
 

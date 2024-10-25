@@ -2,7 +2,7 @@
 #include <MemoryManager.h>
 #include <scheduler.h>
 
-uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio, BackgroundState bgState) {
+uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio, BackgroundState bgState, uint8_t parentPid) {
     uint64_t *stackBase = allocMemory(MEM_BLOCK_SIZE);
     if (stackBase == NULL) {
         return -1;
@@ -28,6 +28,10 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
     process->processPid = newProcessPid;
     process->RSP = rsp;
     process->stackBase = stackBase;
+    process->parentPid = parentPid;
+    for (int i = 0; i < 40; ++i) {
+        process->waitingFor[i] = NULL;
+    }
 
     //process->argv = args;
     process->bgState = bgState;
@@ -50,8 +54,6 @@ uint32_t killProcess(PCB *process) {
 
 void processWrapper(char argc, char *argv[], void *mainFunc) {
     uint64_t ret = ((int (*)(int, char **))mainFunc)(argc, argv);
-    while (1){
-        ;
-    }
-    killProcess(getCurrentPid());
+    zombie(getCurrentPid());
+    yield();
 }

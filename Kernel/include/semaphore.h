@@ -31,4 +31,5 @@ void sem_wait(uint8_t  semIndex);
 void sem_post(uint8_t semIndex);
 void initSemaphores();
 
+
 #endif //TPE_SO_SEMAPHORE_H

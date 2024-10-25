@@ -33,7 +33,8 @@ typedef enum {
     READY,
     BLOCK,
     RUNNING,
-    NOT_EXISTS
+    NOT_EXISTS,
+    ZOMBIE
 } State;
 
 typedef enum {

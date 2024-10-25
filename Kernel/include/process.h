@@ -10,17 +10,18 @@
 typedef struct PCB {
     uint8_t priority;
     uint8_t processPid;
-    //uint8_t parentPid;
+    uint8_t parentPid;
     State state;
     BackgroundState bgState;
     uint8_t *RSP;
     uint8_t *stackBase;
     char **argv;
     uint8_t argc;
+    struct PCB * waitingFor[40];
 } PCB;
 
 void processWrapper(char argc, char *argv[],void * mainFunc);
-uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio, BackgroundState bgState);
+uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio, BackgroundState bgState, uint8_t parentPid);
 uint32_t killProcess(PCB *process);
 
 #endif // TPE_SO_PROCESS_H
