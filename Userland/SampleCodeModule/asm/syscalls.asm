@@ -27,6 +27,7 @@ GLOBAL my_semWait
 GLOBAL my_semPost
 GLOBAL my_semInit
 GLOBAL my_semClose
+GLOBAL my_waitPid
 
 
 read:
@@ -169,4 +170,10 @@ my_semInit:
 my_semClose:
     mov rax,27
     int 80h
+    ret
+
+my_waitPid:
+    mov rax, 28
+    int 80h
+    call my_yield
     ret

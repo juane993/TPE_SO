@@ -30,5 +30,8 @@ schedulerADT getScheduler();
 PCB * getProcessCurrentPid();
 PCB * getProcess(uint8_t pid);
 uint8_t getCurrentPid();
+void waitForChildren();
+int8_t waitPid(uint8_t pid);
+void unblockWaiters(uint8_t pid);
 
 #endif

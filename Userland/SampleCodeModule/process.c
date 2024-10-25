@@ -64,6 +64,8 @@ void run_test_prio(){
 
 void run_test_sync(char * arg1, char * argv2, char * argv3){
     char * argv[] = {arg1, argv2, argv3};
-    my_create_process(test_sync, 3, argv, HIGH, FOREGROUND);
+    uint8_t child = my_create_process(test_sync, 3, argv, HIGH, FOREGROUND);
+    my_waitPid(child);
+
 }
 

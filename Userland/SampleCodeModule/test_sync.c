@@ -22,6 +22,7 @@ void slowInc(int64_t *p, int64_t inc) {
         printf( "NEGATIVE by process with pid: %d after \n",my_getPid());
     else
         printf( "%d by process with pid: %d after. %s \n", *p,my_getPid(),inc>0?"i incremented":"i decremented");
+
 }
 
 uint64_t my_process_inc(uint64_t argc, char *argv[]) {
@@ -63,6 +64,7 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
     slowInc(&global, inc);
     if (use_sem)
       my_semPost(SEM_ID);
+
   }
 
 //  if (use_sem)
@@ -73,12 +75,21 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
 }
 
 uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
+
   uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
 
   if (argc != 3){
       my_exit();
       return -1;
   }
+    printf("running testSync\n");
+  int a = 0;
+    for (uint64_t i = 0; i < 500000000; ++i) {
+        if(i == 250000000)
+            printf("mid Point\n");
+    }
+    printf("finished running testSync\n");
+    return 16;
 
 
   char *argvDec[] = {argv[0], "-1", argv[1],argv[2], NULL};
@@ -92,6 +103,8 @@ uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
     pids[i + TOTAL_PAIR_PROCESSES] = my_create_process(my_process_inc, 4, argvDec,LOW,0);
       //pids[i] = my_create_process(my_process_inc, 4, argvInc, LOW,0);
   }
+
+
 
   //falta implementar / to implement
 //  for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {

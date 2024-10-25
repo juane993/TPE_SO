@@ -47,7 +47,7 @@
 #define SEMPOST 25
 #define SEMINIT 26
 #define SEMFREE 27
-
+#define WAITPID 28
 
 static uint8_t syscall_read(uint32_t fd);
 static void syscall_write(uint32_t fd, char c);
@@ -78,6 +78,7 @@ static void syscall_semWait(uint8_t id);
 static void syscall_semPost(uint8_t id);
 static int8_t syscall_semInit(uint8_t id, uint8_t value);
 static void syscall_semFree(uint8_t id);
+static int8_t syscall_waitPid(uint8_t pid);
 
 int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
     switch (nr) {
@@ -150,6 +151,8 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
         case SEMFREE:
             syscall_semFree((uint8_t) arg0);
             break;
+        case WAITPID:
+            return syscall_waitPid((uint8_t) arg0);
     }
     return 0;
 }
@@ -299,4 +302,8 @@ static int8_t syscall_semInit(uint8_t id, uint8_t value){
 
 static void syscall_semFree(uint8_t id){
     sem_free(id);
+}
+
+static int8_t syscall_waitPid(uint8_t pid){
+    return waitPid(pid);
 }

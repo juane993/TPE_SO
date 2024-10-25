@@ -274,6 +274,39 @@ int8_t my_get_pid(){
 //        }
 //    }
 //}
+void waitForChildren()
+{
+    for (int i = 1; i < MAX_PROCESSES; ++i) {
+        sch->procesess[i].waitingForMe[sch->procesess[i].waitingIndex] = getProcessCurrentPid();
+        sch->procesess[i].waitingIndex++;
+    }
+}
+
+int8_t waitPid(uint8_t pid)
+{
+    if(sch->procesess[pid].state == NOT_EXISTS)
+    {
+        return -1;
+    }
+    if(sch->procesess[pid].state == ZOMBIE){
+        return pid;
+    }
+    sch->procesess[pid].waitingForMe[sch->procesess[pid].waitingIndex] = getProcessCurrentPid();
+    sch->procesess[pid].waitingIndex++;
+    block(sch->currentPid);
+    return pid;
+}
+
+void unblockWaiters(uint8_t pid)
+{
+    for (int i = 0; i < MAX_PROCESSES; ++i) {
+        PCB * proc = sch->procesess[pid].waitingForMe[i];
+        if(proc != NULL)
+        {
+            proc->state = READY;
+        }
+    }
+}
 
 
 

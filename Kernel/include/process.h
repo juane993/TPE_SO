@@ -17,7 +17,8 @@ typedef struct PCB {
     uint8_t *stackBase;
     char **argv;
     uint8_t argc;
-    struct PCB * waitingFor[40];
+    struct PCB * waitingForMe[40];
+    uint8_t waitingIndex;
 } PCB;
 
 void processWrapper(char argc, char *argv[],void * mainFunc);

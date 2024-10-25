@@ -30,11 +30,13 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
     process->stackBase = stackBase;
     process->parentPid = parentPid;
     for (int i = 0; i < 40; ++i) {
-        process->waitingFor[i] = NULL;
+        process->waitingForMe[i] = NULL;
     }
 
     //process->argv = args;
     process->bgState = bgState;
+    process->waitingIndex = 0;
+    //process->waitingForMe[0] = getProcess(parentPid);
 
     return process->processPid;
 }
@@ -55,5 +57,6 @@ uint32_t killProcess(PCB *process) {
 void processWrapper(char argc, char *argv[], void *mainFunc) {
     uint64_t ret = ((int (*)(int, char **))mainFunc)(argc, argv);
     zombie(getCurrentPid());
+    unblockWaiters(getCurrentPid());
     yield();
 }
