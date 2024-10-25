@@ -5,15 +5,15 @@
 #include <semaphore.h>
 
 #define SEM_ID 1
-#define TOTAL_PAIR_PROCESSES 2
+#define TOTAL_PAIR_PROCESSES 4
 
 int64_t global; // shared memory
 
 void slowInc(int64_t *p, int64_t inc) {
     if(*p < 0)
-        printf( "NEGATIVE by process with pid: %d before \n",my_getPid());
+        printf( "NEGATIVE by process with pid: %d before.\n",my_getPid());
     else
-        printf( "%d by process with pid: %d before \n", *p,my_getPid());
+        printf( "%d by process with pid: %d before. I will %s \n", *p,my_getPid(),inc>0?"increment":"decrement");
   int64_t aux = *p;
   my_yield(); // This makes the race condition highly probable
   aux += inc;
@@ -21,7 +21,7 @@ void slowInc(int64_t *p, int64_t inc) {
     if(*p < 0)
         printf( "NEGATIVE by process with pid: %d after \n",my_getPid());
     else
-        printf( "%d by process with pid: %d after \n", *p,my_getPid());
+        printf( "%d by process with pid: %d after. %s \n", *p,my_getPid(),inc>0?"i incremented":"i decremented");
 }
 
 uint64_t my_process_inc(uint64_t argc, char *argv[]) {
@@ -88,8 +88,9 @@ uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
 
   uint64_t i;
   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-    pids[i] = my_create_process(my_process_inc, 4, argvDec, LOW,0);
-    pids[i + TOTAL_PAIR_PROCESSES] = my_create_process(my_process_inc, 4, argvInc,LOW,0);
+    pids[i] = my_create_process(my_process_inc, 4, argvInc, LOW,0);
+    pids[i + TOTAL_PAIR_PROCESSES] = my_create_process(my_process_inc, 4, argvDec,LOW,0);
+      //pids[i] = my_create_process(my_process_inc, 4, argvInc, LOW,0);
   }
 
   //falta implementar / to implement
