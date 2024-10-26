@@ -10,22 +10,25 @@
 int64_t global; // shared memory
 
 void slowInc(int64_t *p, int64_t inc) {
-    if(*p < 0)
-        printf( "NEGATIVE by process with pid: %d before.\n",my_getPid());
-    else
-        printf( "%d by process with pid: %d before. I will %s \n", *p,my_getPid(),inc>0?"increment":"decrement");
+//    if(*p < 0)
+//       // printf( "NEGATIVE by process with pid: %d before.\n",my_getPid());
+//    else
+       // printf( "%d by process with pid: %d before. I will %s \n", *p,my_getPid(),inc>0?"increment":"decrement");
   int64_t aux = *p;
   my_yield(); // This makes the race condition highly probable
   aux += inc;
   *p = aux;
-    if(*p < 0)
-        printf( "NEGATIVE by process with pid: %d after \n",my_getPid());
-    else
-        printf( "%d by process with pid: %d after. %s \n", *p,my_getPid(),inc>0?"i incremented":"i decremented");
+//    if(*p < 0)
+//        //printf( "NEGATIVE by process with pid: %d after \n",my_getPid());
+//    else
+        //printf( "%d by process with pid: %d after. %s \n", *p,my_getPid(),inc>0?"i incremented":"i decremented");
 
 }
 
 uint64_t my_process_inc(uint64_t argc, char *argv[]) {
+    char pid = my_getPid();
+
+
   uint64_t n;
   int8_t inc;
   int8_t use_sem;
@@ -52,7 +55,7 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
         my_exit();
         return -1;
     }
-    char pid = my_getPid();
+
 
   if (use_sem)
     my_semInit(SEM_ID, 1);
@@ -114,7 +117,7 @@ uint64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
 
 //  falta implementar / to implement
 
-
+    //shellWaitTest();
 
   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
     my_waitPid(pids[i]);

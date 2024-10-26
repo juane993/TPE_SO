@@ -283,6 +283,7 @@ int8_t waitPid(uint8_t pid)
         return -1;
     }
     if(sch->procesess[pid].state == ZOMBIE){
+        kill(pid);
         return pid;
     }
     sch->procesess[pid].waitingForMe[sch->procesess[pid].waitingIndex] = getProcessCurrentPid();
@@ -293,13 +294,18 @@ int8_t waitPid(uint8_t pid)
 
 void unblockWaiters(uint8_t pid)
 {
+    char found = 0;
     uint8_t waitingInex = sch->procesess[pid].waitingIndex;
     for (int i = 0; i < waitingInex; ++i) {
         PCB * proc = sch->procesess[pid].waitingForMe[i];
         if(proc != NULL && proc->state != NOT_EXISTS)
         {
             proc->state = READY;
+            found = 1;
         }
+    }
+    if(found){
+        kill(pid);
     }
 }
 
