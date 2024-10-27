@@ -5,19 +5,10 @@
 int64_t global; // shared memory
 
 void slowInc(int64_t *p, int64_t inc) {
-//    if(*p < 0)
-//       // printf( "NEGATIVE by process with pid: %d before.\n",my_getPid());
-//    else
-       // printf( "%d by process with pid: %d before. I will %s \n", *p,my_getPid(),inc>0?"increment":"decrement");
   int64_t aux = *p;
   my_yield(); // This makes the race condition highly probable
   aux += inc;
   *p = aux;
-//    if(*p < 0)
-//        //printf( "NEGATIVE by process with pid: %d after \n",my_getPid());
-//    else
-        //printf( "%d by process with pid: %d after. %s \n", *p,my_getPid(),inc>0?"i incremented":"i decremented");
-
 }
 
 uint64_t my_process_inc(uint64_t argc, char *argv[]) {
@@ -64,9 +55,6 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
       my_semPost(SEM_ID);
 
   }
-
-//  if (use_sem)
-//    my_sem_close(SEM_ID);
     printf("Process %d finished\n", pid);
     return 0;
 }
