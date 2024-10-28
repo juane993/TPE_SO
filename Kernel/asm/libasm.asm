@@ -218,7 +218,7 @@ initProcessStack:
     push rdi        ; Dirección de retorno (RIP para el proceso)
     mov rdi, rdx 	; Primer argumento, argc
     mov rsi, rcx	; Segundo argumento, args
-    mov rdx, r8
+    mov rdx, r8     ; Tercer parametro, mainFunc
     pushState
     mov rax, rsp
     mov rsp, r10
@@ -226,4 +226,4 @@ initProcessStack:
     ret
 
 
-;	process->stackPos = _initialize_stack_frame(&processWrapper, code, stackEnd, (void *) process->argv);
+

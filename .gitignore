@@ -23,3 +23,4 @@ Userland/0000-sampleCodeModule.elf
 .bash_history
 *.elf
 compile.sh
+‎.pre-commit-config.yaml
