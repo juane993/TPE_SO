@@ -84,6 +84,7 @@ uint8_t * scheduler(uint8_t * currentSP)
             return sch->procesess[i].RSP;
         }
     }
+
     sch->roundRobbinLoopCounter++;
     for (int i = 0; i < roundRobinIndex; ++i) {
         if(sch->procesess[i].state == READY && sch->procesess[i].priority > sch->roundRobbinLoopCounter)
@@ -98,6 +99,14 @@ uint8_t * scheduler(uint8_t * currentSP)
     if(sch->roundRobbinLoopCounter >= sch->currentMaxPrio)
     {
         sch->roundRobbinLoopCounter = 0;
+        for (int i = 0; i < roundRobinIndex; ++i) {
+            if(sch->procesess[i].state == READY && sch->procesess[i].priority > sch->roundRobbinLoopCounter)
+            {
+                sch->currentRoundRobbinIndex = i;
+                sch->currentPid = i;
+                return sch->procesess[i].RSP;
+            }
+        }
     }
     return sch->procesess[roundRobinIndex].RSP;
 
