@@ -333,9 +333,8 @@ void unblockWaiters(uint8_t pid)
     uint8_t waitingInex = sch->procesess[pid].waitingIndex;
     for (int i = 0; i < waitingInex; ++i) {
         PCB * proc = sch->procesess[pid].waitingForMe[i];
-        if(proc != NULL && proc->state != NOT_EXISTS)
-        {
-            proc->state = READY;
+        if(proc != NULL){
+            unblock(proc->processPid);
             found = 1;
         }
     }
