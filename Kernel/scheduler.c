@@ -63,6 +63,18 @@ uint8_t getCurrentPid()
     return sch->currentPid;
 }
 
+uint8_t * getNextReadyProcess(uint8_t start, uint8_t end){
+    for (int i = start; i < end; ++i) {
+        if(sch->procesess[i].state == READY && sch->procesess[i].priority > sch->roundRobbinLoopCounter)
+        {
+            sch->currentRoundRobbinIndex = i;
+            sch->currentPid = i;
+            return sch->procesess[i].RSP;
+        }
+    }
+    return NULL;
+}
+
 uint8_t * scheduler(uint8_t * currentSP)
 {
     if(!initialized)
@@ -76,38 +88,31 @@ uint8_t * scheduler(uint8_t * currentSP)
     uint8_t currentPid = sch->currentPid;
     sch->procesess[currentPid].RSP = currentSP;
     uint8_t roundRobinIndex = currentPid;
-    for (int i = roundRobinIndex + 1; i < MAX_PROCESSES; ++i) {
-        if(sch->procesess[i].state == READY && sch->procesess[i].priority > sch->roundRobbinLoopCounter)
-        {
-            sch->currentRoundRobbinIndex = i;
-            sch->currentPid = i;
-            return sch->procesess[i].RSP;
-        }
+    uint8_t * nextProcess = NULL;
+    nextProcess = getNextReadyProcess(roundRobinIndex + 1,MAX_PROCESSES);
+    if(nextProcess != NULL)
+    {
+        return nextProcess;
     }
-
     sch->roundRobbinLoopCounter++;
-    for (int i = 0; i < roundRobinIndex; ++i) {
-        if(sch->procesess[i].state == READY && sch->procesess[i].priority > sch->roundRobbinLoopCounter)
-        {
-            sch->currentRoundRobbinIndex = i;
-            sch->currentPid = i;
-            return sch->procesess[i].RSP;
-        }
+    nextProcess = getNextReadyProcess(0,roundRobinIndex);
+    if(nextProcess != NULL)
+    {
+        return nextProcess;
     }
 
     //si llego al final del scheduler, quiere decir que me quedo solo un proceso corriendo
     if(sch->roundRobbinLoopCounter >= sch->currentMaxPrio)
     {
         sch->roundRobbinLoopCounter = 0;
-        for (int i = 0; i < roundRobinIndex; ++i) {
-            if(sch->procesess[i].state == READY && sch->procesess[i].priority > sch->roundRobbinLoopCounter)
-            {
-                sch->currentRoundRobbinIndex = i;
-                sch->currentPid = i;
-                return sch->procesess[i].RSP;
-            }
-        }
+
+       nextProcess = getNextReadyProcess(0,roundRobinIndex);
+       if(nextProcess != NULL)
+       {
+           return nextProcess;
+       }
     }
+
     return sch->procesess[roundRobinIndex].RSP;
 
 
