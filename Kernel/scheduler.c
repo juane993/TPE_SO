@@ -106,7 +106,7 @@ uint8_t * scheduler(uint8_t * currentSP)
     {
         sch->roundRobbinLoopCounter = 0;
 
-       nextProcess = getNextReadyProcess(0,roundRobinIndex);
+       nextProcess = getNextReadyProcess(0,MAX_PROCESSES);
        if(nextProcess != NULL)
        {
            return nextProcess;
@@ -114,27 +114,6 @@ uint8_t * scheduler(uint8_t * currentSP)
     }
 
     return sch->procesess[roundRobinIndex].RSP;
-
-
-
-//    for (int i = roundRobinIndex + 1; i < currentRoundRobbinPointers; i++) {
-//        if(sch->roundRobbinPointers[i] != NULL && (*(sch->roundRobbinPointers[i])).state == READY)
-//        {
-//            sch->currentRoundRobbinIndex = i;
-//            sch->currentPid = (*(sch->roundRobbinPointers[i])).processPid;
-//            return (*(sch->roundRobbinPointers[i])).RSP;
-//        }
-//    }
-//       for (int i = 0; i < roundRobinIndex; i++) {
-//           if(sch->roundRobbinPointers[i] != NULL &&(*(sch->roundRobbinPointers[i])).state == READY)
-//           {
-//               sch->currentRoundRobbinIndex = i;
-//               sch->currentPid = (*(sch->roundRobbinPointers[i])).processPid;
-//               return (*(sch->roundRobbinPointers[i])).RSP;
-//           }
-//    }
-
-
 
 }
 
