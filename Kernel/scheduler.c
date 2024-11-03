@@ -2,16 +2,30 @@
 
 void deleteProcessPointers(uint32_t pid);
 void asignPriority(int32_t pid, Priority newPrio);
+void calculateMaxPrio();
 
 
-uint16_t currentRoundRobbinPointers = 0;
+
+
+
 uint8_t shellRunning = 0;
 typedef struct  schedulerCDT{
     uint8_t currentPid;
     uint8_t nextUPid;
+
+    //con la implementacion esta capaz lo volamos
     uint8_t currentRoundRobbinIndex;
+
+    //el contador que cuenta en que loop estoy del round robbin. yo voy a correr un proceso si
+    //es menor a la prioridad del proceso. sino, no corre hasta que se resetee.
+    uint8_t roundRobbinLoopCounter;
+
+
+    //la prioridad maxima actual. inicialmente es 20 por la shell. cuando el contador llegue a este numero
+    //termina la iteracion y reinicio el contador
+    uint8_t currentMaxPrio;
     PCB procesess[MAX_PROCESSES];
-    PCB * roundRobbinPointers[MAX_PRIO_LEVELS * MAX_PROCESSES + 10]; //suficientemente grande
+
 }schedulerCDT;
 
 schedulerADT sch;
@@ -21,14 +35,14 @@ void initScheduler()
 {
     sch = (schedulerADT) SCHEDULER_ADDRESS;
     sch->currentPid = 0;
-    sch->currentRoundRobbinIndex = 0;
     sch->nextUPid = 0;
+    sch->currentMaxPrio = SHELL;
+    sch->currentRoundRobbinIndex = 0;
+    sch->roundRobbinLoopCounter = 0;
     for (int i = 0; i < MAX_PROCESSES; ++i) {
         sch->procesess[i].state = NOT_EXISTS;
     }
-    for (int i = 0; i < MAX_PRIO_LEVELS * MAX_PROCESSES + 10; ++i) {
-        sch->roundRobbinPointers[i] = NULL;
-    }
+
     initialized = 1;
 }
 
@@ -49,6 +63,18 @@ uint8_t getCurrentPid()
     return sch->currentPid;
 }
 
+uint8_t * getNextReadyProcess(uint8_t start, uint8_t end){
+    for (int i = start; i < end; ++i) {
+        if(sch->procesess[i].state == READY && sch->procesess[i].priority > sch->roundRobbinLoopCounter)
+        {
+            sch->currentRoundRobbinIndex = i;
+            sch->currentPid = i;
+            return sch->procesess[i].RSP;
+        }
+    }
+    return NULL;
+}
+
 uint8_t * scheduler(uint8_t * currentSP)
 {
     if(!initialized)
@@ -61,57 +87,36 @@ uint8_t * scheduler(uint8_t * currentSP)
     }
     uint8_t currentPid = sch->currentPid;
     sch->procesess[currentPid].RSP = currentSP;
-    uint8_t roundRobinIndex = sch->currentRoundRobbinIndex;
-    for (int i = roundRobinIndex + 1; i < currentRoundRobbinPointers; i++) {
-        if(sch->roundRobbinPointers[i] != NULL && (*(sch->roundRobbinPointers[i])).state == READY)
-        {
-            sch->currentRoundRobbinIndex = i;
-            sch->currentPid = (*(sch->roundRobbinPointers[i])).processPid;
-            return (*(sch->roundRobbinPointers[i])).RSP;
-        }
+    uint8_t roundRobinIndex = currentPid;
+    uint8_t * nextProcess = NULL;
+    nextProcess = getNextReadyProcess(roundRobinIndex + 1,MAX_PROCESSES);
+    if(nextProcess != NULL)
+    {
+        return nextProcess;
     }
-       for (int i = 0; i < roundRobinIndex; i++) {
-           if(sch->roundRobbinPointers[i] != NULL &&(*(sch->roundRobbinPointers[i])).state == READY)
-           {
-               sch->currentRoundRobbinIndex = i;
-               sch->currentPid = (*(sch->roundRobbinPointers[i])).processPid;
-               return (*(sch->roundRobbinPointers[i])).RSP;
-           }
+    sch->roundRobbinLoopCounter++;
+    nextProcess = getNextReadyProcess(0,roundRobinIndex);
+    if(nextProcess != NULL)
+    {
+        return nextProcess;
     }
-    return (*(sch->roundRobbinPointers[roundRobinIndex])).RSP;
+
+    //si llego al final del scheduler, quiere decir que me quedo solo un proceso corriendo
+    if(sch->roundRobbinLoopCounter >= sch->currentMaxPrio)
+    {
+        sch->roundRobbinLoopCounter = 0;
+
+       nextProcess = getNextReadyProcess(0,MAX_PROCESSES);
+       if(nextProcess != NULL)
+       {
+           return nextProcess;
+       }
+    }
+
+    return sch->procesess[roundRobinIndex].RSP;
+
 }
 
-//uint8_t * scheduler(uint8_t * currentSP)
-//{
-//    if(!initialized)
-//    {
-//        initScheduler();
-//    }
-//    if(currentRunningProceses == 0)
-//    {
-//        return currentSP;
-//    }
-//   uint8_t currentPid = sch->currentPid;
-//   sch->procesess[currentPid].RSP = currentSP;
-//   for (int i = currentPid + 1; i < currentRunningProceses; i++) {
-//        if(sch->procesess[i].state == READY)
-//        {
-//            currentPid = i; //innecesario esta asignacion
-//            sch->currentPid = i;
-//            return sch->procesess[i].RSP;
-//           // sch->procesess[i].state = RUNNING;
-//        }
-//   }
-//   for (int i = 0; i < currentPid; i++) {
-//       if(sch->procesess[i].state == READY)
-//       {
-//           currentPid = i;
-//           sch->currentPid = i;
-//           return sch->procesess[i].RSP;
-//       }
-//   }
-//   return sch->procesess[currentPid].RSP;
-//}
 
 int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio, BackgroundState bgState)
 {
@@ -133,12 +138,10 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio,
 //    }
 
     asignPriority(pid,prio);
-    if(pid >= 0 && currentRoundRobbinPointers < MAX_PROCESSES * MAX_PRIO_LEVELS + 10) {
-        currentRoundRobbinPointers += prio;
-    }
     if(prio == SHELL){
         shellRunning = 1;
     }
+    calculateMaxPrio();
     return pid;
 }
 int32_t kill(int32_t pid){
@@ -149,25 +152,27 @@ int32_t kill(int32_t pid){
     if(value == -1){
         return -1;
     }
-    deleteProcessPointers(pid);
+    //deleteProcessPointers(pid);
+    calculateMaxPrio();
 
     return pid;
 }
-void deleteProcessPointers(uint32_t pid)
-{
-    for (int i = 0; i < MAX_PROCESSES * MAX_PRIO_LEVELS + 10; ++i) {
-        if(sch->roundRobbinPointers[i] == &(sch->procesess[pid]))
-        {
-            sch->roundRobbinPointers[i] = NULL;
-        }
-    }
-}
+//void deleteProcessPointers(uint32_t pid)
+//{
+//    for (int i = 0; i < MAX_PROCESSES * MAX_PRIO_LEVELS + 10; ++i) {
+//        if(sch->roundRobbinPointers[i] == &(sch->procesess[pid]))
+//        {
+//            sch->roundRobbinPointers[i] = NULL;
+//        }
+//    }
+//}
 int32_t block(int32_t pid){
     if(sch->procesess[pid].state == NOT_EXISTS)
     {
         return -1;
     }
     sch->procesess[pid].state = BLOCK;
+    calculateMaxPrio();
     return pid;
 }
 int32_t zombie(int32_t pid){
@@ -176,6 +181,7 @@ int32_t zombie(int32_t pid){
         return -1;
     }
     sch->procesess[pid].state = ZOMBIE;
+    calculateMaxPrio();
     return pid;
 }
 
@@ -184,21 +190,15 @@ int32_t nice(int32_t pid, Priority newPrio)
    if(sch->procesess[pid].state == NOT_EXISTS){
        return -1;
    }
-    deleteProcessPointers(pid);
+//    deleteProcessPointers(pid);
     asignPriority(pid,newPrio);
     return pid;
 }
 
 void asignPriority(int32_t pid, Priority newPrio)
 {
-    int ptrsLeftToAssign = newPrio;
-    for (int i = 0; i < MAX_PROCESSES * MAX_PRIO_LEVELS + 10 && ptrsLeftToAssign > 0; ++i) {
-        if(sch->roundRobbinPointers[i] == NULL)
-        {
-            sch->roundRobbinPointers[i] = &(sch->procesess[pid]);
-            ptrsLeftToAssign--;
-        }
-    }
+    sch->procesess[pid].priority = newPrio;
+    calculateMaxPrio();
 }
 
 void my_exit()
@@ -213,7 +213,25 @@ int32_t unblock(int32_t pid){
         return -1;
     }
     sch->procesess[pid].state = READY;
+    calculateMaxPrio();
     return pid;
+}
+
+void calculateMaxPrio()
+{
+    char shellPrioFound = 0;
+    uint8_t max = 0;
+    for (int i = 0; i < MAX_PROCESSES && !shellPrioFound; ++i) {
+        if(sch->procesess[i].state == READY && sch->procesess[i].priority > max)
+        {
+            max = sch->procesess[i].priority;
+            if(max == SHELL)
+            {
+                shellPrioFound = 1;
+            }
+        }
+    }
+    sch->currentMaxPrio = max;
 }
 
 char * ps()
@@ -289,6 +307,7 @@ int8_t waitPid(uint8_t pid)
     sch->procesess[pid].waitingForMe[sch->procesess[pid].waitingIndex] = getProcessCurrentPid();
     sch->procesess[pid].waitingIndex++;
     block(sch->currentPid);
+
     return pid;
 }
 
@@ -298,15 +317,15 @@ void unblockWaiters(uint8_t pid)
     uint8_t waitingInex = sch->procesess[pid].waitingIndex;
     for (int i = 0; i < waitingInex; ++i) {
         PCB * proc = sch->procesess[pid].waitingForMe[i];
-        if(proc != NULL && proc->state != NOT_EXISTS)
-        {
-            proc->state = READY;
+        if(proc != NULL){
+            unblock(proc->processPid);
             found = 1;
         }
     }
     if(found){
         kill(pid);
     }
+    calculateMaxPrio();
 }
 
 

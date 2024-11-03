@@ -9,6 +9,9 @@ GLOBAL initProcessStack
 GLOBAL yield
 GLOBAL acquire
 GLOBAL release
+GLOBAL disableInterrupts
+GLOBAL enableInterrupts
+
 
 section .text
 
@@ -93,6 +96,15 @@ getKeyPressed:
 
     mov rsp, rbp
     pop rbp
+    ret
+
+
+disableInterrupts:
+    cli
+    ret
+
+enableInterrupts:
+    sti
     ret
 
 
