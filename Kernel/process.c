@@ -66,9 +66,9 @@ uint32_t killProcess(PCB *process) {
 void processWrapper(char argc, char *argv[], void *mainFunc) {
 
     uint64_t ret = ((int (*)(int, char **))mainFunc)(argc, argv);
-    disableInterrupts();
+    sem_wait(MUTEX);
     unblockWaiters(getCurrentPid());
     zombie(getCurrentPid());
-    enableInterrupts();
+    sem_post(MUTEX);
     yield();
 }
