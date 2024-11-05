@@ -26,8 +26,8 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
     process->priority = prio;
     process->state = READY;
     process->processPid = newProcessPid;
-    process->RSP = rsp;
-    process->stackBase = stackBase;
+    process->RSP = (uint8_t *) rsp;
+    process->stackBase = (uint8_t *) stackBase;
     process->parentPid = parentPid;
     for (int i = 0; i < 40; ++i) {
         process->waitingForMe[i] = NULL;
@@ -55,7 +55,7 @@ uint32_t killProcess(PCB *process) {
 }
 
 void processWrapper(char argc, char *argv[], void *mainFunc) {
-    uint64_t ret = ((int (*)(int, char **))mainFunc)(argc, argv);
+    uint64_t ret = ((int (*)(int, char **))mainFunc)(argc, argv); // todo unused variable ret
     zombie(getCurrentPid());
     unblockWaiters(getCurrentPid());
     yield();

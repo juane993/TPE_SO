@@ -241,12 +241,12 @@ char * ps()
             currentBufPos+=len;
             strcpy(currentBufPos,", BasePointer: ");
             currentBufPos+= 15;
-            len = itoa(sch->procesess[i].stackBase,itoaBuffer,16);
+            len = itoa((uintptr_t) sch->procesess[i].stackBase,itoaBuffer,16);
             strcpy(currentBufPos,itoaBuffer);
             currentBufPos+=len;
             strcpy(currentBufPos,", StackPointer: ");
             currentBufPos+= 16;
-            len = itoa(sch->procesess[i].RSP,itoaBuffer,16);
+            len = itoa( (uintptr_t) sch->procesess[i].RSP,itoaBuffer,16);
             strcpy(currentBufPos,itoaBuffer);
             currentBufPos+=len;
             strcpy(currentBufPos,", BGState: ");
