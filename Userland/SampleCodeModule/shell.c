@@ -14,7 +14,7 @@
 
 
 /* Enum para la cantidad de argumentos recibidos */
-typedef enum {NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM, THREE_PARAM} functionType;
+typedef enum {NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM, THREE_PARAM, FOUR_PARAM} functionType;
 #define QTY_BYTES 32 /* Cantidad de bytes de respuesta del printmem */
 #define DEFAULT_FONT_SIZE 1
 #define MIN_FONT_SIZE 1
@@ -36,6 +36,7 @@ typedef struct {
        int (*g)(char *);
        int (*h)(char *, char *);
        int (*i)(char *, char *, char *);
+       int (*j)(char *, char *, char *, char *);
     };
     functionType ftype;             // Cantidad de argumentos del comando
 } Command;
@@ -69,12 +70,12 @@ void init() {
     commands[8] = (Command){ "font-size", "Cambio de dimensiones de la fuente. Para hacerlo escribir el comando seguido de un numero", .g = (void*) &fontSize, SINGLE_PARAM};
     commands[9] = (Command){ "printmem", "Realiza un vuelco de memoria de los 32 bytes posteriores a una direccion de memoria en formato hexadecimal enviada por parametro", .g = (void*) &printMem, SINGLE_PARAM};
     commands[10] = (Command){ "clear", "Limpia toda la pantalla", .f = (void*) &clear, NO_PARAMS};
-    commands[11] = (Command){ "memtest", "mem test", .f = (void*) &test_mm, NO_PARAMS};
-    commands[12] = (Command){ "testprocess", "test processes", .g = (void*) &run_test_proc, SINGLE_PARAM};
-    commands[13] = (Command){ "testprio", "test priorities", .f = (void*) &run_test_prio, NO_PARAMS};
+    commands[11] = (Command){ "memtest", "mem test", .g = (void*) &test_mm, SINGLE_PARAM};
+    commands[12] = (Command){ "testprocess", "test processes", .h = (void*) &run_test_proc, DUAL_PARAM};
+    commands[13] = (Command){ "testprio", "test priorities", .f = (void*) &run_test_prio, SINGLE_PARAM};
     commands[14] = (Command){ "kill", "kill a process with pid ", .g = (void*) &kill, SINGLE_PARAM};
     commands[15] = (Command){ "ps", "program status ", .f = (void*) &sys_ps, NO_PARAMS};
-    commands[16] = (Command){ "testsync", "test de sincronizacion", .g = (void*) &run_test_sync, THREE_PARAM};
+    commands[16] = (Command){ "testsync", "test de sincronizacion", .j = (void*) &run_test_sync, FOUR_PARAM};
     commands[17] = (Command){"cat", "Imprime el STDIN tal como lo recibe", .f = (void*) &run_cat, NO_PARAMS};
 }
 
@@ -93,7 +94,8 @@ void run_shell() {
         char arg1[MAX_CHARS];
         char arg2[MAX_CHARS];
         char arg3[MAX_CHARS];
-        int qtyParams = scanf("%s %s %s %s", command, arg1, arg2, arg3);
+        char arg4[MAX_CHARS];
+        int qtyParams = scanf("%s %s %s %s %s", command, arg1, arg2, arg3, arg4);
         index = getCommandIndex(command);
         if (index == -1) {
             if (command[0] != 0)
@@ -119,6 +121,9 @@ void run_shell() {
                 break;
             case THREE_PARAM:
                 commands[index].i(arg1, arg2, arg3);
+                break;
+            case FOUR_PARAM:
+                commands[index].j(arg1, arg2, arg3,arg4);
                 break;
         }
     }

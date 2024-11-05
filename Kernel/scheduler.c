@@ -355,7 +355,6 @@ int8_t waitPidNoHang(uint8_t pid){
 
 void adoptOrphans(uint8_t parentPid) {
 
-    //OJO COM EL CHILDREN
     PCB ** children = (sch->procesess[parentPid].children);
     uint8_t childIndex = sch->procesess[parentPid].childIndex;
 
@@ -364,11 +363,6 @@ void adoptOrphans(uint8_t parentPid) {
     }
 
 }
-
-
-
-
-
 
 /**
 *   Dentro del PCB --> Guardamos SP y estado (ready, bloqueado)

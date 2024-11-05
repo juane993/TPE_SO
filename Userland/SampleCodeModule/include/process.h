@@ -28,9 +28,9 @@ int8_t runProcess(char *name,char * bgState, char *argv[]);
 int8_t kill(char *pid);
 
 void initProcesess();
-void run_test_proc(char * argv);
-void run_test_prio();
-void run_test_sync(char * arg1, char * arg2, char * arg3);
+void run_test_proc(char * argv, char * bgState);
+void run_test_prio(char * bgState);
+void run_test_sync(char * arg1, char * arg2, char * arg3, char * bgState);
 int filter();
 int wc();
 int cat();

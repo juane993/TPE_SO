@@ -59,19 +59,39 @@ int8_t kill(char *pid)
     return 0;
 }
 
-void run_test_proc(char * argv)
+void run_test_proc(char * argv, char * bgState)
 {
-    my_create_process(test_processes, 1, &argv, HIGH, FOREGROUND);
+    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+    uint8_t child = my_create_process(test_processes, 1, &argv, HIGH, bg);
+    if(bg == FOREGROUND){
+        my_waitPid(child);
+    } else{
+        my_waitPidNoHang(child);
+    }
 }
 
-void run_test_prio(){
-    my_create_process(test_prio, 0, (void *) 0, HIGH, FOREGROUND);
+void run_test_prio(char * bgState){
+    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+    uint8_t child = my_create_process(test_prio, 0, (void *) 0, HIGH, bg);
+    if(bg == FOREGROUND){
+        my_waitPid(child);
+    } else{
+        my_waitPidNoHang(child);
+    }
 }
 
-void run_test_sync(char * arg1, char * argv2, char * argv3){
+void run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState){
     char * argv[] = {arg1, argv2, argv3};
-    uint8_t child = my_create_process(test_sync, 3, argv, HIGH, FOREGROUND);
-    my_waitPid(child);
+    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+
+    uint8_t child = my_create_process(test_sync, 3, argv, HIGH, bg);
+
+    if(bg == FOREGROUND){
+        my_waitPid(child);
+    } else{
+        my_waitPidNoHang(child);
+    }
+
 
 }
 
