@@ -341,14 +341,14 @@ int8_t waitPidNoHang(uint8_t pid){
 void adoptOrphans(uint8_t parentPid) {
 
     //OJO COM EL CHILDREN
-    PCB * children = &(sch->procesess[parentPid]);
+    PCB ** children = (sch->procesess[parentPid].children);
     uint8_t childIndex = sch->procesess[parentPid].childIndex;
 
     for (int i = 0; i < childIndex; ++i) {
-        uint8_t waitingIndex = children[i].waitingIndex;
-        children[i].waitingForMe[waitingIndex].waitingPCB = &(sch->procesess[0]); //Now Shell waits for ME
-        children[i].waitingForMe[waitingIndex].boolUnblock = FALSE;
-        children[i].waitingIndex++;
+        uint8_t waitingIndex = children[i]->waitingIndex;
+        children[i]->waitingForMe[waitingIndex].waitingPCB = &(sch->procesess[0]); //Now Shell waits for ME
+        children[i]->waitingForMe[waitingIndex].boolUnblock = FALSE;
+        children[i]->waitingIndex++;
     }
 
 }
