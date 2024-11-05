@@ -139,4 +139,6 @@ void my_semClose(uint8_t sem);
 
 int8_t my_waitPid(uint8_t pid);
 
+int8_t my_waitPidNoHang(uint8_t pid);
+
 #endif

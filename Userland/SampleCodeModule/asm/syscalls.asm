@@ -28,6 +28,7 @@ GLOBAL my_semPost
 GLOBAL my_semInit
 GLOBAL my_semClose
 GLOBAL my_waitPid
+GLOBAL my_waitPidNoHang
 
 
 read:
@@ -176,4 +177,9 @@ my_waitPid:
     mov rax, 28
     int 80h
     call my_yield
+    ret
+
+my_waitPidNoHang:
+    mov rax, 29
+    int 80h
     ret

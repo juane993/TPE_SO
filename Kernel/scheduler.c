@@ -142,6 +142,11 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio,
         shellRunning = 1;
     }
     calculateMaxPrio();
+
+    PCB * proc = &(0sch->procesess[sch->currentPid]);
+
+    proc->children[proc->childIndex] = &(sch->procesess[pid]);
+    proc->childIndex++;
     return pid;
 }
 int32_t kill(int32_t pid){
@@ -152,20 +157,29 @@ int32_t kill(int32_t pid){
     if(value == -1){
         return -1;
     }
-    //deleteProcessPointers(pid);
+
     calculateMaxPrio();
 
     return pid;
 }
-//void deleteProcessPointers(uint32_t pid)
-//{
-//    for (int i = 0; i < MAX_PROCESSES * MAX_PRIO_LEVELS + 10; ++i) {
-//        if(sch->roundRobbinPointers[i] == &(sch->procesess[pid]))
-//        {
-//            sch->roundRobbinPointers[i] = NULL;
-//        }
-//    }
-//}
+
+int8_t waitPid(uint8_t pid)
+{
+    if(sch->procesess[pid].state == NOT_EXISTS)
+    {
+        return -1;
+    }
+    if(sch->procesess[pid].state == ZOMBIE){
+        kill(pid);
+        return pid;
+    }
+    sch->procesess[pid].waitingForMe[sch->procesess[pid].waitingIndex].waitingPCB = getProcessCurrentPid();
+    sch->procesess[pid].waitingForMe[sch->procesess[pid].waitingIndex].boolUnblock = TRUE;
+    sch->procesess[pid].waitingIndex++;
+    block(sch->currentPid);
+    return pid;
+}
+
 int32_t block(int32_t pid){
     if(sch->procesess[pid].state == NOT_EXISTS)
     {
@@ -211,6 +225,10 @@ int32_t unblock(int32_t pid){
     if(sch->procesess[pid].state == NOT_EXISTS)
     {
         return -1;
+    }
+    if(sch->procesess[pid].state == READY)
+    {
+        return pid;
     }
     sch->procesess[pid].state = READY;
     calculateMaxPrio();
@@ -285,40 +303,17 @@ int8_t my_get_pid(){
 }
 
 
-/// TODO implement
-//void waitForChildren()
-//{
-//    for (int i = 1; i < MAX_PROCESSES; ++i) {
-//        sch->procesess[i].waitingForMe[sch->procesess[i].waitingIndex] = getProcessCurrentPid();
-//        sch->procesess[i].waitingIndex++;
-//    }
-//}
-
-int8_t waitPid(uint8_t pid)
-{
-    if(sch->procesess[pid].state == NOT_EXISTS)
-    {
-        return -1;
-    }
-    if(sch->procesess[pid].state == ZOMBIE){
-        kill(pid);
-        return pid;
-    }
-    sch->procesess[pid].waitingForMe[sch->procesess[pid].waitingIndex] = getProcessCurrentPid();
-    sch->procesess[pid].waitingIndex++;
-    block(sch->currentPid);
-
-    return pid;
-}
-
 void unblockWaiters(uint8_t pid)
 {
     char found = 0;
     uint8_t waitingInex = sch->procesess[pid].waitingIndex;
     for (int i = 0; i < waitingInex; ++i) {
-        PCB * proc = sch->procesess[pid].waitingForMe[i];
-        if(proc != NULL){
-            unblock(proc->processPid);
+        WaitingProcess * proc = &sch->procesess[pid].waitingForMe[i];
+        if(proc->waitingPCB != NULL && proc->waitingPCB->state != NOT_EXISTS){
+            if(proc->boolUnblock){
+                unblock(proc->waitingPCB->processPid);
+            }
+
             found = 1;
         }
     }
@@ -327,6 +322,37 @@ void unblockWaiters(uint8_t pid)
     }
     calculateMaxPrio();
 }
+
+int8_t waitPidNoHang(uint8_t pid){
+    if(sch->procesess[pid].state == NOT_EXISTS)
+    {
+        return -1;
+    }
+    if(sch->procesess[pid].state == ZOMBIE){
+        kill(pid);
+        return pid;
+    }
+    sch->procesess[pid].waitingForMe[sch->procesess[pid].waitingIndex].waitingPCB = getProcessCurrentPid();
+    sch->procesess[pid].waitingForMe[sch->procesess[pid].waitingIndex].boolUnblock = FALSE;
+    sch->procesess[pid].waitingIndex++;
+    return pid;
+}
+
+void adoptOrphans(uint8_t parentPid) {
+
+    //OJO COM EL CHILDREN
+    PCB * children = &(sch->procesess[parentPid]);
+    uint8_t childIndex = sch->procesess[parentPid].childIndex;
+
+    for (int i = 0; i < childIndex; ++i) {
+        uint8_t waitingIndex = children[i].waitingIndex;
+        children[i]->waitingForMe[waitingIndex].waitingPCB = &(sch->procesess[0]); //Now Shell waits for ME
+        children[i]->waitingForMe[waitingIndex].boolUnblock = FALSE;
+        children[i]->waitingIndex++;
+    }
+
+}
+
 
 
 

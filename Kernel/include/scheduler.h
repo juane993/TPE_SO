@@ -32,6 +32,8 @@ PCB * getProcess(uint8_t pid);
 uint8_t getCurrentPid();
 void waitForChildren();
 int8_t waitPid(uint8_t pid);
+int8_t waitPidNoHang(uint8_t pid);
 void unblockWaiters(uint8_t pid);
+void adoptOrphans(uint8_t parentPid);
 
 #endif

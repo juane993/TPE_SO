@@ -39,7 +39,8 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
     process->stackBase = (uint8_t *) stackBase;
     process->parentPid = parentPid;
     for (int i = 0; i < 40; ++i) {
-        process->waitingForMe[i] = NULL;
+        process->waitingForMe[i]->waitingPCB = NULL;
+        process->children[i] = NULL;
     }
 
     //process->argv = args;
@@ -67,8 +68,14 @@ void processWrapper(char argc, char *argv[], void *mainFunc) {
 
     uint64_t ret = ((int (*)(int, char **))mainFunc)(argc, argv);
     sem_wait(MUTEX);
+    adoptOrphans(getCurrentPid());
+
     unblockWaiters(getCurrentPid());
     zombie(getCurrentPid());
+    //si el padre existe, no hago nada
+
+    //si tengo hijos (y no hay papi), le deberia decir a la shell que estan huerfanos.
+
     sem_post(MUTEX);
     yield();
 }
