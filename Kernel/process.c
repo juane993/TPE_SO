@@ -1,6 +1,15 @@
 #include <process.h>
 #include <MemoryManager.h>
 #include <scheduler.h>
+#include <semaphore.h>
+
+// OJO, quiero ver si tengo una race condition y por eso explota
+//despues debe haber mejor manera de hacerlo pero quiero que no me interrumpan
+//cuando estoy cerrando la wrapper
+extern void disableInterrupts();
+extern void enableInterrupts();
+
+
 
 uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio, BackgroundState bgState, uint8_t parentPid) {
     uint64_t *stackBase = allocMemory(MEM_BLOCK_SIZE);
@@ -55,8 +64,11 @@ uint32_t killProcess(PCB *process) {
 }
 
 void processWrapper(char argc, char *argv[], void *mainFunc) {
-    uint64_t ret = ((int (*)(int, char **))mainFunc)(argc, argv); // todo unused variable ret
-    zombie(getCurrentPid());
+
+    uint64_t ret = ((int (*)(int, char **))mainFunc)(argc, argv);
+    sem_wait(MUTEX);
     unblockWaiters(getCurrentPid());
+    zombie(getCurrentPid());
+    sem_post(MUTEX);
     yield();
 }

@@ -96,10 +96,11 @@ int64_t test_sync(int argc, char *argv[]) { //{n, use_sem, 0}
 
 
   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-    my_waitPid(pids[i]);
       printf("waiting for children with pid: %d\n",pids[i]);
-    my_waitPid(pids[i + TOTAL_PAIR_PROCESSES]);
+    my_waitPid(pids[i]);
       printf("waiting for children with pid: %d\n",pids[i + TOTAL_PAIR_PROCESSES]);
+    my_waitPid(pids[i + TOTAL_PAIR_PROCESSES]);
+
   }
 
   if(global >= 0)
