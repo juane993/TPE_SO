@@ -137,7 +137,7 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
             syscall_yield();
             break;
         case PS:
-            return syscall_ps();
+            return (int64_t) syscall_ps();
         case GET_PID:
             return syscall_getpid();
         case SEMWAIT:

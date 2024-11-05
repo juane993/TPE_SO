@@ -31,6 +31,11 @@ void initProcesess();
 void run_test_proc(char * argv);
 void run_test_prio();
 void run_test_sync(char * arg1, char * arg2, char * arg3);
+int filter();
+int wc();
+int cat();
+void run_cat();
+//int cat();
 
 //void psPrint();
 

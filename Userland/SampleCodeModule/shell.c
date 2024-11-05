@@ -26,6 +26,7 @@ typedef enum {NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM, THREE_PARAM} functionType
 #define INVALID_FONT_SIZE "Dimension invalida de fuente\n"
 #define CHECK_MAN "Escriba \"man %s\" para ver como funciona el comando\n"
 #define CHECK_MAN_FONT "Escriba \"man font-size\" para ver las dimensiones validas\n"
+#define EOF (-1)
 
 typedef struct {
     char * name;                    // Nombre del comando
@@ -71,11 +72,10 @@ void init() {
     commands[11] = (Command){ "memtest", "mem test", .f = (void*) &test_mm, NO_PARAMS};
     commands[12] = (Command){ "testprocess", "test processes", .g = (void*) &run_test_proc, SINGLE_PARAM};
     commands[13] = (Command){ "testprio", "test priorities", .f = (void*) &run_test_prio, NO_PARAMS};
-    //commands[14] = (Command){ "runproc", "run a process", .i = (void*) &runProcess, THREE_PARAM};         TO-Implement
     commands[14] = (Command){ "kill", "kill a process with pid ", .g = (void*) &kill, SINGLE_PARAM};
     commands[15] = (Command){ "ps", "program status ", .f = (void*) &sys_ps, NO_PARAMS};
     commands[16] = (Command){ "testsync", "test de sincronizacion", .g = (void*) &run_test_sync, THREE_PARAM};
-
+    commands[17] = (Command){"cat", "Imprime el STDIN tal como lo recibe", .f = (void*) &run_cat, NO_PARAMS};
 }
 
 void createShellProc()
@@ -213,6 +213,5 @@ static void sys_ps(){
     printf("%s", ps);
     my_free((void *)ps);
 }
-
 
 

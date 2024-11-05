@@ -2,11 +2,13 @@
 #include <stdint.h>
 #include <lib.h>
 #include <video.h>
-#include <time.h>
 #define BUFFER_CAPACITY 10                      /* Longitud maxima del vector _buffer */
 #define HOTKEY 29                               /* Scancode para el snapshot de registros */
+#define EOF (-1)
+
 static uint8_t _bufferStart = 0;                /* Indice del comienzo de la cola */
 static char _bufferSize = 0;                    /* Longitud de la cola */
+char bool = 0;
 static uint8_t _buffer[BUFFER_CAPACITY] = {0};  /* Vector ciclico que guarda las teclas 
                                                  * que se van leyendo del teclado */
 static const char charHexMap[256] =             /* Mapa de scancode a ASCII */
@@ -26,6 +28,18 @@ static int getBufferIndex(int offset){
 
 void keyboardHandler(){
     uint8_t key = getKeyPressed();
+
+    if (key == HOTKEY){
+        bool = 1;
+    }else if (key == 0x9D){ //Release de SHIFT
+        bool = 0;
+    }
+
+    if(bool && (key == 32)){
+        printChar('3');
+        key = 0;
+    }
+
     if(_bufferSize < BUFFER_CAPACITY -1){
         if(!(key & 0x80)){
             if (key == HOTKEY) {

@@ -1,4 +1,10 @@
 #include <process.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define EOF '3'
+#define toLower(n) ((n) >= 'A' && (n) <= 'Z' ? (n) + ('a' - 'A') : (n))
+
 
 procesess proc[QTY_PROC];
 
@@ -67,5 +73,36 @@ void run_test_sync(char * arg1, char * argv2, char * argv3){
     uint8_t child = my_create_process(test_sync, 3, argv, HIGH, FOREGROUND);
     my_waitPid(child);
 
+}
+
+int filter() {
+    char c;
+    while ((int) (c = getchar()) != EOF) {
+        if (toLower(c) == 'a' || toLower(c) == 'e' || toLower(c) == 'i' || toLower(c) == 'o' || toLower(c) == 'u')
+            putchar(c);
+    }
+    putchar('\n');
+    return 0;
+}
+
+int wc() {
+    char c;
+    int lineCounter = 0;
+    while ((int) (c = getchar()) != EOF)
+        lineCounter += (c == '\n');
+    printf("La cantidad de lineas es: %d\n", lineCounter);
+    return 0;
+}
+
+void run_cat(){
+    my_create_process(cat, 0, (void *) 0, HIGH, FOREGROUND);
+}
+
+int cat() {
+    char c;
+    while ((int) (c = getchar()) != '3') {
+        putchar(c);
+    }
+    return 0;
 }
 

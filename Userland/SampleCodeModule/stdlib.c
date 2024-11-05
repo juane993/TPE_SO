@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define toLower(n) ((n) >= 'A' && (n) <= 'Z' ? (n) - ('A' - 'a') : (n))
+#define toLower(n) ((n) >= 'A' && (n) <= 'Z' ? (n) + ('a' - 'A') : (n))
 #define isNumber(n) ((n) >= '0' && (n) <= '9')
 #define isHex(n) ((n) >= 'a' && (n) <= 'f')
 

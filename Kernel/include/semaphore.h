@@ -29,6 +29,7 @@ typedef struct semaphoreCDT * semaphoreADT;
 int8_t sem_init(uint8_t semIndex, uint8_t value);
 void sem_wait(uint8_t  semIndex);
 void sem_post(uint8_t semIndex);
+int8_t sem_free(uint8_t semIndex);
 void initSemaphores();
 
 
