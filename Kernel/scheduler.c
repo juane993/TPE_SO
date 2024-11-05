@@ -143,7 +143,7 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio,
     }
     calculateMaxPrio();
 
-    PCB * proc = &(0sch->procesess[sch->currentPid]);
+    PCB * proc = &(sch->procesess[sch->currentPid]);
 
     proc->children[proc->childIndex] = &(sch->procesess[pid]);
     proc->childIndex++;
@@ -346,9 +346,9 @@ void adoptOrphans(uint8_t parentPid) {
 
     for (int i = 0; i < childIndex; ++i) {
         uint8_t waitingIndex = children[i].waitingIndex;
-        children[i]->waitingForMe[waitingIndex].waitingPCB = &(sch->procesess[0]); //Now Shell waits for ME
-        children[i]->waitingForMe[waitingIndex].boolUnblock = FALSE;
-        children[i]->waitingIndex++;
+        children[i].waitingForMe[waitingIndex].waitingPCB = &(sch->procesess[0]); //Now Shell waits for ME
+        children[i].waitingForMe[waitingIndex].boolUnblock = FALSE;
+        children[i].waitingIndex++;
     }
 
 }

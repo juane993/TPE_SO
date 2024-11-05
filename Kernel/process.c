@@ -39,7 +39,7 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
     process->stackBase = (uint8_t *) stackBase;
     process->parentPid = parentPid;
     for (int i = 0; i < 40; ++i) {
-        process->waitingForMe[i]->waitingPCB = NULL;
+        process->waitingForMe[i].waitingPCB = NULL;
         process->children[i] = NULL;
     }
 
