@@ -24,4 +24,6 @@ int strcpychar(char * dest, const char * origin, char limit);
  * @return Londitud de la cadena de destino
  */
 int strcpy(char * dest, const char * origin);
+
+int strcpycharlimited(char *dest, const char *origin, char limitChar, int limitIndex);
 #endif

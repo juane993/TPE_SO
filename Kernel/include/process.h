@@ -28,6 +28,8 @@ typedef struct PCB {
     struct PCB * children[40];
     uint8_t childIndex;
     uint8_t waitingForFD;
+
+    uint8_t openFDs[MAX_FDS];
 } PCB;
 
 

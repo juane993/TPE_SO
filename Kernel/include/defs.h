@@ -32,6 +32,9 @@
 #define STDERR 2
 #define KBDIN 3
 
+#define MAX_PIPES 30
+#define MAX_FDS 10
+
 typedef enum {
     LOW = 1,
     MEDIUM = 5,

@@ -1,7 +1,7 @@
 #include <process.h>
 
 
-#define EOF '3'
+#define EOF -1
 #define toLower(n) ((n) >= 'A' && (n) <= 'Z' ? (n) + ('a' - 'A') : (n))
 
 
@@ -58,32 +58,34 @@ int8_t kill(char *pid)
     return 0;
 }
 
-void run_test_proc(char * argv, char * bgState)
+int8_t run_test_proc(char * argv, char * bgState)
 {
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
-    uint8_t child = my_create_process(test_processes, 1, &argv, HIGH, bg);
+    int8_t child = my_create_process(test_processes, 1, &argv, HIGH, bg);
     if(bg == FOREGROUND){
         my_waitPid(child);
     } else{
         my_waitPidNoHang(child);
     }
+    return child;
 }
 
-void run_test_prio(char * bgState){
+int8_t run_test_prio(char * bgState){
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
-    uint8_t child = my_create_process(test_prio, 0, (void *) 0, HIGH, bg);
+    int8_t child = my_create_process(test_prio, 0, (void *) 0, HIGH, bg);
     if(bg == FOREGROUND){
         my_waitPid(child);
     } else{
         my_waitPidNoHang(child);
     }
+    return child;
 }
 
-void run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState){
+int8_t run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState){
     char * argv[] = {arg1, argv2, argv3};
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
 
-    uint8_t child = my_create_process(test_sync, 3, argv, HIGH, bg);
+    int8_t child = my_create_process(test_sync, 3, argv, HIGH, bg);
 
     if(bg == FOREGROUND){
         my_waitPid(child);
@@ -91,7 +93,7 @@ void run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState){
         my_waitPidNoHang(child);
     }
 
-
+    return child;
 }
 
 
@@ -101,9 +103,9 @@ void idleProcess(){
     }
 }
 
-void run_idle_process()
+int8_t run_idle_process()
 {
-    my_create_process(idleProcess, 0, (void *) 0, LOW, BACKGROUND);
+    return my_create_process(idleProcess, 0, (void *) 0, LOW, BACKGROUND);
 }
 
 int filter() {
@@ -127,23 +129,23 @@ int wc() {
 
 int cat() {
     char c;
-    while ((int) (c = getchar()) != '3') {
+    while ((int) (c = getchar()) != EOF) {
         putchar(c);
     }
     return 0;
 }
 
-void run_filter(){
-    my_create_process(filter, 0, (void *) 0, HIGH, FOREGROUND);
+int8_t run_filter(){
+    return my_create_process(filter, 0, (void *) 0, HIGH, FOREGROUND);
 }
 
-void run_cat(){
-    my_create_process(cat, 0, (void *) 0, HIGH, FOREGROUND);
+int8_t run_cat(){
+    return my_create_process(cat, 0, (void *) 0, HIGH, FOREGROUND);
+
 }
 
-void run_wc(){
-    my_create_process(wc, 0, (void *) 0, HIGH, FOREGROUND);
-
+int8_t run_wc(){
+    return my_create_process(wc, 0, (void *) 0, HIGH, FOREGROUND);
 }
 
 

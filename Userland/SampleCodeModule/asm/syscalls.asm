@@ -29,7 +29,9 @@ GLOBAL my_semInit
 GLOBAL my_semClose
 GLOBAL my_waitPid
 GLOBAL my_waitPidNoHang
-
+GLOBAL my_mapFD
+GLOBAL my_openPipe
+GLOBAL my_closePipe
 
 read:
     mov rax, 0
@@ -187,5 +189,20 @@ my_waitPid:
 
 my_waitPidNoHang:
     mov rax, 29
+    int 80h
+    ret
+
+my_mapFD:
+    mov rax, 30
+    int 80h
+    ret
+
+my_openPipe:
+    mov rax, 31
+    int 80h
+    ret
+
+my_closePipe:
+    mov rax, 32
     int 80h
     ret

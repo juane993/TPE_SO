@@ -3,12 +3,13 @@
 
 #include <string.h>
 #include <lib.h>
+#include <defs.h>
 
 #define PIPES_MANAGER_ADDRESS (0x900000)
 
 #define PIPE_BUF_SIZE 100
 
-#define MAX_PIPES 30
+
 #define NOT_USED -1
 
 typedef struct pipesCDT * pipesADT;

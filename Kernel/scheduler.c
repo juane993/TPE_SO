@@ -143,11 +143,11 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio,
     }
     calculateMaxPrio();
 
-    PCB * proc = &(sch->procesess[sch->currentPid]);
+    PCB * currentProc = &(sch->procesess[sch->currentPid]);
 
-    proc->children[proc->childIndex] = &(sch->procesess[pid]);
-    proc->childIndex++;
-    proc->waitingForFD = EMPTY_FD;
+    currentProc->children[currentProc->childIndex] = &(sch->procesess[pid]);
+    currentProc->childIndex++;
+
     return pid;
 }
 int32_t kill(int32_t pid){
@@ -361,6 +361,7 @@ void unblockFDWaiter(uint8_t fd)
         if(sch->procesess[i].waitingForFD == fd)
         {
             unblock(i);
+            sch->procesess[i].waitingForFD = EMPTY_FD;
             return;
         }
     }

@@ -15,6 +15,7 @@ void initPipeManager()
 }
 
 int8_t initPipe(uint8_t pipeId){
+    // pipeId = pipeId-4;
     if(pipeId >= MAX_PIPES ||pipeId < 0 || pipesManager->pipes[pipeId].pipeId != NOT_USED)
     {
         return -1;
@@ -27,6 +28,9 @@ int8_t initPipe(uint8_t pipeId){
 }
 
 int8_t closePipe(uint8_t pipeId){
+   // pipeId = pipeId-4;
+
+
     if(pipeId >= MAX_PIPES ||pipeId < 0 || pipesManager->pipes[pipeId].pipeId == NOT_USED)
     {
         return -1;
@@ -36,6 +40,9 @@ int8_t closePipe(uint8_t pipeId){
 }
 
 int8_t writePipe(uint8_t pipeId, char * buf, uint8_t size){
+    //pipeId = pipeId-4;
+
+
     if(pipeId >= MAX_PIPES ||pipeId < 0 || pipesManager->pipes[pipeId].pipeId == NOT_USED)
     {
         return -1;
@@ -51,6 +58,8 @@ int8_t writePipe(uint8_t pipeId, char * buf, uint8_t size){
 }
 
 int8_t readPipe(uint8_t pipeId, char * buf, uint8_t size){
+    // pipeId = pipeId-4;
+
     if(pipeId >= MAX_PIPES ||pipeId < 0 || pipesManager->pipes[pipeId].pipeId == NOT_USED)
     {
         return -1;

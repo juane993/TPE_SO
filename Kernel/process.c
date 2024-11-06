@@ -2,6 +2,7 @@
 #include <keyboard.h>
 #include <pipes.h>
 #include <semaphore.h>
+#include <video.h>
 
 // OJO, quiero ver si tengo una race condition y por eso explota
 //despues debe haber mejor manera de hacerlo pero quiero que no me interrumpan
@@ -46,6 +47,14 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
     //process->argv = args;
     process->bgState = bgState;
     process->waitingIndex = 0;
+    process->waitingForFD = EMPTY_FD;
+    process->openFDs[0] = STDIN;
+    process->openFDs[1] = STDOUT;
+    process->openFDs[2] = STDERR;
+    process->openFDs[3] = KBDIN;
+    for (int i = 4; i < MAX_FDS; ++i) {
+        process->openFDs[i] = EMPTY_FD;
+    }
     //process->waitingForMe[0] = getProcess(parentPid);
 
     return process->processPid;
@@ -81,6 +90,8 @@ void processWrapper(char argc, char *argv[], void *mainFunc) {
 }
 
 
+
+
 uint8_t readStdin(){
     char c = getAscii();
     if(c == 0)
@@ -95,15 +106,47 @@ uint8_t readStdin(){
     return c;
 }
 
-uint8_t read(uint8_t fd, char *c, uint8_t size) {
+uint8_t mapFD(uint8_t pid, uint8_t oldFD, uint8_t newFD)
+{
+    PCB * proc = getProcess(pid);
+    if(oldFD < 0 || oldFD >= MAX_FDS || newFD < 0 || newFD >= MAX_FDS)
+    {
+        return -1;
+    }
+    proc->openFDs[oldFD] = newFD;
+    return 0;
+}
+
+uint8_t transformFD(uint8_t fd){
+    return getProcessCurrentPid()->openFDs[fd];
+}
+
+uint8_t read(uint8_t fd, char *buf, uint8_t size) {
+    fd = transformFD(fd);
     switch (fd){
         case STDIN:
-            *c = readStdin();
+            *buf = readStdin();
             return 1;
         case KBDIN:
-            *c = getScancode();
+            *buf = getScancode();
             return 1;
         default:
-            return readPipe(fd,c,size);
+            return readPipe(fd,buf,size);
     }
+}
+uint8_t write(uint8_t fd, char *buf, uint8_t size)
+{
+    fd = transformFD(fd);
+    Color prevColor = getFontColor();
+    if(fd == STDERR)
+    {
+        setFontColor(ERROR_COLOR);
+    }
+    else if(fd > KBDIN)
+    {
+        return writePipe(fd, buf, size);
+    }
+    printChar(buf[0]);
+    setFontColor(prevColor);
+    return 1;
 }

@@ -29,16 +29,16 @@ int8_t runProcess(char *name,char * bgState, char *argv[]);
 int8_t kill(char *pid);
 
 void initProcesess();
-void run_test_proc(char * argv, char * bgState);
-void run_test_prio(char * bgState);
-void run_test_sync(char * arg1, char * arg2, char * arg3, char * bgState);
+int8_t run_test_proc(char * argv, char * bgState);
+int8_t run_test_prio(char * bgState);
+int8_t run_test_sync(char * arg1, char * arg2, char * arg3, char * bgState);
 int filter();
 int wc();
 int cat();
-void run_cat();
-void run_wc();
-void run_filter();
-void run_idle_process();
+int8_t run_cat();
+int8_t run_wc();
+int8_t run_filter();
+int8_t run_idle_process();
 //int cat();
 
 //void psPrint();

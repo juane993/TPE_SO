@@ -141,4 +141,10 @@ int8_t my_waitPid(uint8_t pid);
 
 int8_t my_waitPidNoHang(uint8_t pid);
 
+int8_t my_mapFD(uint8_t pid, uint8_t oldFD, uint8_t newFD);
+
+int8_t my_openPipe(uint8_t fd);
+
+int8_t my_closePipe(uint8_t fd);
+
 #endif

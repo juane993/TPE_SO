@@ -11,6 +11,7 @@
 #include <test_processes.h>
 #include <test_prio.h>
 #include <process.h>
+#include <inputParser.h>
 
 
 /* Enum para la cantidad de argumentos recibidos */
@@ -93,14 +94,18 @@ void run_shell() {
     while(1){
         putchar('>');
         char command[MAX_CHARS] = {0};
+        char *prog1 = NULL;
+        char *prog2 = NULL;
+        findPipe(command, &prog1, &prog2);
+
         char arg1[MAX_CHARS];
         char arg2[MAX_CHARS];
         char arg3[MAX_CHARS];
         char arg4[MAX_CHARS];
-        int qtyParams = scanf("%s %s %s %s %s", command, arg1, arg2, arg3, arg4);
-        index = getCommandIndex(command);
+        int qtyParams = scanf("%s %s %s %s %s", prog1, arg1, arg2, arg3, arg4);
+        index = getCommandIndex(prog1);
         if (index == -1) {
-            if (command[0] != 0)
+            if (prog1[0] != 0)
                 printErr(INVALID_COMMAND);
             continue;
         }
@@ -110,23 +115,71 @@ void run_shell() {
             printf(CHECK_MAN, command);
             continue;
         }
+
+        char prog2Arg1[MAX_CHARS];
+        char prog2Arg2[MAX_CHARS];
+        char prog2Arg3[MAX_CHARS];
+        char prog2Arg4[MAX_CHARS];
+        if ( prog2 != NULL){
+            int qtyParams = scanf("%s %s %s %s %s", prog2, prog2Arg1, prog2Arg2, prog2Arg3, prog2Arg4);
+            index = getCommandIndex(prog2);
+            if (index == -1) {
+                if (prog2[0] != 0)
+                    printErr(INVALID_COMMAND);
+                continue;
+            }
+            int funcParams = commands[index].ftype;
+            if(qtyParams - 1 != funcParams){
+                printErr(WRONG_PARAMS);
+                printf(CHECK_MAN, prog2);
+                continue;
+            }
+        }
+
+
+
+        int pid1;
         switch (commands[index].ftype)
         {
             case NO_PARAMS:
-                commands[index].f();
+               pid1 = commands[index].f();
                 break;
             case SINGLE_PARAM:
-                commands[index].g(arg1);
+               pid1 = commands[index].g(arg1);
                 break;
             case DUAL_PARAM:
-                commands[index].h(arg1, arg2);
+                pid1 = commands[index].h(arg1, arg2);
                 break;
             case THREE_PARAM:
-                commands[index].i(arg1, arg2, arg3);
+               pid1 =  commands[index].i(arg1, arg2, arg3);
                 break;
             case FOUR_PARAM:
-                commands[index].j(arg1, arg2, arg3,arg4);
+               pid1 = commands[index].j(arg1, arg2, arg3,arg4);
                 break;
+        }
+         if (prog2 != NULL){
+            int pid2;
+            switch (commands[index].ftype)
+            {
+                case NO_PARAMS:
+                   pid2 = commands[index].f();
+                    break;
+                case SINGLE_PARAM:
+                   pid2 = commands[index].g(prog2Arg1);
+                    break;
+                case DUAL_PARAM:
+                   pid2 = commands[index].h(prog2Arg1, prog2Arg2);
+                    break;
+                case THREE_PARAM:
+                   pid2 = commands[index].i(prog2Arg1, prog2Arg2, prog2Arg3);
+                    break;
+                case FOUR_PARAM:
+                    pid2 = commands[index].j(prog2Arg1, prog2Arg2, prog2Arg3,prog2Arg4);
+                    break;
+            }
+            my_openPipe(5);
+            my_mapFD(pid1, STDOUT, 5);
+            my_mapFD(pid2, STDIN, 5);
         }
     }
 }

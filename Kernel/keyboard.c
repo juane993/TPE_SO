@@ -3,9 +3,11 @@
 #include <stdint.h>
 #include <lib.h>
 #include <video.h>
+#include <defs.h>
+
 #define BUFFER_CAPACITY 10                      /* Longitud maxima del vector _buffer */
 #define HOTKEY 29                               /* Scancode para el snapshot de registros */
-#define EOF (-1)
+
 
 static uint8_t _bufferStart = 0;                /* Indice del comienzo de la cola */
 static char _bufferSize = 0;                    /* Longitud de la cola */
@@ -16,7 +18,7 @@ static const char charHexMap[256] =             /* Mapa de scancode a ASCII */
     {   0,  0,  '1',  '2',  '3',  '4',  '5',  '6', '7',  '8',  '9', '0', '-',  '=',  '\b',  ' ',
         'q',  'w',  'e',  'r',  't',  'y',  'u',  'i', 'o',  'p',  '[', ']',  '\n',  0, 'a', 's',
         'd',  'f',  'g',  'h',  'j',  'k',  'l',  ';',  '\'',  0,  0,  '\\', 'z',  'x', 'c', 'v',
-        'b',  'n',  'm',  ',',  '.',  '/',  0,  '*', 0,  ' ',  0, 0, 0,  0, 0, 0};
+        'b',  'n',  'm',  ',',  '.',  '/',  0,  '*', 0,  ' ',  0, 0, 0,  0, 0, EOF};
 
 /**
  * @brief  Obtiene el indice del elemento en la cola dado un corrimiento 
@@ -36,13 +38,16 @@ void keyboardHandler(){
         bool = 0;
     }
 
-    if(bool && (key == 32)){
-        printChar('3');
-        key = 0;
-    }
+
 
     if(_bufferSize < BUFFER_CAPACITY -1){
-        if(!(key & 0x80)){
+        if(bool && (key == 32)){
+           // printChar('3');
+            _buffer[getBufferIndex(_bufferSize)] = 63;
+            _bufferSize++;
+            unblockFDWaiter(STDIN);
+        }
+        else if(!(key & 0x80)){
             if (key == HOTKEY) {
                 saveRegisters();
                 return;
