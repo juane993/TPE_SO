@@ -34,6 +34,12 @@ GLOBAL my_waitPidNoHang
 read:
     mov rax, 0
     int 80h
+    test rax, rax
+    jnz .finish
+    call my_yield
+    jmp read
+
+.finish:
     ret
 
 write:

@@ -14,6 +14,7 @@
 #include <defs.h>
 #include <lib.h>
 #include <MemoryManager.h>
+
 typedef struct schedulerCDT  *schedulerADT;
 uint8_t * scheduler(uint8_t * currentSP);
 void initScheduler();
@@ -35,5 +36,6 @@ int8_t waitPid(uint8_t pid);
 int8_t waitPidNoHang(uint8_t pid);
 void unblockWaiters(uint8_t pid);
 void adoptOrphans(uint8_t parentPid);
+void unblockFDWaiter(uint8_t fd);
 
 #endif

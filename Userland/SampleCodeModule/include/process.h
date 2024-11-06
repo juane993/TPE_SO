@@ -36,6 +36,8 @@ int filter();
 int wc();
 int cat();
 void run_cat();
+void run_wc();
+void run_filter();
 void run_idle_process();
 //int cat();
 

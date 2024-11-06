@@ -125,10 +125,6 @@ int wc() {
     return 0;
 }
 
-void run_cat(){
-    my_create_process(cat, 0, (void *) 0, HIGH, FOREGROUND);
-}
-
 int cat() {
     char c;
     while ((int) (c = getchar()) != '3') {
@@ -136,4 +132,18 @@ int cat() {
     }
     return 0;
 }
+
+void run_filter(){
+    my_create_process(filter, 0, (void *) 0, HIGH, FOREGROUND);
+}
+
+void run_cat(){
+    my_create_process(cat, 0, (void *) 0, HIGH, FOREGROUND);
+}
+
+void run_wc(){
+    my_create_process(wc, 0, (void *) 0, HIGH, FOREGROUND);
+
+}
+
 

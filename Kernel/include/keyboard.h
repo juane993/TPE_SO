@@ -1,5 +1,8 @@
 #ifndef _KEYBOARD_H_
 #define _KEYBOARD_H_
+
+#include <scheduler.h>
+
 /* Handler de interrupciones de teclado */
 void keyboardHandler();
 

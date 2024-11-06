@@ -6,6 +6,8 @@
 #include <lib.h>
 #include <defs.h>
 
+
+
 typedef struct  WaitingProcess {
     struct PCB * waitingPCB;
     uint8_t boolUnblock;
@@ -25,6 +27,7 @@ typedef struct PCB {
     uint8_t waitingIndex;
     struct PCB * children[40];
     uint8_t childIndex;
+    uint8_t waitingForFD;
 } PCB;
 
 
@@ -33,5 +36,6 @@ typedef struct PCB {
 void processWrapper(char argc, char *argv[],void * mainFunc);
 uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio, BackgroundState bgState, uint8_t parentPid);
 uint32_t killProcess(PCB *process);
+uint8_t read(uint8_t fd, char * c,uint8_t size);
 
 #endif // TPE_SO_PROCESS_H

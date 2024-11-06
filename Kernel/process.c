@@ -1,6 +1,6 @@
 #include <process.h>
-#include <MemoryManager.h>
-#include <scheduler.h>
+#include <keyboard.h>
+#include <pipes.h>
 #include <semaphore.h>
 
 // OJO, quiero ver si tengo una race condition y por eso explota
@@ -78,4 +78,32 @@ void processWrapper(char argc, char *argv[], void *mainFunc) {
 
     sem_post(MUTEX);
     yield();
+}
+
+
+uint8_t readStdin(){
+    char c = getAscii();
+    if(c == 0)
+    {
+
+        block(getCurrentPid());
+        PCB * proc = getProcessCurrentPid();
+        proc->waitingForFD = STDIN;
+        yield();
+        c = getAscii();
+    }
+    return c;
+}
+
+uint8_t read(uint8_t fd, char *c, uint8_t size) {
+    switch (fd){
+        case STDIN:
+            *c = readStdin();
+            return 1;
+        case KBDIN:
+            *c = getScancode();
+            return 1;
+        default:
+            return readPipe(fd,c,size);
+    }
 }

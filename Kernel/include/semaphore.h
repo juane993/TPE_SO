@@ -3,7 +3,7 @@
 #ifndef TPE_SO_SEMAPHORE_H
 #define TPE_SO_SEMAPHORE_H
 
-#include <process.h>
+
 #include <MemoryManager.h>
 #include <defs.h>
 #include <lib.h>

@@ -147,6 +147,7 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio,
 
     proc->children[proc->childIndex] = &(sch->procesess[pid]);
     proc->childIndex++;
+    proc->waitingForFD = EMPTY_FD;
     return pid;
 }
 int32_t kill(int32_t pid){
@@ -351,6 +352,18 @@ void adoptOrphans(uint8_t parentPid) {
         children[i]->waitingIndex++;
     }
 
+}
+
+
+void unblockFDWaiter(uint8_t fd)
+{
+    for (int i = 0; i < MAX_PROCESSES; ++i) {
+        if(sch->procesess[i].waitingForFD == fd)
+        {
+            unblock(i);
+            return;
+        }
+    }
 }
 
 

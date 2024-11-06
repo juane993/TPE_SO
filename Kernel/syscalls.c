@@ -10,13 +10,10 @@
 #include <scheduler.h>
 #include <semaphore.h>
 #include <pipes.h>
+#include <process.h>
+#include <defs.h>
 
 
-/* File Descriptors*/
-#define STDIN 0
-#define STDOUT 1
-#define STDERR 2
-#define KBDIN 3
 
 /* IDs de syscalls */
 #define READ 0
@@ -166,17 +163,7 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
 
 // Read char
 static uint8_t syscall_read(uint32_t fd, char * c,uint8_t size){
-    switch (fd){
-        case STDIN:
-             *c = getAscii();
-            return 1;
-        case KBDIN:
-            *c = getScancode();
-            return 1;
-        default:
-            return readPipe(fd,c,size);
-    }
-    return 0;
+    read(fd, c, size);
 }
 
 // Write

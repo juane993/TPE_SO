@@ -76,7 +76,9 @@ void init() {
     commands[14] = (Command){ "kill", "kill a process with pid ", .g = (void*) &kill, SINGLE_PARAM};
     commands[15] = (Command){ "ps", "program status ", .f = (void*) &sys_ps, NO_PARAMS};
     commands[16] = (Command){ "testsync", "test de sincronizacion", .j = (void*) &run_test_sync, FOUR_PARAM};
-    commands[17] = (Command){"cat", "Imprime el STDIN tal como lo recibe", .f = (void*) &run_cat, NO_PARAMS};
+    commands[17] = (Command){"cat", "Imprime el STDIN tal como lo recibe", .g = (void*) &run_cat, SINGLE_PARAM};
+    commands[18] = (Command){"wc", "Imprime la cantidad de lineas", .g = (void*) &run_wc, SINGLE_PARAM};
+    commands[19] = (Command){"filer", "Imprime las vocales", .g = (void*) &run_wc, SINGLE_PARAM};
 }
 
 void createShellProc()

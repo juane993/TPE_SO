@@ -24,6 +24,13 @@
 
 #define FALSE 0
 #define TRUE 1
+#define EMPTY_FD -1
+
+/* File Descriptors*/
+#define STDIN 0
+#define STDOUT 1
+#define STDERR 2
+#define KBDIN 3
 
 typedef enum {
     LOW = 1,

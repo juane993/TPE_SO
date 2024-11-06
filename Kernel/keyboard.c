@@ -1,3 +1,4 @@
+#include <process.h>
 #include <keyboard.h>
 #include <stdint.h>
 #include <lib.h>
@@ -48,6 +49,7 @@ void keyboardHandler(){
             }
             _buffer[getBufferIndex(_bufferSize)] = key;
             _bufferSize++;
+            unblockFDWaiter(STDIN);
         }
     }
 }
