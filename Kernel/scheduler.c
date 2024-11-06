@@ -150,7 +150,7 @@ int8_t createProcess(void * mainFunc,uint8_t argc, char * args[], Priority prio,
     return pid;
 }
 int32_t kill(int32_t pid){
-    if(pid == 0){
+    if(pid == 0 || pid == 1){
         return -1;
     }
     uint32_t value = killProcess(&(sch->procesess[pid]));
@@ -323,21 +323,6 @@ void unblockWaiters(uint8_t pid)
     calculateMaxPrio();
 }
 
-int8_t shellWaitPidNoHang(uint8_t pid){
-    if(sch->procesess[pid].state == NOT_EXISTS)
-    {
-        return -1;
-    }
-    if(sch->procesess[pid].state == ZOMBIE){
-        kill(pid);
-        return pid;
-    }
-    sch->procesess[pid].waitingForMe[sch->procesess[pid].waitingIndex].waitingPCB = &(sch->procesess[0]);
-    sch->procesess[pid].waitingForMe[sch->procesess[pid].waitingIndex].boolUnblock = FALSE;
-    sch->procesess[pid].waitingIndex++;
-    return pid;
-}
-
 int8_t waitPidNoHang(uint8_t pid){
     if(sch->procesess[pid].state == NOT_EXISTS)
     {
@@ -355,14 +340,23 @@ int8_t waitPidNoHang(uint8_t pid){
 
 void adoptOrphans(uint8_t parentPid) {
 
+    //OJO COM EL CHILDREN
     PCB ** children = (sch->procesess[parentPid].children);
     uint8_t childIndex = sch->procesess[parentPid].childIndex;
 
     for (int i = 0; i < childIndex; ++i) {
-       shellWaitPidNoHang(children[i]->processPid);
+        uint8_t waitingIndex = children[i]->waitingIndex;
+        children[i]->waitingForMe[waitingIndex].waitingPCB = &(sch->procesess[1]); //Now Shell waits for ME
+        children[i]->waitingForMe[waitingIndex].boolUnblock = FALSE;
+        children[i]->waitingIndex++;
     }
 
 }
+
+
+
+
+
 
 /**
 *   Dentro del PCB --> Guardamos SP y estado (ready, bloqueado)

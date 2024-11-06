@@ -10,6 +10,7 @@
 #include <test_prio.h>
 #include <test_processes.h>
 #include <test_sync.h>
+#include <libasm.h>
 
 #define QTY_PROC 4
 
@@ -35,6 +36,7 @@ int filter();
 int wc();
 int cat();
 void run_cat();
+void run_idle_process();
 //int cat();
 
 //void psPrint();

@@ -9,6 +9,7 @@
 #include <MemoryManager.h>
 #include <scheduler.h>
 #include <semaphore.h>
+#include <pipes.h>
 
 
 /* File Descriptors*/
@@ -50,8 +51,8 @@
 #define WAITPID 28
 #define WAITPIDNOHANG 29
 
-static uint8_t syscall_read(uint32_t fd);
-static void syscall_write(uint32_t fd, char c);
+static uint8_t syscall_read(uint32_t fd, char * c,uint8_t size);
+static uint8_t syscall_write(uint32_t fd, char * c,uint8_t size);
 static void syscall_clear();
 static uint32_t syscall_seconds();
 static uint64_t * syscall_registerArray(uint64_t * regarr);
@@ -87,9 +88,9 @@ static int8_t syscall_waitPidNoHang(uint8_t pid);
 int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
     switch (nr) {
         case READ:
-            return syscall_read((uint32_t)arg0);
+            return syscall_read((uint32_t)arg0, (char *) arg1, (uint8_t) arg2);
         case WRITE:
-            syscall_write((uint32_t)arg0, (char)arg1);
+            syscall_write((uint32_t)arg0, (char *)arg1, (uint8_t) arg2);
             break;
         case CLEAR:
             syscall_clear();
@@ -164,25 +165,30 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
 }
 
 // Read char
-static uint8_t syscall_read(uint32_t fd){
+static uint8_t syscall_read(uint32_t fd, char * c,uint8_t size){
     switch (fd){
         case STDIN:
-            return getAscii();
+             *c = getAscii();
+            return 1;
         case KBDIN:
-            return getScancode();
+            *c = getScancode();
+            return 1;
+        default:
+            return readPipe(fd,c,size);
     }
     return 0;
 }
 
-// Write char
-static void syscall_write(uint32_t fd, char c){
+// Write
+static uint8_t syscall_write(uint32_t fd, char * buf, uint8_t size){
     Color prevColor = getFontColor();
     if(fd == STDERR)
         setFontColor(ERROR_COLOR);
     else if(fd != STDOUT)
-        return;
-    printChar(c);
+        return writePipe(fd, buf, size);
+    printChar(buf[0]);
     setFontColor(prevColor);
+    return 1;
 }
 
 // Clear

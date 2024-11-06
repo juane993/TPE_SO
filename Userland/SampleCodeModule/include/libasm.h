@@ -10,4 +10,6 @@ void usrGetInfoReg();
  * 
  */
 void kaboom();
+
+void _hlt();
 #endif

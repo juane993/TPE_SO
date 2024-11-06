@@ -1,6 +1,5 @@
 #include <process.h>
-#include <stdio.h>
-#include <stdlib.h>
+
 
 #define EOF '3'
 #define toLower(n) ((n) >= 'A' && (n) <= 'Z' ? (n) + ('a' - 'A') : (n))
@@ -93,6 +92,18 @@ void run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState){
     }
 
 
+}
+
+
+void idleProcess(){
+    while(1){
+        _hlt();
+    }
+}
+
+void run_idle_process()
+{
+    my_create_process(idleProcess, 0, (void *) 0, LOW, BACKGROUND);
 }
 
 int filter() {
