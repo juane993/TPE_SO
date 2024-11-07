@@ -91,7 +91,8 @@ void createShellProc()
 void run_shell()
 {
     init();
-    int index;
+//    int index;
+    int index1, index2;
     puts(WELCOME);
     while(1){
         putchar('>');
@@ -110,13 +111,13 @@ void run_shell()
         int argc = 4;
         int qtyParams = split(prog1, argc, args);
 
-        index = getCommandIndex(prog1);
-        if (index == -1) {
+        index1 = getCommandIndex(prog1);
+        if (index1 == -1) {
             if (prog1[0] != 0)
                 printErr(INVALID_COMMAND);
             continue;
         }
-        int funcParams = commands[index].ftype;
+        int funcParams = commands[index1].ftype;
         if(qtyParams != funcParams){
             printErr(WRONG_PARAMS);
             printf(CHECK_MAN, command);
@@ -133,17 +134,17 @@ void run_shell()
             args[1] = prog2Arg2;
             args[2] = prog2Arg3;
             args[3] = prog2Arg4;
-            split(prog2, argc, args);
+            int qtyParams2 = split(prog2, argc, args);
 
 
-            index = getCommandIndex(prog2);
-            if (index == -1) {
+            index2 = getCommandIndex(prog2);
+            if (index2 == -1) {
                 if (prog2[0] != 0)
                     printErr(INVALID_COMMAND);
                 continue;
             }
-            int funcParams = commands[index].ftype;
-            if(qtyParams != funcParams){
+            int funcParams = commands[index2].ftype;
+            if(qtyParams2 != funcParams){
                 printErr(WRONG_PARAMS);
                 printf(CHECK_MAN, prog2);
                 continue;
@@ -151,42 +152,42 @@ void run_shell()
         }
 
         int pid1;
-        switch (commands[index].ftype)
+        switch (commands[index1].ftype)
         {
             case NO_PARAMS:
-               pid1 = commands[index].f();
+               pid1 = commands[index1].f();
                 break;
             case SINGLE_PARAM:
-               pid1 = commands[index].g(arg1);
+               pid1 = commands[index1].g(arg1);
                 break;
             case DUAL_PARAM:
-                pid1 = commands[index].h(arg1, arg2);
+                pid1 = commands[index1].h(arg1, arg2);
                 break;
             case THREE_PARAM:
-               pid1 =  commands[index].i(arg1, arg2, arg3);
+               pid1 =  commands[index1].i(arg1, arg2, arg3);
                 break;
             case FOUR_PARAM:
-               pid1 = commands[index].j(arg1, arg2, arg3,arg4);
+               pid1 = commands[index1].j(arg1, arg2, arg3,arg4);
                 break;
         }
          if (prog2 != NULL){
             int pid2;
-            switch (commands[index].ftype)
+            switch (commands[index2].ftype)
             {
                 case NO_PARAMS:
-                   pid2 = commands[index].f();
+                   pid2 = commands[index2].f();
                     break;
                 case SINGLE_PARAM:
-                   pid2 = commands[index].g(prog2Arg1);
+                   pid2 = commands[index2].g(prog2Arg1);
                     break;
                 case DUAL_PARAM:
-                   pid2 = commands[index].h(prog2Arg1, prog2Arg2);
+                   pid2 = commands[index2].h(prog2Arg1, prog2Arg2);
                     break;
                 case THREE_PARAM:
-                   pid2 = commands[index].i(prog2Arg1, prog2Arg2, prog2Arg3);
+                   pid2 = commands[index2].i(prog2Arg1, prog2Arg2, prog2Arg3);
                     break;
                 case FOUR_PARAM:
-                    pid2 = commands[index].j(prog2Arg1, prog2Arg2, prog2Arg3,prog2Arg4);
+                    pid2 = commands[index2].j(prog2Arg1, prog2Arg2, prog2Arg3,prog2Arg4);
                     break;
             }
             my_openPipe(5);

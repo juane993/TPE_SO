@@ -84,7 +84,7 @@ int8_t run_test_prio(char * bgState){
 int8_t run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState){
     char * argv[] = {arg1, argv2, argv3};
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
-  //  my_openPipe(5);
+   // my_openPipe(5);
     int8_t child = my_create_process(test_sync, 3, argv, HIGH, bg);
 
    // my_mapFD(child, STDOUT, 5);
@@ -138,16 +138,49 @@ int8_t cat() {
     return 0;
 }
 
-int8_t run_filter(){
-    return my_create_process(filter, 0, (void *) 0, HIGH, FOREGROUND);
+int8_t run_filter(char * bgState){
+    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+
+
+    int8_t child = my_create_process(filter, 0, (void *)0, HIGH, bg);
+
+    if(bg == FOREGROUND){
+        my_waitPid(child);
+    } else{
+        my_waitPidNoHang(child);
+    }
+    return child;
+
+
 }
 
-int8_t run_cat(){
-    return my_create_process(cat, 0, (void *) 0, HIGH, FOREGROUND);
+int8_t run_cat(char * bgState){
+
+    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+
+
+    int8_t child = my_create_process(cat, 0, (void *)0, HIGH, bg);
+
+    if(bg == FOREGROUND){
+        my_waitPid(child);
+    } else{
+        my_waitPidNoHang(child);
+    }
+    return child;
 }
 
-int8_t run_wc(){
-    return my_create_process(wc, 0, (void *) 0, HIGH, FOREGROUND);
+int8_t run_wc(char * bgState){
+    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+
+
+    int8_t child = my_create_process(wc, 0, (void *)0, HIGH, bg);
+
+    if(bg == FOREGROUND){
+        my_waitPid(child);
+    } else{
+        my_waitPidNoHang(child);
+    }
+    return child;
 }
 
 int8_t loop(char *sec) {

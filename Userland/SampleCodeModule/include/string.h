@@ -27,3 +27,11 @@ int strcpy(char * dest, const char * origin);
 
 int strcpycharlimited(char *dest, const char *origin, char limitChar, int limitIndex);
 #endif
+
+
+/**
+ * @brief Cuenta la cantidad de caracteres del string
+ * @param str: Cadena a contar
+ * @return Londitud de la cadena
+ */
+int strlen(const char * str);

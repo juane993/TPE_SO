@@ -31,3 +31,11 @@ int strcpycharlimited(char *dest, const char *origin, char limitChar, int limitI
     dest[idx] = 0;
     return idx;
 }
+
+int strlen(const char * str){
+    int count = 0;
+    while(str[count] != '\0'){
+        count++;
+    }
+    return count;
+}

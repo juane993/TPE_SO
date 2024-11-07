@@ -36,9 +36,9 @@ int8_t filter();
 int8_t wc();
 int8_t cat();
 int8_t loop(char *sec);
-int8_t run_cat();
-int8_t run_wc();
-int8_t run_filter();
+int8_t run_cat(char * bgState);
+int8_t run_wc(char * bgState);
+int8_t run_filter(char * bgState);
 int8_t run_loop(char * arg1, char * bgState);
 int8_t run_idle_process();
 
