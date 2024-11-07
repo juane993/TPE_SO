@@ -27,3 +27,38 @@ void findPipe(char *str, char **part1, char **part2) {
     // Asigna la segunda parte después del delimitador
     *part2 = delimiter_position + 1;
 }
+
+
+int split(char *str, char argc, char ** args){
+    int readParams = 0;
+    while (*str != ' ' && *str != '\0') {
+        str++;
+    }
+    *str = '\0';
+    str++;
+
+    for (int i = 0; i < argc; ++i) {
+        while (*str == ' ') {
+            str++;
+        }
+
+        int j = 0;
+        char * arg = args[i];
+        char paramRead = 0;
+        while (*str != ' ' && *str != '\0') {
+            if(!paramRead){
+                readParams++;
+                paramRead = 1;
+            }
+            arg[j] = *str;
+            str++;
+            j++;
+        }
+        arg[j] = '\0';
+        if(*str == '\0'){
+            return readParams;
+        }
+        str++;
+    }
+    return readParams;
+}

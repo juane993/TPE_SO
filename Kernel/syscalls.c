@@ -48,9 +48,9 @@
 #define WAITPID 28
 #define WAITPIDNOHANG 29
 #define MAPFD 30
-#define OPENPIPE 32
-#define CLOSEPIPE 33
-#define SLEEP 34
+#define OPENPIPE 31
+#define CLOSEPIPE 32
+#define SLEEP 33
 
 static uint8_t syscall_read(uint32_t fd, char * c,uint8_t size);
 static uint8_t syscall_write(uint32_t fd, char * c,uint8_t size);

@@ -33,4 +33,7 @@ int strtoh(char* s, char ** end);
  * @return Longitud del buffer (numero que se convirtio en cadena de caracteres)
  */
 int itoa(uint64_t n, char* buffer, int base);
+
+
+void * memcpy(void * destination, const void * source, uint64_t length);
 #endif

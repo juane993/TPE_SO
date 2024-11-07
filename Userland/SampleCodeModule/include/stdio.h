@@ -67,6 +67,8 @@ char getScanCode();
  */
 int scanf(char * fmt, ...);
 
+int scanfOneString(char * buff);
+
 /**
  * @brief Imprime en STDOUT una "cadena de formato" que permite mezclar distintos tipos de datos para luego mostrarlos en la cadena final
  * @note La cantidad de parametros no es fija

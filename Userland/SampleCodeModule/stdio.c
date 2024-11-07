@@ -103,6 +103,28 @@ void printNChars(char c, int n) {
     for (int i = 0; i < n; i++)
         putchar(c);
 }
+int scanfOneString(char * buff)
+{
+    char c;
+    char input[MAX_CHARS];
+    uint64_t bIdx = 0;
+    while((c = getchar()) != '\n' && bIdx < MAX_CHARS-1){
+        if (c != 0) {
+            if (c != '\b'){
+                input[bIdx++] = c;
+                putchar(c);
+            }
+            else if(bIdx>0){
+                bIdx--;
+                putchar(c);
+            }
+        }
+    }
+    putchar('\n');
+    input[bIdx] = 0;
+    memcpy(buff, input, bIdx);
+    return bIdx;
+}
 
 int scanf(char * fmt, ...) {
     va_list v;
@@ -113,6 +135,8 @@ int scanf(char * fmt, ...) {
     char cursorDrawn = 0;
     char buffer[MAX_CHARS];
     uint64_t bIdx = 0;
+
+
     while((c = getchar()) != '\n' && bIdx < MAX_CHARS-1){
         cursorTicks = getTicks() - ticks;
          if(cursorTicks > CURSOR_FREQ){
@@ -145,6 +169,8 @@ int scanf(char * fmt, ...) {
         putchar('\b');
     putchar('\n');
     buffer[bIdx] = 0;
+
+
     char * fmtPtr = fmt;
     char * end;
     bIdx = 0;

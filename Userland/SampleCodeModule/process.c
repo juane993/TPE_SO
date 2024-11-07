@@ -84,14 +84,17 @@ int8_t run_test_prio(char * bgState){
 int8_t run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState){
     char * argv[] = {arg1, argv2, argv3};
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
-
+  //  my_openPipe(5);
     int8_t child = my_create_process(test_sync, 3, argv, HIGH, bg);
+
+   // my_mapFD(child, STDOUT, 5);
 
     if(bg == FOREGROUND){
         my_waitPid(child);
     } else{
         my_waitPidNoHang(child);
     }
+
 
     return child;
 }

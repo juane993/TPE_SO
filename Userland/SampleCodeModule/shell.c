@@ -79,7 +79,8 @@ void init() {
     commands[16] = (Command){ "testsync", "test de sincronizacion", .j = (void*) &run_test_sync, FOUR_PARAM};
     commands[17] = (Command){"cat", "Imprime el STDIN tal como lo recibe", .g = (void*) &run_cat, SINGLE_PARAM};
     commands[18] = (Command){"wc", "Imprime la cantidad de lineas", .g = (void*) &run_wc, SINGLE_PARAM};
-    commands[19] = (Command){"filer", "Imprime las vocales", .g = (void*) &run_wc, SINGLE_PARAM};
+    commands[19] = (Command){"filter", "Imprime las vocales", .g = (void*) &run_filter, SINGLE_PARAM};
+    commands[20] = (Command){"loop", "Imprime su ID con un saludo cada n segundos", .h = (void*) &run_loop, DUAL_PARAM};
 }
 
 void createShellProc()
@@ -87,7 +88,8 @@ void createShellProc()
     my_create_process(run_shell, 0, (void *)0, SHELL,FOREGROUND);
 }
 
-void run_shell() {
+void run_shell()
+{
     init();
     int index;
     puts(WELCOME);
@@ -96,13 +98,18 @@ void run_shell() {
         char command[MAX_CHARS] = {0};
         char *prog1 = NULL;
         char *prog2 = NULL;
+        scanfOneString(command);
         findPipe(command, &prog1, &prog2);
 
         char arg1[MAX_CHARS];
         char arg2[MAX_CHARS];
         char arg3[MAX_CHARS];
         char arg4[MAX_CHARS];
-        int qtyParams = scanf("%s %s %s %s %s", prog1, arg1, arg2, arg3, arg4);
+
+        char * args[] = {arg1, arg2, arg3, arg4};
+        int argc = 4;
+        int qtyParams = split(prog1, argc, args);
+
         index = getCommandIndex(prog1);
         if (index == -1) {
             if (prog1[0] != 0)
@@ -110,7 +117,7 @@ void run_shell() {
             continue;
         }
         int funcParams = commands[index].ftype;
-        if(qtyParams - 1 != funcParams){
+        if(qtyParams != funcParams){
             printErr(WRONG_PARAMS);
             printf(CHECK_MAN, command);
             continue;
@@ -121,7 +128,14 @@ void run_shell() {
         char prog2Arg3[MAX_CHARS];
         char prog2Arg4[MAX_CHARS];
         if ( prog2 != NULL){
-            int qtyParams = scanf("%s %s %s %s %s", prog2, prog2Arg1, prog2Arg2, prog2Arg3, prog2Arg4);
+            argc = 4;
+            args[0] = prog2Arg1;
+            args[1] = prog2Arg2;
+            args[2] = prog2Arg3;
+            args[3] = prog2Arg4;
+            split(prog2, argc, args);
+
+
             index = getCommandIndex(prog2);
             if (index == -1) {
                 if (prog2[0] != 0)
@@ -129,14 +143,12 @@ void run_shell() {
                 continue;
             }
             int funcParams = commands[index].ftype;
-            if(qtyParams - 1 != funcParams){
+            if(qtyParams != funcParams){
                 printErr(WRONG_PARAMS);
                 printf(CHECK_MAN, prog2);
                 continue;
             }
         }
-
-
 
         int pid1;
         switch (commands[index].ftype)
@@ -181,8 +193,108 @@ void run_shell() {
             my_mapFD(pid1, STDOUT, 5);
             my_mapFD(pid2, STDIN, 5);
         }
+
     }
 }
+
+//void run_shell() {
+//    init();
+//    int index;
+//    puts(WELCOME);
+//    while(1){
+//        putchar('>');
+//        char command[MAX_CHARS] = {0};
+//        char *prog1 = NULL;
+//        char *prog2 = NULL;
+//
+//        int qtyParams = scanf("%s", command);
+//        findPipe(command, &prog1, &prog2);
+//
+//        char arg1[MAX_CHARS];
+//        char arg2[MAX_CHARS];
+//        char arg3[MAX_CHARS];
+//        char arg4[MAX_CHARS];
+//
+//        index = getCommandIndex(prog1);
+//        if (index == -1) {
+//            if (prog1[0] != 0)
+//                printErr(INVALID_COMMAND);
+//            continue;
+//        }
+//        int funcParams = commands[index].ftype;
+//        if(qtyParams - 1 != funcParams){
+//            printErr(WRONG_PARAMS);
+//            printf(CHECK_MAN, command);
+//            continue;
+//        }
+//
+//        char prog2Arg1[MAX_CHARS];
+//        char prog2Arg2[MAX_CHARS];
+//        char prog2Arg3[MAX_CHARS];
+//        char prog2Arg4[MAX_CHARS];
+//        if ( prog2 != NULL){
+//            int qtyParams = scanf("%s %s %s %s %s", prog2, prog2Arg1, prog2Arg2, prog2Arg3, prog2Arg4);
+//            index = getCommandIndex(prog2);
+//            if (index == -1) {
+//                if (prog2[0] != 0)
+//                    printErr(INVALID_COMMAND);
+//                continue;
+//            }
+//            int funcParams = commands[index].ftype;
+//            if(qtyParams - 1 != funcParams){
+//                printErr(WRONG_PARAMS);
+//                printf(CHECK_MAN, prog2);
+//                continue;
+//            }
+//        }
+//
+//
+//
+//        int pid1;
+//        switch (commands[index].ftype)
+//        {
+//            case NO_PARAMS:
+//               pid1 = commands[index].f();
+//                break;
+//            case SINGLE_PARAM:
+//               pid1 = commands[index].g(arg1);
+//                break;
+//            case DUAL_PARAM:
+//                pid1 = commands[index].h(arg1, arg2);
+//                break;
+//            case THREE_PARAM:
+//               pid1 =  commands[index].i(arg1, arg2, arg3);
+//                break;
+//            case FOUR_PARAM:
+//               pid1 = commands[index].j(arg1, arg2, arg3,arg4);
+//                break;
+//        }
+//         if (prog2 != NULL){
+//            int pid2;
+//            switch (commands[index].ftype)
+//            {
+//                case NO_PARAMS:
+//                   pid2 = commands[index].f();
+//                    break;
+//                case SINGLE_PARAM:
+//                   pid2 = commands[index].g(prog2Arg1);
+//                    break;
+//                case DUAL_PARAM:
+//                   pid2 = commands[index].h(prog2Arg1, prog2Arg2);
+//                    break;
+//                case THREE_PARAM:
+//                   pid2 = commands[index].i(prog2Arg1, prog2Arg2, prog2Arg3);
+//                    break;
+//                case FOUR_PARAM:
+//                    pid2 = commands[index].j(prog2Arg1, prog2Arg2, prog2Arg3,prog2Arg4);
+//                    break;
+//            }
+//            my_openPipe(5);
+//            my_mapFD(pid1, STDOUT, 5);
+//            my_mapFD(pid2, STDIN, 5);
+//        }
+//    }
+//}
 
 /**
  * @brief  Devuelve el indice del vector de comandos dado su nombre
