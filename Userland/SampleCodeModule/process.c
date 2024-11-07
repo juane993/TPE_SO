@@ -132,8 +132,17 @@ int8_t wc() {
 
 int8_t cat() {
     char c;
+    char str[100];
+    int i;
     while ((int) (c = getchar()) != EOF) {
         putchar(c);
+        str[i] = c;
+        i++;
+        if(c == '\n'){
+            str[i] = '\0';
+            printf("%s", str);
+            i = 0;
+        }
     }
     return 0;
 }
@@ -156,8 +165,16 @@ int8_t run_filter(char * bgState){
 
 int8_t run_cat(char * bgState){
 
-    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+    if(strcmp(bgState, "bg") == 0){
+        printErr("Foreground execution is required for cat\n");
+        return -1;
+    }
+    if(strcmp(bgState, "fg") != 0){
+        printErr("Invalid background state\n");
+        return -1;
+    }
 
+    BackgroundState bg = FOREGROUND;
 
     int8_t child = my_create_process(cat, 0, (void *)0, HIGH, bg);
 
@@ -170,6 +187,7 @@ int8_t run_cat(char * bgState){
 }
 
 int8_t run_wc(char * bgState){
+
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
 
 
