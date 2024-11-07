@@ -150,3 +150,15 @@ uint8_t write(uint8_t fd, char *buf, uint8_t size)
     setFontColor(prevColor);
     return 1;
 }
+
+uint32_t getSeconds() {
+    uint8_t h, m, s;
+    getTime(&h, &m, &s);
+    return s + m * 60 + ((h + 24 - 3) % 24) * 3600;
+}
+
+void sleep(int8_t sec){
+    uint32_t limit = getSeconds() + sec;
+    while (getSeconds() < limit)
+        yield();
+}

@@ -32,6 +32,7 @@ GLOBAL my_waitPidNoHang
 GLOBAL my_mapFD
 GLOBAL my_openPipe
 GLOBAL my_closePipe
+GLOBAL my_sleep
 
 read:
     mov rax, 0
@@ -204,5 +205,10 @@ my_openPipe:
 
 my_closePipe:
     mov rax, 32
+    int 80h
+    ret
+
+my_sleep:
+    mov rax, 33
     int 80h
     ret

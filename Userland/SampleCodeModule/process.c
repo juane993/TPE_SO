@@ -108,7 +108,7 @@ int8_t run_idle_process()
     return my_create_process(idleProcess, 0, (void *) 0, LOW, BACKGROUND);
 }
 
-int filter() {
+int8_t filter() {
     char c;
     while ((int) (c = getchar()) != EOF) {
         if (toLower(c) == 'a' || toLower(c) == 'e' || toLower(c) == 'i' || toLower(c) == 'o' || toLower(c) == 'u')
@@ -118,7 +118,7 @@ int filter() {
     return 0;
 }
 
-int wc() {
+int8_t wc() {
     char c;
     int lineCounter = 0;
     while ((int) (c = getchar()) != EOF)
@@ -127,7 +127,7 @@ int wc() {
     return 0;
 }
 
-int cat() {
+int8_t cat() {
     char c;
     while ((int) (c = getchar()) != EOF) {
         putchar(c);
@@ -141,11 +141,35 @@ int8_t run_filter(){
 
 int8_t run_cat(){
     return my_create_process(cat, 0, (void *) 0, HIGH, FOREGROUND);
-
 }
 
 int8_t run_wc(){
     return my_create_process(wc, 0, (void *) 0, HIGH, FOREGROUND);
 }
 
+int8_t loop(char *sec) {
 
+    uint16_t pid = my_getPid();
+    while (1) {
+        my_sleep(atoi(sec));
+        printf("Hola, soy el proceso: %d\n", pid);
+    }
+    return 0;
+}
+
+int8_t run_loop(char * arg1, char * bgState){
+
+    char * argv[] = {arg1};
+    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+
+
+    int8_t child = my_create_process(loop, 1, argv, LOW, bg);
+
+    if(bg == FOREGROUND){
+        my_waitPid(child);
+    } else{
+        my_waitPidNoHang(child);
+    }
+
+    return child;
+}

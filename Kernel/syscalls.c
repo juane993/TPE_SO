@@ -50,6 +50,7 @@
 #define MAPFD 30
 #define OPENPIPE 32
 #define CLOSEPIPE 33
+#define SLEEP 34
 
 static uint8_t syscall_read(uint32_t fd, char * c,uint8_t size);
 static uint8_t syscall_write(uint32_t fd, char * c,uint8_t size);
@@ -87,6 +88,8 @@ static int8_t syscall_waitPidNoHang(uint8_t pid);
 static int8_t syscall_mapFD(uint8_t pid, uint8_t oldFD, uint8_t newFD);
 static int8_t syscall_openPipe(uint8_t fd);
 static int8_t syscall_closePipe(uint8_t fd);
+
+static void syscall_sleep(int8_t sec);
 
 
 int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
@@ -170,6 +173,9 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
             return syscall_openPipe((uint8_t) arg0);
         case CLOSEPIPE:
             return syscall_closePipe((uint8_t) arg0);
+        case SLEEP:
+            syscall_sleep((int8_t)arg0);
+            break;
     }
     return 0;
 }
@@ -326,5 +332,9 @@ static int8_t syscall_openPipe(uint8_t fd){
 }
 static int8_t syscall_closePipe(uint8_t fd){
     return closePipe(fd);
+}
+
+static void syscall_sleep(int8_t sec){
+    sleep( sec);
 }
 

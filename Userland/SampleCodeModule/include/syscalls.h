@@ -147,4 +147,6 @@ int8_t my_openPipe(uint8_t fd);
 
 int8_t my_closePipe(uint8_t fd);
 
+void my_sleep(uint8_t sec);
+
 #endif

@@ -32,14 +32,15 @@ void initProcesess();
 int8_t run_test_proc(char * argv, char * bgState);
 int8_t run_test_prio(char * bgState);
 int8_t run_test_sync(char * arg1, char * arg2, char * arg3, char * bgState);
-int filter();
-int wc();
-int cat();
+int8_t filter();
+int8_t wc();
+int8_t cat();
+int8_t loop(char *sec);
 int8_t run_cat();
 int8_t run_wc();
 int8_t run_filter();
+int8_t run_loop(char * arg1, char * bgState);
 int8_t run_idle_process();
-//int cat();
 
 //void psPrint();
 
