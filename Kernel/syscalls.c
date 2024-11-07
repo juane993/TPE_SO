@@ -86,8 +86,8 @@ static int8_t syscall_waitPid(uint8_t pid);
 static int8_t syscall_waitPidNoHang(uint8_t pid);
 
 static int8_t syscall_mapFD(uint8_t pid, uint8_t oldFD, uint8_t newFD);
-static int8_t syscall_openPipe(uint8_t fd);
-static int8_t syscall_closePipe(uint8_t fd);
+static int8_t syscall_openPipe(int8_t * fd);
+static int8_t syscall_closePipeEnd(int8_t fd);
 
 static void syscall_sleep(int8_t sec);
 
@@ -170,9 +170,9 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
         case MAPFD:
             return syscall_mapFD((uint8_t) arg0, (uint8_t) arg1, (uint8_t) arg2);
         case OPENPIPE:
-            return syscall_openPipe((uint8_t) arg0);
+            return syscall_openPipe((int8_t *) arg0);
         case CLOSEPIPE:
-            return syscall_closePipe((uint8_t) arg0);
+            return syscall_closePipeEnd((int8_t) arg0);
         case SLEEP:
             syscall_sleep((int8_t)arg0);
             break;
@@ -327,13 +327,12 @@ static int8_t syscall_waitPidNoHang(uint8_t pid){
 static int8_t syscall_mapFD(uint8_t pid, uint8_t oldFD, uint8_t newFD){
     return mapFD(pid, oldFD, newFD);
 }
-static int8_t syscall_openPipe(uint8_t fd){
+static int8_t syscall_openPipe(int8_t * fd){
     return initPipe(fd);
 }
-static int8_t syscall_closePipe(uint8_t fd){
-    return closePipe(fd);
+static int8_t syscall_closePipeEnd(int8_t fd){
+    return closePipeEnd(fd);
 }
-
 static void syscall_sleep(int8_t sec){
     sleep( sec);
 }

@@ -132,17 +132,8 @@ int8_t wc() {
 
 int8_t cat() {
     char c;
-    char str[100];
-    int i;
     while ((int) (c = getchar()) != EOF) {
         putchar(c);
-        str[i] = c;
-        i++;
-        if(c == '\n'){
-            str[i] = '\0';
-            printf("%s", str);
-            i = 0;
-        }
     }
     return 0;
 }
@@ -189,7 +180,6 @@ int8_t run_cat(char * bgState){
 int8_t run_wc(char * bgState){
 
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
-
 
     int8_t child = my_create_process(wc, 0, (void *)0, HIGH, bg);
 

@@ -72,20 +72,43 @@ uint32_t killProcess(PCB *process) {
     process->state = NOT_EXISTS;
     return process->processPid;
 }
+void closePipeEnds()
+{
+    PCB * proc = getProcessCurrentPid();
+    int i = 0;
+    while (i < MAX_FDS)
+    {
+        int8_t fd = proc->openFDs[i];
+        if(fd != EMPTY_FD && fd > KBDIN)
+        {
+            if(fd % 2 == 1)
+            {
+                char eof = EOF;
+                writePipe(fd, &eof, 1);
+            }
+            closePipeEnd(fd);
+        }
+        i++;
+    }
+}
+
+void my_exit()
+{
+    sem_wait(MUTEX);
+    PCB * proc = getProcessCurrentPid();
+    closePipeEnds();
+    adoptOrphans(getCurrentPid());
+    unblockWaiters(getCurrentPid());
+    zombie(getCurrentPid());
+    sem_post(MUTEX);
+}
 
 void processWrapper(char argc, char *argv[], void *mainFunc) {
 
     uint64_t ret = ((int (*)(int, char **))mainFunc)(argc, argv);
-    sem_wait(MUTEX);
-    adoptOrphans(getCurrentPid());
-
-    unblockWaiters(getCurrentPid());
-    zombie(getCurrentPid());
-    //si el padre existe, no hago nada
-
-    //si tengo hijos (y no hay papi), le deberia decir a la shell que estan huerfanos.
-
-    sem_post(MUTEX);
+    //disableInterrupts();
+    my_exit();
+    //enableInterrupts();
     yield();
 }
 
@@ -114,6 +137,7 @@ uint8_t mapFD(uint8_t pid, uint8_t oldFD, uint8_t newFD)
         return -1;
     }
     proc->openFDs[oldFD] = newFD;
+
     return 0;
 }
 
@@ -121,7 +145,7 @@ uint8_t transformFD(uint8_t fd){
     return getProcessCurrentPid()->openFDs[fd];
 }
 
-uint8_t read(uint8_t fd, char *buf, uint8_t size) {
+uint8_t read(int8_t fd, char *buf, uint8_t size) {
     fd = transformFD(fd);
     switch (fd){
         case STDIN:
@@ -134,7 +158,7 @@ uint8_t read(uint8_t fd, char *buf, uint8_t size) {
             return readPipe(fd,buf,size);
     }
 }
-uint8_t write(uint8_t fd, char *buf, uint8_t size)
+uint8_t write(int8_t fd, char *buf, uint8_t size)
 {
     fd = transformFD(fd);
     Color prevColor = getFontColor();

@@ -190,9 +190,10 @@ void run_shell()
                     pid2 = commands[index2].j(prog2Arg1, prog2Arg2, prog2Arg3,prog2Arg4);
                     break;
             }
-            my_openPipe(5);
-            my_mapFD(pid1, STDOUT, 5);
-            my_mapFD(pid2, STDIN, 5);
+            int8_t pipesFD[2];
+            my_openPipe(pipesFD);
+            my_mapFD(pid1, STDOUT, pipesFD[1]);
+            my_mapFD(pid2, STDIN, pipesFD[0]);
         }
 
     }

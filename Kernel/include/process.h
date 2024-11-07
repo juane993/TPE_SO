@@ -29,7 +29,8 @@ typedef struct PCB {
     uint8_t childIndex;
     uint8_t waitingForFD;
 
-    uint8_t openFDs[MAX_FDS];
+    int8_t openFDs[MAX_FDS];
+
 } PCB;
 
 
@@ -38,7 +39,9 @@ typedef struct PCB {
 void processWrapper(char argc, char *argv[],void * mainFunc);
 uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio, BackgroundState bgState, uint8_t parentPid);
 uint32_t killProcess(PCB *process);
-uint8_t read(uint8_t fd, char * c,uint8_t size);
+uint8_t read(int8_t fd, char * c,uint8_t size);
+uint8_t write(int8_t fd, char * c,uint8_t size);
 void sleep(int8_t sec);
+void my_exit();
 
 #endif // TPE_SO_PROCESS_H

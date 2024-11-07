@@ -216,11 +216,7 @@ void asignPriority(int32_t pid, Priority newPrio)
     calculateMaxPrio();
 }
 
-void my_exit()
-{
-    kill(sch->currentPid);
-    yield();
-}
+
 
 int32_t unblock(int32_t pid){
     if(sch->procesess[pid].state == NOT_EXISTS)
