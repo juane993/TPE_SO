@@ -17,30 +17,28 @@ void createMemoryManager(int size){
 	current = 0;
 }
 
-void * allocMemory(uint32_t size){
-
-
-}
-void my_free(void *p){
-
-}
-
-//void* allocMemory(uint32_t size){
-//	if(size > block_size){
-//		return NULL;
-//	}
-//	if(current < BLOCK_COUNT) {
-//		return free_ptrs[current++];
-//	}
-//	return NULL;
-//}
+//void * allocMemory(uint32_t size){
 //
+//
+//}
 //void my_free(void *p){
-//	free_ptrs[--current] = p;
+//
 //}
 
-//int main(int argc, char * argv[]){
-//	int num = test_mm(argc - 1 ,  argv);
-//}
+void* allocMemory(uint32_t size){
+	if(size > block_size){
+		return NULL;
+	}
+	if(current < BLOCK_COUNT) {
+		return free_ptrs[current++];
+	}
+	return NULL;
+}
+
+void my_free(void *p){
+	free_ptrs[--current] = p;
+}
+
+
 
 
