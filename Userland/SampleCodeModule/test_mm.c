@@ -3,6 +3,7 @@
 #include <test_mm.h>
 #include <test_util.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 
 
@@ -18,7 +19,8 @@ typedef struct MM_rq {
 
 
 
-uint64_t test_mm(uint64_t maxmem) {
+uint64_t test_mm(int argc, char *argv[]) {
+    uint64_t maxmem = atoi(argv[0]);
     mm_rq mm_rqs[MAX_BLOCKS];
     uint8_t rq;
     uint32_t total;
@@ -72,9 +74,10 @@ uint64_t test_mm(uint64_t maxmem) {
 
                 //memset de reemplazo para nuestro kernel
                 //char * temp = (char *) mm_rqs[i].address;
-                for (int j = 0; j < mm_rqs[i].size; ++j) {
-                    ((uint8_t *)mm_rqs[i].address)[j] = i;
-                }
+                memset(mm_rqs[i].address, i, mm_rqs[i].size);
+//                for (int j = 0; j < mm_rqs[i].size; ++j) {
+//                    ((uint8_t *)mm_rqs[i].address)[j] = i;
+//                }
             }
         }
 

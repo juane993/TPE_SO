@@ -74,7 +74,7 @@ void init() {
     commands[8] = (Command){ "font-size", "Cambio de dimensiones de la fuente. Para hacerlo escribir el comando seguido de un numero", .g = (void*) &fontSize, SINGLE_PARAM};
     commands[9] = (Command){ "printmem", "Realiza un vuelco de memoria de los 32 bytes posteriores a una direccion de memoria en formato hexadecimal enviada por parametro", .g = (void*) &printMem, SINGLE_PARAM};
     commands[10] = (Command){ "clear", "Limpia toda la pantalla", .f = (void*) &clearConsole, NO_PARAMS};
-    commands[11] = (Command){ "memtest", "mem test", .g = (void*) &test_mm, SINGLE_PARAM};
+    commands[11] = (Command){ "testmem", "mem test", .h = (void*) &run_test_mem, DUAL_PARAM};
     commands[12] = (Command){ "testprocess", "test processes", .h = (void*) &run_test_proc, DUAL_PARAM};
     commands[13] = (Command){ "testprio", "test priorities", .f = (void*) &run_test_prio, SINGLE_PARAM};
     commands[14] = (Command){ "kill", "kill a process with pid ", .g = (void*) &kill, SINGLE_PARAM};

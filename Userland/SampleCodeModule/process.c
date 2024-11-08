@@ -99,6 +99,13 @@ int8_t run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState){
     return child;
 }
 
+int8_t run_test_mem(char * arg1, char * bgState)
+{
+    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+    char * argv[] ={arg1};
+    int8_t child = my_create_process(test_mm, 1, argv, HIGH, bg);
+    return child;
+}
 
 void idleProcess(){
     while(1){
@@ -196,6 +203,8 @@ int8_t loop(char *sec) {
     }
     return 0;
 }
+
+
 
 int8_t run_loop(char * arg1, char * bgState){
 

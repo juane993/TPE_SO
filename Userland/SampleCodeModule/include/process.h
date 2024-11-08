@@ -10,6 +10,7 @@
 #include <test_prio.h>
 #include <test_processes.h>
 #include <test_sync.h>
+#include <test_mm.h>
 #include <libasm.h>
 
 #define QTY_PROC 4
@@ -41,6 +42,7 @@ int8_t run_wc(char * bgState);
 int8_t run_filter(char * bgState);
 int8_t run_loop(char * arg1, char * bgState);
 int8_t run_idle_process();
+int8_t run_test_mem(char * arg1, char * bgState);
 
 //void psPrint();
 

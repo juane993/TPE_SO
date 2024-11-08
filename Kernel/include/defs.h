@@ -16,7 +16,7 @@
 #define ACS_INT_386 	0x0E		/* Interrupt GATE 32 bits */
 #define ACS_INT         ( ACS_PRESENT | ACS_INT_386 )
 
-#define MEM_BLOCK_SIZE 1000
+#define MEM_BLOCK_SIZE 2048
 #define LOGIC_DOWN (void *)0x5
 
 #define NULL ((void *)0)
