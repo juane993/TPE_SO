@@ -12,7 +12,7 @@
 #include <test_prio.h>
 #include <process.h>
 #include <inputParser.h>
-
+#include <philo.h>
 
 void waitForChildren(uint8_t pid);
 
@@ -84,10 +84,10 @@ void init() {
     commands[18] = (Command){"wc", "Imprime la cantidad de lineas", .g = (void*) &run_wc, SINGLE_PARAM};
     commands[19] = (Command){"filter", "Imprime las vocales", .g = (void*) &run_filter, SINGLE_PARAM};
     commands[20] = (Command){"loop", "Imprime su ID con un saludo cada n segundos", .h = (void*) &run_loop, DUAL_PARAM};
+    commands[21] = (Command){"philo", "Philosofer", .f = (void*) &run_philosophers, SINGLE_PARAM};
 }
 
-void createShellProc()
-{
+void createShellProc(){
     my_create_process(run_shell, 0, (void *)0, SHELL,FOREGROUND);
 }
 
@@ -116,8 +116,7 @@ void shellWait(uint8_t pid, char ** args){
     }
 }
 
-void run_shell()
-{
+void run_shell(){
     init();
 //    int index;
     int index1, index2;
