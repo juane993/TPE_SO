@@ -62,22 +62,22 @@ int8_t run_test_proc(char * argv, char * bgState)
 {
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
     int8_t child = my_create_process(test_processes, 1, &argv, HIGH, bg);
-    if(bg == FOREGROUND){
-        my_waitPid(child);
-    } else{
-        my_waitPidNoHang(child);
-    }
+//    if(bg == FOREGROUND){
+//        my_waitPid(child);
+//    } else{
+//        my_waitPidNoHang(child);
+//    }
     return child;
 }
 
 int8_t run_test_prio(char * bgState){
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
     int8_t child = my_create_process(test_prio, 0, (void *) 0, HIGH, bg);
-    if(bg == FOREGROUND){
-        my_waitPid(child);
-    } else{
-        my_waitPidNoHang(child);
-    }
+//    if(bg == FOREGROUND){
+//        my_waitPid(child);
+//    } else{
+//        my_waitPidNoHang(child);
+//    }
     return child;
 }
 
@@ -89,11 +89,11 @@ int8_t run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState){
 
    // my_mapFD(child, STDOUT, 5);
 
-    if(bg == FOREGROUND){
-        my_waitPid(child);
-    } else{
-        my_waitPidNoHang(child);
-    }
+//    if(bg == FOREGROUND){
+//        my_waitPid(child);
+//    } else{
+//        my_waitPidNoHang(child);
+//    }
 
 
     return child;
@@ -144,11 +144,11 @@ int8_t run_filter(char * bgState){
 
     int8_t child = my_create_process(filter, 0, (void *)0, HIGH, bg);
 
-    if(bg == FOREGROUND){
-        my_waitPid(child);
-    } else{
-        my_waitPidNoHang(child);
-    }
+//    if(bg == FOREGROUND){
+//        my_waitPid(child);
+//    } else{
+//        my_waitPidNoHang(child);
+//    }
     return child;
 
 
@@ -169,11 +169,11 @@ int8_t run_cat(char * bgState){
 
     int8_t child = my_create_process(cat, 0, (void *)0, HIGH, bg);
 
-    if(bg == FOREGROUND){
-        my_waitPid(child);
-    } else{
-        my_waitPidNoHang(child);
-    }
+//    if(bg == FOREGROUND){
+//        my_waitPid(child);
+//    } else{
+//        my_waitPidNoHang(child);
+//    }
     return child;
 }
 
@@ -183,11 +183,7 @@ int8_t run_wc(char * bgState){
 
     int8_t child = my_create_process(wc, 0, (void *)0, HIGH, bg);
 
-    if(bg == FOREGROUND){
-        my_waitPid(child);
-    } else{
-        my_waitPidNoHang(child);
-    }
+
     return child;
 }
 
@@ -209,11 +205,11 @@ int8_t run_loop(char * arg1, char * bgState){
 
     int8_t child = my_create_process(loop, 1, argv, LOW, bg);
 
-    if(bg == FOREGROUND){
-        my_waitPid(child);
-    } else{
-        my_waitPidNoHang(child);
-    }
+//    if(bg == FOREGROUND){
+//        my_waitPid(child);
+//    } else{
+//        my_waitPidNoHang(child);
+//    }
 
     return child;
 }
