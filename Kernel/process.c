@@ -18,9 +18,9 @@ uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, ui
         return -1;
     }
     process->argc = argc;
-    process->argv = allocMemory(699);
+    process->argv = allocMemory(MEM_BLOCK_SIZE);
     for (int i = 0; i < argc; ++i) {
-        process->argv[i] = allocMemory(20);
+        process->argv[i] = allocMemory(MEM_BLOCK_SIZE);
         memcpy(process->argv[i], args[i], 20);
     }
     uint64_t *rsp = initProcessStack(processWrapper, stackBase, argc, process->argv, mainFunc);
