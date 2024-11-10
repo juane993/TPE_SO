@@ -49,10 +49,11 @@ void keyboardHandler()
             _buffer[getBufferIndex(_bufferSize)] = 63;
             _bufferSize++;
             unblockFDWaiter(STDIN);
-        }else if (bool && (key == 46))
+        }
+        else if (bool && (key == 46))
         {
-            printChar('G');
-            kill(getCurrentPid()); //TODO debe ser simple de solucionar, no lo logro.
+            print("^C\n");
+            kill_current_fg_process(); // TODO debe ser simple de solucionar, no lo logro.
         }
         else if (!(key & 0x80))
         {
@@ -83,21 +84,4 @@ char getScancode()
 char getAscii()
 {
     return charHexMap[(int) getScancode()];
-}
-
-int32_t killer(int32_t pid)
-{
-    if (pid == 0 || pid == 1)
-    {
-        return -1;
-    }
-    uint32_t value = killProcess(&(sch->procesess[pid]));
-    if (value == -1)
-    {
-        return -1;
-    }
-
-    calculateMaxPrio();
-
-    return pid;
 }

@@ -170,6 +170,18 @@ int32_t kill(int32_t pid)
     return pid;
 }
 
+int32_t kill_current_fg_process()
+{
+    for (int i = 0; i < MAX_PROCESSES; i++)
+    {
+        if (sch->procesess[i].bgState == FOREGROUND && (sch->procesess[i].priority != SHELL))
+        {
+            kill(i);
+            unblock(1);
+        }
+    }
+}
+
 int8_t waitPid(uint8_t pid)
 {
     if (sch->procesess[pid].state == NOT_EXISTS)

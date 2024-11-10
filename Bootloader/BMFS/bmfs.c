@@ -732,7 +732,7 @@ void read(char * filename)
         }
         else
         {
-            fseek(disk, tempentry.StartingBlock * 2097152,SEEK_SET); // Skip to the starting block in the disk
+            fseek(disk, tempentry.StartingBlock * 2097152, SEEK_SET); // Skip to the starting block in the disk
             for (tint = 0; tint < tempentry.FileSize; tint++)
             {
                 putc(getc(disk), tfile); // This is really terrible.
@@ -774,7 +774,7 @@ void write(char * filename)
             }
             else
             {
-                fseek(disk, tempentry.StartingBlock * 2097152,SEEK_SET); // Skip to the starting block in the disk
+                fseek(disk, tempentry.StartingBlock * 2097152, SEEK_SET); // Skip to the starting block in the disk
                 for (tint = 0; tint < tempfilesize; tint++)
                 {
                     putc(getc(tfile), disk); // This is really terrible.

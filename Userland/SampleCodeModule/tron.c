@@ -39,16 +39,16 @@
                            */
 
 #define INVALID_QTY_PLAYERS "Actualmente el juego solo soporta el modo individual o el de 2 jugadores, vuelva pronto!\n"
-#define WELCOME  "Bienvenido a %s\n"
-#define TRON     "Tron"
-#define TRON_ZEN "Tron-Zen"
+#define WELCOME             "Bienvenido a %s\n"
+#define TRON                "Tron"
+#define TRON_ZEN            "Tron-Zen"
 
 #define P1_WINS "Gano el jugador 1!\n"
 #define P2_WINS "Gano el jugador 2!\n"
 #define DRAW    "Empate!\n"
 
-#define P1_KEYS "El jugador 1 se mueve con W A S D y activa turbo con Z \n"
-#define P2_KEYS "El jugador 2 se mueve con las flechas y activa turbo con /\n"
+#define P1_KEYS  "El jugador 1 se mueve con W A S D y activa turbo con Z \n"
+#define P2_KEYS  "El jugador 2 se mueve con las flechas y activa turbo con /\n"
 #define ZEN_KEYS "El jugador se mueve con W A S D o con las flechas\ny activa turbo con Z o /\n"
 
 #define START_GAME "Presione espacio para comenzar, y ESC para salir en el juego\n"
