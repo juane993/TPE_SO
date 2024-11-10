@@ -1,3 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <syscalls.h>
 #include <sound.h>
 
@@ -5,7 +9,7 @@ void playSoundVictory1()
 {
     playSound(390, 3);
     playSound(520, 3);
-    playSound(660, 3);
+    playSound(661, 3);
     playSound(780, 6);
     playSound(660, 3);
     playSound(780, 6);

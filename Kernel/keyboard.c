@@ -1,3 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <process.h>
 #include <keyboard.h>
 #include <stdint.h>
@@ -53,7 +57,7 @@ void keyboardHandler()
         else if (bool && (key == 46))
         {
             print("^C\n");
-            kill_current_fg_process(); // TODO debe ser simple de solucionar, no lo logro.
+            kill_current_fg_process();
         }
         else if (!(key & 0x80))
         {

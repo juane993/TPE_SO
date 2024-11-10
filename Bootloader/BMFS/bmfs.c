@@ -1,3 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 /* BareMetal File System Utility */
 /* Written by Ian Seyler of Return Infinity */
 
@@ -50,7 +54,7 @@ int initialize(char * diskname, char * size, char * mbr, char * boot, char * ker
 void create(char * filename, unsigned long long maxsize);
 void read(char * filename);
 void write(char * filename);
-void delete(char * filename);
+void delete (char * filename);
 
 /* Program code */
 int main(int argc, char * argv[])
@@ -791,7 +795,7 @@ void write(char * filename)
     }
 }
 
-void delete(char * filename)
+void delete (char * filename)
 {
     struct BMFSEntry tempentry;
     char delmarker = 0x01;

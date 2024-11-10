@@ -1617,7 +1617,7 @@ char font_12[] = {
 #define CHAR_HEIGHT_24 32
 
 /* Vector de pixeles de los caracteres de fuente 24 */
-char font_24[] = {
+unsigned char font_24[] = {
     // input24_excl
     0x00,
     0x00,
