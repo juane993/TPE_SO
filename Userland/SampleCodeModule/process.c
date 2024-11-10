@@ -1,3 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <process.h>
 
 #define EOF        -1
@@ -204,13 +208,13 @@ int8_t run_wc(char * bgState)
     return child;
 }
 
-int8_t loop(char * sec)
+int8_t loop()
 {
 
     uint16_t pid = my_getPid();
     while (1)
     {
-        my_sleep(atoi(sec));
+        my_sleep(pid);
         printf("Hola, soy el proceso: %d\n", pid);
     }
     return 0;
@@ -229,6 +233,16 @@ int8_t run_loop(char * arg1, char * bgState)
     //    } else{
     //        my_waitPidNoHang(child);
     //    }
+
+    return child;
+}
+
+int8_t run_philo(char * bgState)
+{
+
+    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+
+    int8_t child = my_create_process(run_philosophers, 0, (void *) 0, LOW, bg);
 
     return child;
 }

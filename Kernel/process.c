@@ -1,3 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <process.h>
 #include <keyboard.h>
 #include <pipes.h>
@@ -127,9 +131,10 @@ void my_exit()
     zombie(getCurrentPid());
     sem_post(MUTEX);
 */
-     }
+}
 
-void my_exit_pid(int8_t pid){
+void my_exit_pid(int8_t pid)
+{
     sem_wait(MUTEX);
     PCB * proc = getProcess(pid);
     closePipeEnds();

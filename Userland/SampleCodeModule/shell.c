@@ -1,3 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -91,8 +95,8 @@ void init()
     commands[17] = (Command){"cat", "Imprime el STDIN tal como lo recibe", .g = (void *) &run_cat, SINGLE_PARAM};
     commands[18] = (Command){"wc", "Imprime la cantidad de lineas", .g = (void *) &run_wc, SINGLE_PARAM};
     commands[19] = (Command){"filter", "Imprime las vocales", .g = (void *) &run_filter, SINGLE_PARAM};
-    commands[20] = (Command){"loop", "Imprime su ID con un saludo cada n segundos", .h = (void *) &run_loop, DUAL_PARAM};
-    commands[21] = (Command){"philo", "Philosofer", .f = (void *) &run_philosophers, SINGLE_PARAM};
+    commands[20] = (Command){"loop", "Imprime su ID con un saludo cada n segundos", .f = (void *) &run_loop, SINGLE_PARAM};
+    commands[21] = (Command){"philo", "Philosofer", .f = (void *) &run_philo, SINGLE_PARAM};
 }
 
 void createShellProc()
@@ -178,7 +182,6 @@ void run_shell()
         char * args2[] = {prog2Arg1, prog2Arg2, prog2Arg3, prog2Arg4};
         if (prog2 != NULL)
         {
-            argc           = 4;
             args2[0]       = prog2Arg1;
             args2[1]       = prog2Arg2;
             args2[2]       = prog2Arg3;
@@ -245,7 +248,7 @@ void run_shell()
 
             int8_t pipesFD[2];
 
-            if (pid1 != -1 && pid2 != -1)
+            if (pid2 != -1)
             {
                 my_openPipe(pipesFD);
                 my_mapFD(pid1, STDOUT, pipesFD[1]);

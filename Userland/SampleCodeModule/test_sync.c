@@ -1,3 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <test_sync.h>
 
 int64_t global; // shared memory
@@ -89,16 +93,16 @@ int64_t test_sync(int argc, char * argv[])
 
     for (i = 0; i < TOTAL_PAIR_PROCESSES; i++)
     {
-        printf("waiting for children with pid: %d\n", pids[i]);
+        printf("waiting for children with pid: %d\n", (int) pids[i]);
         my_waitPid(pids[i]);
-        printf("waiting for children with pid: %d\n", pids[i + TOTAL_PAIR_PROCESSES]);
+        printf("waiting for children with pid: %d\n", (int) pids[i + TOTAL_PAIR_PROCESSES]);
         my_waitPid(pids[i + TOTAL_PAIR_PROCESSES]);
     }
 
     if (global >= 0)
-        printf("Final value: %d\n", global);
+        printf("Final value: %d\n", (int) global);
     else
-        printf("NEGATIVE Final value: -%d\n", global * -1);
+        printf("NEGATIVE Final value: -%d\n", (int) global * -1);
 
     return 0;
 }

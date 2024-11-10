@@ -12,6 +12,7 @@
 #include <test_sync.h>
 #include <test_mm.h>
 #include <libasm.h>
+#include <philo.h>
 
 #define QTY_PROC 4
 
@@ -37,13 +38,14 @@ int8_t run_test_sync(char * arg1, char * arg2, char * arg3, char * bgState);
 int8_t filter();
 int8_t wc();
 int8_t cat();
-int8_t loop(char * sec);
+int8_t loop();
 int8_t run_cat(char * bgState);
 int8_t run_wc(char * bgState);
 int8_t run_filter(char * bgState);
 int8_t run_loop(char * arg1, char * bgState);
 int8_t run_idle_process();
 int8_t run_test_mem(char * arg1, char * bgState);
+int8_t run_philo(char * bgState);
 
 // void psPrint();
 
