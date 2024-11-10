@@ -8,7 +8,7 @@ int block_size;
 void * free_ptrs[BLOCK_COUNT];
 int current;
 
-/*
+
 #define EMPTY 0
 #define NOT_LEAF 1
 #define LEAF 2
@@ -173,8 +173,8 @@ void my_free(void * p)
 
     freeRecursive(root, p);
 }
- */
 
+/*
 void createMemoryManager(int size)
 {
     start      = (void *) START_FREE_MEM;
@@ -203,3 +203,4 @@ void my_free(void * p)
 {
     free_ptrs[--current] = p;
 }
+*/

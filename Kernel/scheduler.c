@@ -177,6 +177,12 @@ int32_t kill_current_fg_process()
     {
         if (sch->procesess[i].bgState == FOREGROUND && (sch->procesess[i].priority != SHELL))
         {
+            for(int j = 0; j < sch->procesess[i].childIndex; j++)
+            {
+               PCB * child = sch->procesess[i].children[j];
+               my_exit_pid(child->processPid);
+            }
+
             my_exit_pid(i);
             return i;
         }
@@ -374,10 +380,18 @@ void adoptOrphans(uint8_t parentPid)
 
     for (int i = 0; i < childIndex; ++i)
     {
-        uint8_t waitingIndex                                = children[i]->waitingIndex;
-        children[i]->waitingForMe[waitingIndex].waitingPCB  = &(sch->procesess[1]); // Now Shell waits for ME
-        children[i]->waitingForMe[waitingIndex].boolUnblock = FALSE;
-        children[i]->waitingIndex++;
+        if (children[i]->state == ZOMBIE)
+        {
+            kill(children[i]->processPid);
+        }
+        else
+        {
+            uint8_t waitingIndex                                = children[i]->waitingIndex;
+            children[i]->waitingForMe[waitingIndex].waitingPCB  = &(sch->procesess[1]); // Now Shell waits for ME
+            children[i]->waitingForMe[waitingIndex].boolUnblock = FALSE;
+            children[i]->waitingIndex++;
+        }
+
     }
 }
 
