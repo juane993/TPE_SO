@@ -20,6 +20,7 @@ uint8_t * scheduler(uint8_t * currentSP);
 void initScheduler();
 int8_t createProcess(void * name, uint8_t argc, char * args[], Priority prio, BackgroundState bgState);
 int32_t kill(int32_t pid);
+int32_t kill_current_fg_process();
 int32_t block(int32_t pid);
 int32_t zombie(int32_t pid);
 int32_t unblock(int32_t pid);

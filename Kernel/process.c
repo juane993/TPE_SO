@@ -117,12 +117,25 @@ void closePipeEnds()
 
 void my_exit()
 {
+    my_exit_pid(getCurrentPid());
+    /*
     sem_wait(MUTEX);
     PCB * proc = getProcessCurrentPid();
     closePipeEnds();
     adoptOrphans(getCurrentPid());
     unblockWaiters(getCurrentPid());
     zombie(getCurrentPid());
+    sem_post(MUTEX);
+*/
+     }
+
+void my_exit_pid(int8_t pid){
+    sem_wait(MUTEX);
+    PCB * proc = getProcess(pid);
+    closePipeEnds();
+    adoptOrphans(pid);
+    unblockWaiters(pid);
+    zombie(pid);
     sem_post(MUTEX);
 }
 
