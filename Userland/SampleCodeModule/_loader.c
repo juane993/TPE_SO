@@ -6,14 +6,10 @@ extern char endOfBinary;
 
 int main();
 
+int _start()
+{
+    // Clean BSS
+    memset(&bss, 0, &endOfBinary - &bss);
 
-
-int _start() {
-	//Clean BSS
-	memset(&bss, 0, &endOfBinary - &bss);
-
-	return main();
-
+    return main();
 }
-
-

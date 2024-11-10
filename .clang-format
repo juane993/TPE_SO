@@ -1,0 +1,41 @@
+# Estilo base de Clang
+BasedOnStyle: LLVM
+
+# Configuración general de identación y estilo
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+BreakBeforeBraces: Allman
+AllowShortFunctionsOnASingleLine: InlineOnly
+
+# Configuración de punteros y referencias
+PointerAlignment: Middle
+
+# Configuración de espacios
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceAfterCStyleCast: true
+
+# Configuración de alineación
+AlignConsecutiveAssignments: true
+AlignOperands: true
+
+# Configuración para inicializaciones de estructuras y arreglos
+AllowShortBlocksOnASingleLine: Always
+BinPackArguments: true
+BinPackParameters: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+ColumnLimit: 0  # Ajusta según el ancho de línea que prefieras
+
+# Configuración para incluir directivas
+IncludeBlocks: Preserve
+SortIncludes: false
+
+# Configuración de macros y definiciones
+DerivePointerAlignment: false
+AlignConsecutiveMacros: true
+
+
+# Configuración para evitar saltos de línea en strings
+PenaltyBreakString: 1000

@@ -6,7 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 
-void* allocMemory(uint32_t size);
+void *allocMemory(uint32_t size);
 void my_free(void *p);
 void createMemoryManager(void *p, int s);
 
@@ -17,11 +17,9 @@ typedef struct MM_rq {
 	uint32_t size;
 } mm_rq;
 
-
-
 uint64_t test_mm(uint64_t argc, char *argv[]) {
 	char mem[MAX_BLOCKS * 20];
-	createMemoryManager((void*) mem, 20);
+	createMemoryManager((void *) mem, 20);
 	mm_rq mm_rqs[MAX_BLOCKS];
 	uint8_t rq;
 	uint32_t total;
@@ -34,14 +32,13 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
 	if ((max_memory = satoi(argv[1])) <= 0)
 		return -1;
 
-	int z=0;
+	int z = 0;
 	while (z < 130) {
 		rq = 0;
 		total = 0;
 
 		// Request as many blocks as we can
 		while (rq < MAX_BLOCKS && total < max_memory) {
-
 			mm_rqs[rq].size = GetUniform(max_memory - total - 1) + 1;
 			printf("%d\n", mm_rqs[rq].size);
 			mm_rqs[rq].address = allocMemory(mm_rqs[rq].size);
@@ -66,7 +63,7 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
 			if (mm_rqs[i].address) {
 				printf("Contenido del bloque %d en dirección %p: ", i, mm_rqs[i].address);
 				for (uint32_t j = 0; j < mm_rqs[i].size; j++) {
-					printf("%u ", ((uint8_t*)mm_rqs[i].address)[j]);
+					printf("%u ", ((uint8_t *) mm_rqs[i].address)[j]);
 				}
 				printf("\n");
 			}
@@ -88,8 +85,8 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
 				my_free(mm_rqs[i].address);
 		}
 
-		printf("TODO BIEN %d,\n",z);
-		z ++;
+		printf("TODO BIEN %d,\n", z);
+		z++;
 	}
 	return 0;
 }

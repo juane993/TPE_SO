@@ -9,4 +9,4 @@
 
 void test_prio();
 
-#endif //TPE_SO_TEST_PRIO_H
+#endif // TPE_SO_TEST_PRIO_H

@@ -6,22 +6,22 @@
 #include <lib.h>
 #include <defs.h>
 
-
-
-typedef struct  WaitingProcess {
+typedef struct WaitingProcess
+{
     struct PCB * waitingPCB;
     uint8_t boolUnblock;
 } WaitingProcess;
 
-typedef struct PCB {
+typedef struct PCB
+{
     uint8_t priority;
     uint8_t processPid;
     uint8_t parentPid;
     State state;
     BackgroundState bgState;
-    uint8_t *RSP;
-    uint8_t *stackBase;
-    char **argv;
+    uint8_t * RSP;
+    uint8_t * stackBase;
+    char ** argv;
     uint8_t argc;
     WaitingProcess waitingForMe[40];
     uint8_t waitingIndex;
@@ -33,14 +33,11 @@ typedef struct PCB {
 
 } PCB;
 
-
-
-
-void processWrapper(char argc, char *argv[],void * mainFunc);
-uint64_t initProcess(PCB *process, void *mainFunc, uint8_t argc, char **args, uint8_t newProcessPid, Priority prio, BackgroundState bgState, uint8_t parentPid);
-uint32_t killProcess(PCB *process);
-uint8_t read(int8_t fd, char * c,uint8_t size);
-uint8_t write(int8_t fd, char * c,uint8_t size);
+void processWrapper(char argc, char * argv[], void * mainFunc);
+uint64_t initProcess(PCB * process, void * mainFunc, uint8_t argc, char ** args, uint8_t newProcessPid, Priority prio, BackgroundState bgState, uint8_t parentPid);
+uint32_t killProcess(PCB * process);
+uint8_t read(int8_t fd, char * c, uint8_t size);
+uint8_t write(int8_t fd, char * c, uint8_t size);
 void sleep(int8_t sec);
 void my_exit();
 

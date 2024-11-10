@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 /**
- * @brief  Escribe 'character' en una direccion de memoria 'length' veces 
+ * @brief  Escribe 'character' en una direccion de memoria 'length' veces
  * @param  destination: Lugar a escribir
  * @param  character: Elemento a copiar
  * @param  length: Cantidad de veces que se desea escrbir el valor
@@ -21,13 +21,13 @@ void * memcpy(void * destination, const void * source, uint64_t length);
 
 /**
  * @brief Convierte un entero a string
- * @note  Actualmente no trabaja con negativos 
+ * @note  Actualmente no trabaja con negativos
  * @param  n: Numero a convertir
- * @param  buffer: Direccion donde se quiere copiar la respuesta 
+ * @param  buffer: Direccion donde se quiere copiar la respuesta
  * @param  base: Base numerica
  * @return Longitud del string generado
  */
-int itoa(uint64_t n, char* buffer, int base);
+int itoa(uint64_t n, char * buffer, int base);
 
 /**
  * @brief Convierte un string a entero base 10
@@ -35,7 +35,7 @@ int itoa(uint64_t n, char* buffer, int base);
  * @param  end: Puntero a la ultima direccion del string
  * @return Entero a partir del string
  */
-int strtoi(char* s, char ** end);
+int strtoi(char * s, char ** end);
 
 /**
  * @brief Devuelve el scancode de la ultima tecla presionada
@@ -46,9 +46,9 @@ char getKeyPressed();
 /**
  * @brief Permite obtener el fabricante del cpu
  * @param  result: Puntero donde se quiere guardar el fabricante del cpu
- * @return Direccion donde se escribio el fabricante 
+ * @return Direccion donde se escribio el fabricante
  */
-char *cpuVendor(char *result);
+char * cpuVendor(char * result);
 
 /**
  * @brief Devuelve la hora actual en formato de 24hs
@@ -75,11 +75,12 @@ void stopSound();
 void saveRegisters();
 
 /**
- * @brief  Detiene la ejecucion del programa hasta que se produzca una interrupcion
+ * @brief  Detiene la ejecucion del programa hasta que se produzca una
+ * interrupcion
  */
 void _hlt();
 
-uint64_t * initProcessStack(void * processWrapper, void * stackBase,uint8_t argc, char ** argv,void * main );
+uint64_t * initProcessStack(void * processWrapper, void * stackBase, uint8_t argc, char ** argv, void * main);
 
 void yield();
 
@@ -88,4 +89,3 @@ void acquire(uint8_t * lock);
 void release(uint8_t * lock);
 
 #endif
-

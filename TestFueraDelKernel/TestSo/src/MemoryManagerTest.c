@@ -44,8 +44,6 @@ CuSuite *getMemoryManagerTestSuite(void) {
 	return suite;
 }
 
-
-
 void testAllocMemory(CuTest *const cuTest) {
 	givenAMemoryManager(cuTest);
 	givenAMemoryAmount();
