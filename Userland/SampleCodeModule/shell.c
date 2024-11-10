@@ -199,6 +199,7 @@ void run_shell(){
                pid1 = commands[index1].j(arg1, arg2, arg3,arg4);
                 break;
         }
+
          if (prog2 != NULL && pid1 != -1){
             int pid2;
             switch (commands[index2].ftype)
@@ -219,6 +220,7 @@ void run_shell(){
                     pid2 = commands[index2].j(prog2Arg1, prog2Arg2, prog2Arg3,prog2Arg4);
                     break;
             }
+
             int8_t pipesFD[2];
 
             if(pid1 != -1 && pid2 != -1){

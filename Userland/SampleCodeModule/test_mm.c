@@ -10,7 +10,7 @@
 
 void createMemoryManager(void *p, int s);
 
-#define MAX_BLOCKS 70
+#define MAX_BLOCKS 100
 
 typedef struct MM_rq {
     void *address;
@@ -38,9 +38,9 @@ uint64_t test_mm(int argc, char *argv[]) {
         while (rq < MAX_BLOCKS && total < max_memory) {
 
 //			mm_rqs[rq].size = GetUniform(max_memory - total - 1) + 1;
-            mm_rqs[rq].size = GetUniform(30) ;
+            mm_rqs[rq].size = GetUniform(32) ;
 
-            mm_rqs[rq].address = allocMemory(mm_rqs[rq].size +  0x400);
+            mm_rqs[rq].address = allocMemory(mm_rqs[rq].size);
 
 
             if (mm_rqs[rq].address) {
@@ -48,20 +48,6 @@ uint64_t test_mm(int argc, char *argv[]) {
                 rq++;
             }
 
-//	        Ahora con el GetUniform con 30 no hace falta si lo cambian agiliza el proceso
-//			if(rq < MAX_BLOCKS && total < max_memory)
-//			{
-//				mm_rqs[rq].size = 15;
-//			//	printf("%d\n", mm_rqs[rq].size);
-//				mm_rqs[rq].address = allocMemory(mm_rqs[rq].size);
-//				//printf("Dirección: %p, \n", mm_rqs[rq].address);
-//
-//
-//				if (mm_rqs[rq].address) {
-//					total += mm_rqs[rq].size;
-//					rq++;
-//				}
-//			}
         }
 
         // Set
@@ -84,7 +70,7 @@ uint64_t test_mm(int argc, char *argv[]) {
         // Mostrar el contenido de los bloques después de memset
         for (i = 0; i < rq; i++) {
             if (mm_rqs[i].address) {
-                printf("Contenido del bloque %d en dirección %p: ", i, mm_rqs[i].address);
+                printf("Contenido del bloque %d en direccion %x: ", i, mm_rqs[i].address);
                 for (uint32_t j = 0; j < mm_rqs[i].size; j++) {
                     printf("%d ", ((uint8_t*)mm_rqs[i].address)[j]);
                 }
@@ -96,7 +82,11 @@ uint64_t test_mm(int argc, char *argv[]) {
         for (i = 0; i < rq; i++) {
             if (mm_rqs[i].address) {
                 if (!memcheck(mm_rqs[i].address, i, mm_rqs[i].size)) {
-                    printf("test_mm ERROR\n");
+                    printf("test_mm ERROR en bloque: %d: ",i);
+                    for (uint32_t j = 0; j < mm_rqs[i].size; j++) {
+                        printf("%d ", ((uint8_t*)mm_rqs[i].address)[j]);
+                    }
+                    printf("\n");
                     return -1;
                 }
             }

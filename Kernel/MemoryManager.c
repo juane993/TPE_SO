@@ -12,7 +12,7 @@ int current;
 
 
 
-#define EMPTY -1
+#define EMPTY 0
 #define NOT_LEAF 1
 #define LEAF 2
 
@@ -33,9 +33,10 @@ uint8_t sizeOfNode = sizeof(buddy_node);
 
 
 //max number of buddie control nodes.
-buddy_node buddies[(1<<0) + (1<<1) + (1<<2) + (1<<3) + (1<<4) + (1<<5) + (1<<6) + (1<<7)] = {0};
+//buddy_node buddies[(1<<0) + (1<<1) + (1<<2) + (1<<3) + (1<<4) + (1<<5) + (1<<6) + (1<<7)] = {0};
+//buddy_node buddies[(1<<0) + (1<<1) + (1<<2) + (1<<3)] = {0};
 
-//buddy_node * buddies = START_AUX_STRUCT;
+buddy_node * buddies = START_AUX_STRUCT;
 //1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 = 255
 buddy_node * root;
 
@@ -62,16 +63,28 @@ void createMemoryManager(int size){
     root->left = NULL;
     root->right = NULL;
     root->index = 0;
+    root->assigned = 0;
 	current = 0;
 }
 
+
+
 buddy_node * allocRecursive(buddy_node * node, uint32_t size){
+
+
+//    if(node == NULL || node->assigned == 1){
+//        return NULL;
+//    }
 
     //me fijo si tiene que ir en el actual o tengo que partirme en 2
     if(node->size / 2 < size){
-        if(node->state == LEAF && node->assigned == 0){
+        if(node->state == LEAF){
+            if(node->assigned == 0){
             node->assigned = 1;
             return node;
+            } else{
+                return NULL;
+            }
         }
         else {
             return NULL;
@@ -102,7 +115,8 @@ void * allocMemory(uint32_t size){
    if(size < MIN_BLOCK_SIZE){
        size = MIN_BLOCK_SIZE;
    }
-    return allocRecursive(root, size)->address;
+    void * aux =allocRecursive(root, size)->address;
+    return aux;
 }
 
 
@@ -119,19 +133,32 @@ void freeRecursive(buddy_node * node, void * p){
        return;
    }
     if(p < node->address + node->size / 2){
+        if(node->left){
          freeRecursive(node->left, p);
+        }
     }
     else {
-        freeRecursive(node->right, p);
+        if(node->right){
+            freeRecursive(node->right, p);
+        }
     }
-    if(node->left->assigned == 0 && node->right->assigned == 0){
+    if(node->left && node->right &&
+    node->left->state == LEAF && node->left->assigned == 0 &&
+    node->right->state == LEAF && node->right->assigned == 0)
+    {
         node->state = LEAF;
+        node->left->state = EMPTY;
+        node->right->state = EMPTY;
         node->left = NULL;
         node->right = NULL;
     }
 }
 
+
 void my_free(void *p){
+    if(p == NULL)
+        return;
+
     freeRecursive(root, p);
 }
 
