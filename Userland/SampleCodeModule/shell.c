@@ -224,9 +224,13 @@ void run_shell()
             pid1 = commands[index1].j(arg1, arg2, arg3, arg4);
             break;
         }
+        if(pid1 != -1) {
+            my_block(pid1);
+        }
 
         if (prog2 != NULL && pid1 != -1)
         {
+
             int pid2;
             switch (commands[index2].ftype)
             {
@@ -251,16 +255,25 @@ void run_shell()
 
             if (pid2 != -1)
             {
+                my_block(pid2);
                 my_openPipe(pipesFD);
                 my_mapFD(pid1, STDOUT, pipesFD[1]);
                 my_mapFD(pid2, STDIN, pipesFD[0]);
+                my_unblock(pid1);
+                my_unblock(pid2);
+                my_waitPidNoHang(pid1);
                 shellWait(pid2, args2);
 
             }
-            my_waitPidNoHang(pid1);
+            else
+            {
+                my_kill(pid1);
+            }
+
         }
         else if (pid1 != -1)
         {
+            my_unblock(pid1);
             shellWait(pid1, args);
         }
     }

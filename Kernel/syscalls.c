@@ -183,7 +183,7 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
         syscall_sleep((int8_t) arg0);
         break;
     case PRINTMEM:
-        return (char *) syscall_printMem();
+        return (int64_t) syscall_printMem();
     }
     return 0;
 }

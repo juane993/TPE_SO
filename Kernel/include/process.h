@@ -41,5 +41,6 @@ uint8_t write(int8_t fd, char * c, uint8_t size);
 void sleep(int8_t sec);
 void my_exit();
 void my_exit_pid(int8_t pid);
+uint8_t mapFD(uint8_t pid, uint8_t oldFD, uint8_t newFD);
 
 #endif // TPE_SO_PROCESS_H

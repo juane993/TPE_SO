@@ -1,6 +1,6 @@
 #include <buddy.h>
 #include <string.h>
-
+#include <lib.h>
 
 #define EMPTY 0
 #define NOT_LEAF 1
