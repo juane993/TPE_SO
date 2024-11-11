@@ -2,7 +2,10 @@
 #ifndef TPE_SO_BUDDY_H
 #define TPE_SO_BUDDY_H
 
+#include <defs.h>
+#include <stdint.h>
 // buddy system
+#define START_FREE_MEM 0x600000
 #define TOTAL_MEM_SIZE 0x20000 // 128kb = 131072 bytes
 
 #define START_AUX_STRUCT  (void *) 0x620000 // for buddy control system. UNUSED

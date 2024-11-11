@@ -28,6 +28,8 @@ uint8_t sizeOfNode = sizeof(buddy_node);
 buddy_node * buddies = START_AUX_STRUCT;
 // 1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 = 255
 buddy_node * root;
+void * start;
+int current;
 
 buddy_node * createNode(uint8_t index, uint64_t size, uint8_t level, void * address, buddy_node * parent)
 {
