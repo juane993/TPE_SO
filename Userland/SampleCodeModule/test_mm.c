@@ -11,7 +11,7 @@
 
 void createMemoryManager(void * p, int s);
 
-#define MAX_BLOCKS 100
+#define MAX_BLOCKS 50
 
 typedef struct MM_rq
 {
@@ -34,9 +34,9 @@ uint64_t test_mm(int argc, char * argv[])
     {
         rq    = 0;
         total = 0;
-
+        char finish = 0;
         // Request as many blocks as we can
-        while (rq < MAX_BLOCKS && total < max_memory)
+        while (rq < MAX_BLOCKS && total < max_memory && !finish)
         {
 
             //			mm_rqs[rq].size = GetUniform(max_memory - total - 1) +
@@ -49,6 +49,8 @@ uint64_t test_mm(int argc, char * argv[])
             {
                 total += mm_rqs[rq].size;
                 rq++;
+            } else{
+                finish = 1;
             }
         }
 

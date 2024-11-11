@@ -63,9 +63,9 @@ void createMemoryManager(int size)
 buddy_node * allocRecursive(buddy_node * node, uint32_t size)
 {
 
-    //    if(node == NULL || node->assigned == 1){
-    //        return NULL;
-    //    }
+        if(node == NULL || node->assigned == 1){
+            return NULL;
+        }
 
     // me fijo si tiene que ir en el actual o tengo que partirme en 2
     if (node->size / 2 < size)
