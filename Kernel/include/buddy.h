@@ -12,6 +12,11 @@
 #define sizeof_buddy_node 32
 #define MIN_BLOCK_SIZE    0x400 // 1kb
 
+void createMemoryManager(int size);
+void * allocMemory(uint32_t size);
+void my_free(void * p);
+char * printMem();
+
 #define MAX_HEIGHT 7
 
 #endif //TPE_SO_BUDDY_H

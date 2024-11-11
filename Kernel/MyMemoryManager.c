@@ -1,5 +1,5 @@
 #include <MemoryManager.h>
-
+#include <string.h>
 void * start;
 int block_size;
 
@@ -16,6 +16,27 @@ void createMemoryManager(int size)
         free_ptrs[i] = (char *) start + i * block_size;
     }
     current = 0;
+}
+uint64_t getMemUsed(){
+    return current * block_size;
+}
+
+char * printMem(){
+    char * buffer        = (char *) allocMemory(1000);
+    char * currentBufPos = buffer;
+    char len= 0;
+    len = strcpy(currentBufPos, "Using MemoryManager system\n");
+    currentBufPos += len;
+    len = strcpy(currentBufPos, "Total memory consumed: ");
+    currentBufPos += len;
+    len = itoa(getMemUsed(), currentBufPos, 16);
+    currentBufPos += len;
+    len = strcpy(currentBufPos, " H bytes from ");
+    currentBufPos += len;
+    len = itoa(TOTAL_MEM, currentBufPos, 16);
+    currentBufPos += len;
+    len = strcpy(currentBufPos, " H bytes\n");
+    return buffer;
 }
 
 void * allocMemory(uint32_t size)

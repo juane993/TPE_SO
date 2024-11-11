@@ -1,4 +1,6 @@
 #include <buddy.h>
+#include <string.h>
+
 
 #define EMPTY 0
 #define NOT_LEAF 1
@@ -58,6 +60,39 @@ void createMemoryManager(int size)
     root->index    = 0;
     root->assigned = 0;
     current        = 0;
+}
+
+uint64_t getAsignedMemRecursive(buddy_node * node)
+{
+    if (node->state == LEAF && node->assigned == 1)
+    {
+        return node->size;
+    }
+    if (node->state == LEAF && node->assigned == 0)
+    {
+        return 0;
+    }
+    return getAsignedMemRecursive(node->left) + getAsignedMemRecursive(node->right);
+}
+
+
+
+char * printMem(){
+        char * buffer        = (char *) allocMemory(1000);
+        char * currentBufPos = buffer;
+        char len= 0;
+        len = strcpy(currentBufPos, "Using buddy system\n");
+        currentBufPos += len;
+        len = strcpy(currentBufPos, "Total memory consumed: ");
+        currentBufPos += len;
+        len = itoa(getAsignedMemRecursive(root), currentBufPos, 16);
+        currentBufPos += len;
+        len = strcpy(currentBufPos, " H bytes from ");
+        currentBufPos += len;
+        len = itoa(TOTAL_MEM_SIZE, currentBufPos, 16);
+        currentBufPos += len;
+        len = strcpy(currentBufPos, " H bytes\n");
+        return buffer;
 }
 
 buddy_node * allocRecursive(buddy_node * node, uint32_t size)

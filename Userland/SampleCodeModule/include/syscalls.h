@@ -150,4 +150,6 @@ int8_t my_closePipe(int8_t fd);
 
 void my_sleep(uint8_t sec);
 
+char * my_printMem();
+
 #endif

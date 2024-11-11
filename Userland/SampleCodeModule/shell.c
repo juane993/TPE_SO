@@ -65,10 +65,11 @@ static int8_t div(char * num, char * div);
 static int8_t tron();
 static int8_t tronZen();
 static int8_t fontSize(char * size);
-static int8_t printMem(char * pos);
+
 static int8_t getCommandIndex(char * command);
 static int8_t sys_ps();
 static int8_t clearConsole();
+static int8_t sys_printMem();
 
 static Command commands[QTY_COMMANDS];
 
@@ -84,19 +85,19 @@ void init()
     commands[6]  = (Command){"tron", "Juego Tron Light Cycles", .f = (void *) &tron, NO_PARAMS};
     commands[7]  = (Command){"tron-zen", "Juego Tron Light Cycles con un unico jugador", .f = (void *) &tronZen, NO_PARAMS};
     commands[8]  = (Command){"font-size", "Cambio de dimensiones de la fuente. Para hacerlo escribir el comando seguido de un numero", .g = (void *) &fontSize, SINGLE_PARAM};
-    commands[9]  = (Command){"printmem", "Realiza un vuelco de memoria de los 32 bytes posteriores a una direccion de memoria en formato hexadecimal enviada por parametro", .g = (void *) &printMem, SINGLE_PARAM};
-    commands[10] = (Command){"clear", "Limpia toda la pantalla", .f = (void *) &clearConsole, NO_PARAMS};
-    commands[11] = (Command){"testmem", "mem test", .h = (void *) &run_test_mem, DUAL_PARAM};
-    commands[12] = (Command){"testprocess", "test processes", .h = (void *) &run_test_proc, DUAL_PARAM};
-    commands[13] = (Command){"testprio", "test priorities", .f = (void *) &run_test_prio, SINGLE_PARAM};
-    commands[14] = (Command){"kill", "kill a process with pid ", .g = (void *) &kill, SINGLE_PARAM};
-    commands[15] = (Command){"ps", "program status ", .f = (void *) &sys_ps, NO_PARAMS};
-    commands[16] = (Command){"testsync", "test de sincronizacion", .j = (void *) &run_test_sync, FOUR_PARAM};
-    commands[17] = (Command){"cat", "Imprime el STDIN tal como lo recibe", .g = (void *) &run_cat, SINGLE_PARAM};
-    commands[18] = (Command){"wc", "Imprime la cantidad de lineas", .g = (void *) &run_wc, SINGLE_PARAM};
-    commands[19] = (Command){"filter", "Imprime las vocales", .g = (void *) &run_filter, SINGLE_PARAM};
-    commands[20] = (Command){"loop", "Imprime su ID con un saludo cada n segundos", .f = (void *) &run_loop, SINGLE_PARAM};
-    commands[21] = (Command){"philo", "Philosofer", .f = (void *) &run_philo, SINGLE_PARAM};
+    commands[9] = (Command){"clear", "Limpia toda la pantalla", .f = (void *) &clearConsole, NO_PARAMS};
+    commands[10] = (Command){"testmem", "mem test", .h = (void *) &run_test_mem, DUAL_PARAM};
+    commands[11] = (Command){"testprocess", "test processes", .h = (void *) &run_test_proc, DUAL_PARAM};
+    commands[12] = (Command){"testprio", "test priorities", .f = (void *) &run_test_prio, SINGLE_PARAM};
+    commands[13] = (Command){"kill", "kill a process with pid ", .g = (void *) &kill, SINGLE_PARAM};
+    commands[14] = (Command){"ps", "program status ", .f = (void *) &sys_ps, NO_PARAMS};
+    commands[15] = (Command){"testsync", "test de sincronizacion", .j = (void *) &run_test_sync, FOUR_PARAM};
+    commands[16] = (Command){"cat", "Imprime el STDIN tal como lo recibe", .g = (void *) &run_cat, SINGLE_PARAM};
+    commands[17] = (Command){"wc", "Imprime la cantidad de lineas", .g = (void *) &run_wc, SINGLE_PARAM};
+    commands[18] = (Command){"filter", "Imprime las vocales", .g = (void *) &run_filter, SINGLE_PARAM};
+    commands[19] = (Command){"loop", "Imprime su ID con un saludo cada n segundos", .f = (void *) &run_loop, SINGLE_PARAM};
+    commands[20] = (Command){"philo", "Philosofer", .f = (void *) &run_philo, SINGLE_PARAM};
+    commands[21] = (Command){"printmem", "mem status ", .f = (void *) &sys_printMem, NO_PARAMS};
 }
 
 void createShellProc()
@@ -336,20 +337,6 @@ static int8_t tronZen()
     return -1;
 }
 
-static int8_t printMem(char * pos)
-{
-    uint8_t resp[QTY_BYTES];
-    char * end;
-    getMemory(strtoh(pos, &end), resp);
-    for (int i = 0; i < QTY_BYTES; i++)
-    {
-        printf("0x%2x ", resp[i]);
-        if (i % 4 == 3)
-            putchar('\n');
-    }
-
-    return -1;
-}
 
 static char * _regNames[] = {"RIP", "RSP", "RAX", "RBX", "RCX", "RDX", "RBP", "RDI", "RSI", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15"};
 static int8_t printInfoReg()
@@ -380,6 +367,14 @@ static int8_t sys_ps()
     printf("%s", ps);
     my_free((void *) ps);
 
+    return -1;
+}
+
+static int8_t sys_printMem()
+{
+    char * mem = my_printMem();
+    printf("%s", mem);
+    my_free((void *) mem);
     return -1;
 }
 

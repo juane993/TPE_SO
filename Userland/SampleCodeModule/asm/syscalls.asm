@@ -33,6 +33,7 @@ GLOBAL my_mapFD
 GLOBAL my_openPipe
 GLOBAL my_closePipe
 GLOBAL my_sleep
+GLOBAL my_printMem
 
 read:
     mov rax, 0
@@ -210,5 +211,10 @@ my_closePipe:
 
 my_sleep:
     mov rax, 33
+    int 80h
+    ret
+
+my_printMem:
+    mov rax, 34
     int 80h
     ret

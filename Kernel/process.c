@@ -136,7 +136,6 @@ void my_exit()
 void my_exit_pid(int8_t pid)
 {
     sem_wait(MUTEX);
-    PCB * proc = getProcess(pid);
     closePipeEnds();
     adoptOrphans(pid);
     unblockWaiters(pid);
@@ -147,10 +146,10 @@ void my_exit_pid(int8_t pid)
 void processWrapper(char argc, char * argv[], void * mainFunc)
 {
 
-    uint64_t ret = ((int (*)(int, char **)) mainFunc)(argc, argv);
-    // disableInterrupts();
+    ((int (*)(int, char **)) mainFunc)(argc, argv);
+
     my_exit();
-    // enableInterrupts();
+
     yield();
 }
 

@@ -53,6 +53,7 @@
 #define OPENPIPE       31
 #define CLOSEPIPE      32
 #define SLEEP          33
+#define PRINTMEM       34
 
 static uint8_t syscall_read(uint32_t fd, char * c, uint8_t size);
 static uint8_t syscall_write(uint32_t fd, char * c, uint8_t size);
@@ -92,6 +93,8 @@ static int8_t syscall_openPipe(int8_t * fd);
 static int8_t syscall_closePipeEnd(int8_t fd);
 
 static void syscall_sleep(int8_t sec);
+
+static char * syscall_printMem();
 
 int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5)
 {
@@ -179,6 +182,8 @@ int64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1, uint64_t ar
     case SLEEP:
         syscall_sleep((int8_t) arg0);
         break;
+    case PRINTMEM:
+        return (char *) syscall_printMem();
     }
     return 0;
 }
@@ -369,4 +374,9 @@ static int8_t syscall_closePipeEnd(int8_t fd)
 static void syscall_sleep(int8_t sec)
 {
     sleep(sec);
+}
+
+static char * syscall_printMem()
+{
+    return printMem();
 }
