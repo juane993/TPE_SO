@@ -1,17 +1,4 @@
-// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-#include <MemoryManager.h>
-
-uint64_t test_mm(uint64_t argc, char * argv[]);
-
-void * start;
-int block_size;
-
-void * free_ptrs[BLOCK_COUNT];
-int current;
-
+#include <buddy.h>
 
 #define EMPTY 0
 #define NOT_LEAF 1
@@ -177,34 +164,3 @@ void my_free(void * p)
 
     freeRecursive(root, p);
 }
-
-/*
-void createMemoryManager(int size)
-{
-    start      = (void *) START_FREE_MEM;
-    block_size = size;
-    for (int i = 0; i < BLOCK_COUNT; i++)
-    {
-        free_ptrs[i] = (char *) start + i * block_size;
-    }
-    current = 0;
-}
-
-void * allocMemory(uint32_t size)
-{
-    if (size > block_size)
-    {
-        return NULL;
-    }
-    if (current < BLOCK_COUNT)
-    {
-        return free_ptrs[current++];
-    }
-    return NULL;
-}
-
-void my_free(void * p)
-{
-    free_ptrs[--current] = p;
-}
-*/
