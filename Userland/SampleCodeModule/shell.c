@@ -254,8 +254,9 @@ void run_shell()
                 my_mapFD(pid1, STDOUT, pipesFD[1]);
                 my_mapFD(pid2, STDIN, pipesFD[0]);
                 shellWait(pid2, args2);
-                my_waitPidNoHang(pid1);
+
             }
+            my_waitPidNoHang(pid1);
         }
         else if (pid1 != -1)
         {
