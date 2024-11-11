@@ -67,11 +67,7 @@ int8_t run_test_proc(char * argv, char * bgState)
 {
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
     int8_t child       = my_create_process(test_processes, 1, &argv, HIGH, bg);
-    //    if(bg == FOREGROUND){
-    //        my_waitPid(child);
-    //    } else{
-    //        my_waitPidNoHang(child);
-    //    }
+
     return child;
 }
 
@@ -79,11 +75,7 @@ int8_t run_test_prio(char * bgState)
 {
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
     int8_t child       = my_create_process(test_prio, 0, (void *) 0, HIGH, bg);
-    //    if(bg == FOREGROUND){
-    //        my_waitPid(child);
-    //    } else{
-    //        my_waitPidNoHang(child);
-    //    }
+
     return child;
 }
 
@@ -93,14 +85,6 @@ int8_t run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState)
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
     // my_openPipe(5);
     int8_t child = my_create_process(test_sync, 3, argv, HIGH, bg);
-
-    // my_mapFD(child, STDOUT, 5);
-
-    //    if(bg == FOREGROUND){
-    //        my_waitPid(child);
-    //    } else{
-    //        my_waitPidNoHang(child);
-    //    }
 
     return child;
 }
@@ -160,29 +144,20 @@ int8_t cat()
 
 int8_t run_filter(char * bgState)
 {
-    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+    if(validate_bg_state(bgState) == -1) {
+        return -1;
+    }
+
+    BackgroundState bg = FOREGROUND;
 
     int8_t child = my_create_process(filter, 0, (void *) 0, HIGH, bg);
 
-    //    if(bg == FOREGROUND){
-    //        my_waitPid(child);
-    //    } else{
-    //        my_waitPidNoHang(child);
-    //    }
     return child;
 }
 
 int8_t run_cat(char * bgState)
 {
-
-    if (strcmp(bgState, "bg") == 0)
-    {
-        printErr("Foreground execution is required for cat\n");
-        return -1;
-    }
-    if (strcmp(bgState, "fg") != 0)
-    {
-        printErr("Invalid background state\n");
+    if(validate_bg_state(bgState) == -1) {
         return -1;
     }
 
@@ -190,18 +165,16 @@ int8_t run_cat(char * bgState)
 
     int8_t child = my_create_process(cat, 0, (void *) 0, HIGH, bg);
 
-    //    if(bg == FOREGROUND){
-    //        my_waitPid(child);
-    //    } else{
-    //        my_waitPidNoHang(child);
-    //    }
     return child;
 }
 
 int8_t run_wc(char * bgState)
 {
+    if(validate_bg_state(bgState) == -1) {
+        return -1;
+    }
 
-    BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
+    BackgroundState bg = FOREGROUND;
 
     int8_t child = my_create_process(wc, 0, (void *) 0, HIGH, bg);
 
@@ -245,4 +218,16 @@ int8_t run_philo(char * bgState)
     int8_t child = my_create_process(run_philosophers, 0, (void *) 0, LOW, bg);
 
     return child;
+}
+
+int8_t validate_bg_state(char * bgState) {
+    if (strcmp(bgState, "bg") == 0) {
+        printErr("Foreground execution is required for this process\n");
+        return -1;
+    }
+    if (strcmp(bgState, "fg") != 0) {
+        printErr("Invalid background state\n");
+        return -1;
+    }
+    return 0;
 }

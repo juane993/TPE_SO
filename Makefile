@@ -1,6 +1,6 @@
 
 all:  bootloader kernel userland image
-buddy: bootloader kernel_buddy userland image
+buddy: bootloader kernel_buddy userland image_buddy
 
 bootloader:
 	cd Bootloader; make all
@@ -15,6 +15,9 @@ userland:
 	cd Userland; make all
 
 image: kernel bootloader userland
+	cd Image; make all
+
+image_buddy: kernel_buddy bootloader userland
 	cd Image; make all
 
 clean:
