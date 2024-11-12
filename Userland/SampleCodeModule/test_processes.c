@@ -47,7 +47,7 @@ int64_t test_processes(int argc, char * argv[])
             if (p_rqs[rq].pid == -1)
             {
                 printf("test_processes: ERROR creating process\n");
-                my_exit();
+                return -1;
             }
             else
             {

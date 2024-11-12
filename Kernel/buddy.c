@@ -162,6 +162,9 @@ void * allocMemory(uint32_t size)
 // derecho o en el izquierdo
 void freeRecursive(buddy_node * node, void * p)
 {
+    if(node == NULL){
+        return;
+    }
     if (node->state == LEAF)
     {
         if (node->address == p && node->assigned == 1)

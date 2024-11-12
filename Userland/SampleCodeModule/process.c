@@ -23,7 +23,7 @@ int8_t kill(char * pid)
         printErr("Error killing process\n");
         return -1;
     }
-    return 0;
+    return -1;
 }
 
 int8_t run_test_proc(char * argv, char * bgState)
