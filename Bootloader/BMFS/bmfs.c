@@ -54,7 +54,7 @@ int initialize(char * diskname, char * size, char * mbr, char * boot, char * ker
 void create(char * filename, unsigned long long maxsize);
 void read(char * filename);
 void write(char * filename);
-void delete (char * filename);
+void delete(char * filename);
 
 /* Program code */
 int main(int argc, char * argv[])
@@ -795,7 +795,7 @@ void write(char * filename)
     }
 }
 
-void delete (char * filename)
+void delete(char * filename)
 {
     struct BMFSEntry tempentry;
     char delmarker = 0x01;

@@ -48,7 +48,6 @@ int8_t run_test_mem(char * arg1, char * bgState);
 int8_t run_philo(char * bgState);
 int8_t validate_bg_state(char * bgState);
 
-
 // void psPrint();
 
 #endif // TPE_SO_PROCESS_H

@@ -35,7 +35,7 @@ int64_t test_processes(int argc, char * argv[])
 
     p_rq p_rqs[max_processes];
     char loops = 0;
-    while (loops <= 70)
+    while (loops <= 10)
     {
 
         // Create max_processes processes

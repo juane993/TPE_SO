@@ -8,9 +8,6 @@
 #include <semaphore.h>
 #include <video.h>
 
-// OJO, quiero ver si tengo una race condition y por eso explota
-// despues debe haber mejor manera de hacerlo pero quiero que no me interrumpan
-// cuando estoy cerrando la wrapper
 extern void disableInterrupts();
 extern void enableInterrupts();
 
@@ -79,7 +76,6 @@ uint64_t initProcess(PCB * process, void * mainFunc, uint8_t argc, char ** args,
     {
         process->openFDs[i] = EMPTY_FD;
     }
-    // process->waitingForMe[0] = getProcess(parentPid);
 
     return process->processPid;
 }
@@ -119,20 +115,6 @@ void closePipeEnds()
     }
 }
 
-void my_exit()
-{
-    my_exit_pid(getCurrentPid());
-    /*
-    sem_wait(MUTEX);
-    PCB * proc = getProcessCurrentPid();
-    closePipeEnds();
-    adoptOrphans(getCurrentPid());
-    unblockWaiters(getCurrentPid());
-    zombie(getCurrentPid());
-    sem_post(MUTEX);
-*/
-}
-
 void my_exit_pid(int8_t pid)
 {
     sem_wait(MUTEX);
@@ -141,6 +123,11 @@ void my_exit_pid(int8_t pid)
     unblockWaiters(pid);
     zombie(pid);
     sem_post(MUTEX);
+}
+
+void my_exit()
+{
+    my_exit_pid(getCurrentPid());
 }
 
 void processWrapper(char argc, char * argv[], void * mainFunc)

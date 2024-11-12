@@ -9,7 +9,6 @@
 
 procesess proc[QTY_PROC];
 
-
 int8_t kill(char * pid)
 {
     int8_t pidInt = atoi(pid);
@@ -111,7 +110,8 @@ int8_t cat()
 
 int8_t run_filter(char * bgState)
 {
-    if(validate_bg_state(bgState) == -1) {
+    if (validate_bg_state(bgState) == -1)
+    {
         return -1;
     }
 
@@ -125,7 +125,8 @@ int8_t run_filter(char * bgState)
 
 int8_t run_cat(char * bgState)
 {
-    if(validate_bg_state(bgState) == -1) {
+    if (validate_bg_state(bgState) == -1)
+    {
         return -1;
     }
 
@@ -139,7 +140,8 @@ int8_t run_cat(char * bgState)
 
 int8_t run_wc(char * bgState)
 {
-    if(validate_bg_state(bgState) == -1) {
+    if (validate_bg_state(bgState) == -1)
+    {
         return -1;
     }
 
@@ -191,12 +193,15 @@ int8_t run_philo(char * bgState)
     return child;
 }
 
-int8_t validate_bg_state(char * bgState) {
-    if (strcmp(bgState, "bg") == 0) {
+int8_t validate_bg_state(char * bgState)
+{
+    if (strcmp(bgState, "bg") == 0)
+    {
         printErr("Foreground execution is required for this process\n");
         return -1;
     }
-    if (strcmp(bgState, "fg") != 0) {
+    if (strcmp(bgState, "fg") != 0)
+    {
         printErr("Invalid background state\n");
         return -1;
     }

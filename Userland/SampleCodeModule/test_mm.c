@@ -32,8 +32,8 @@ uint64_t test_mm(int argc, char * argv[])
     int z = 0;
     while (z < 20)
     {
-        rq    = 0;
-        total = 0;
+        rq          = 0;
+        total       = 0;
         char finish = 0;
         // Request as many blocks as we can
         while (rq < MAX_BLOCKS && total < max_memory && !finish)
@@ -49,7 +49,9 @@ uint64_t test_mm(int argc, char * argv[])
             {
                 total += mm_rqs[rq].size;
                 rq++;
-            } else{
+            }
+            else
+            {
                 finish = 1;
             }
         }

@@ -3,7 +3,7 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <pipes.h>
-#define PIPE_INDEX(pipeFD)            (((pipeFD) -4) / 2)
+#define PIPE_INDEX(pipeFD)            (((pipeFD) - 4) / 2)
 #define INVALID_READ_PIPE_FD(pipeFD)  ((pipeFD) < 4 || (pipeFD) % 2 != 0 || (pipeFD) > 2 * MAX_PIPES + 5)
 #define INVALID_WRITE_PIPE_FD(pipeFD) ((pipeFD) < 4 || (pipeFD) % 2 == 0 || (pipeFD) > 2 * MAX_PIPES + 5)
 

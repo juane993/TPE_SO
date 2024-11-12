@@ -4,7 +4,6 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <scheduler.h>
 
-
 void deleteProcessPointers(uint32_t pid);
 void asignPriority(int32_t pid, Priority newPrio);
 void calculateMaxPrio();
@@ -181,14 +180,13 @@ int32_t kill_current_fg_process()
     {
         if (sch->procesess[i].bgState == FOREGROUND && (sch->procesess[i].priority != SHELL))
         {
-            for(int j = 0; j < sch->procesess[i].childIndex; j++)
+            for (int j = 0; j < sch->procesess[i].childIndex; j++)
             {
-               PCB * child = sch->procesess[i].children[j];
-               my_exit_pid(child->processPid);
+                PCB * child = sch->procesess[i].children[j];
+                my_exit_pid(child->processPid);
             }
 
             my_exit_pid(i);
-
         }
     }
     return -1;
@@ -395,7 +393,6 @@ void adoptOrphans(uint8_t parentPid)
             children[i]->waitingForMe[waitingIndex].boolUnblock = FALSE;
             children[i]->waitingIndex++;
         }
-
     }
 }
 

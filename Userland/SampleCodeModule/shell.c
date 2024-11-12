@@ -85,7 +85,7 @@ void init()
     commands[6]  = (Command){"tron", "Juego Tron Light Cycles", .f = (void *) &tron, NO_PARAMS};
     commands[7]  = (Command){"tron-zen", "Juego Tron Light Cycles con un unico jugador", .f = (void *) &tronZen, NO_PARAMS};
     commands[8]  = (Command){"font-size", "Cambio de dimensiones de la fuente. Para hacerlo escribir el comando seguido de un numero", .g = (void *) &fontSize, SINGLE_PARAM};
-    commands[9] = (Command){"clear", "Limpia toda la pantalla", .f = (void *) &clearConsole, NO_PARAMS};
+    commands[9]  = (Command){"clear", "Limpia toda la pantalla", .f = (void *) &clearConsole, NO_PARAMS};
     commands[10] = (Command){"testmem", "mem test", .h = (void *) &run_test_mem, DUAL_PARAM};
     commands[11] = (Command){"testprocess", "test processes", .h = (void *) &run_test_proc, DUAL_PARAM};
     commands[12] = (Command){"testprio", "test priorities", .f = (void *) &run_test_prio, SINGLE_PARAM};
@@ -260,13 +260,11 @@ void run_shell()
                 my_unblock(pid2);
                 my_waitPidNoHang(pid1);
                 shellWait(pid2, args2);
-
             }
             else
             {
                 my_kill(pid1);
             }
-
         }
         else if (pid1 != -1)
         {
@@ -346,7 +344,6 @@ static int8_t tronZen()
 
     return -1;
 }
-
 
 static char * _regNames[] = {"RIP", "RSP", "RAX", "RBX", "RCX", "RDX", "RBP", "RDI", "RSI", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15"};
 static int8_t printInfoReg()

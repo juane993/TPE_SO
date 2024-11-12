@@ -11,7 +11,7 @@
 
 #define BLOCK_COUNT 200
 
-#define TOTAL_MEM  (BLOCK_COUNT * MEM_BLOCK_SIZE)
+#define TOTAL_MEM (BLOCK_COUNT * MEM_BLOCK_SIZE)
 
 void createMemoryManager(int size);
 void * allocMemory(uint32_t size);

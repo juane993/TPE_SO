@@ -6,11 +6,11 @@
 #include <stdint.h>
 // buddy system
 #define START_FREE_MEM 0x600000
-#define TOTAL_MEM_SIZE 0x20000 // 128kb = 131072 bytes
+#define TOTAL_MEM_SIZE 0x20000
 
-#define START_AUX_STRUCT  (void *) 0x620000 // for buddy control system. UNUSED
+#define START_AUX_STRUCT  (void *) 0x620000
 #define sizeof_buddy_node 32
-#define MIN_BLOCK_SIZE    0x400 // 1kb
+#define MIN_BLOCK_SIZE    0x400
 
 void createMemoryManager(int size);
 void * allocMemory(uint32_t size);
@@ -19,4 +19,4 @@ char * printMem();
 
 #define MAX_HEIGHT 7
 
-#endif //TPE_SO_BUDDY_H
+#endif // TPE_SO_BUDDY_H

@@ -6,7 +6,6 @@ int block_size;
 void * free_ptrs[BLOCK_COUNT];
 int current;
 
-
 void createMemoryManager(int size)
 {
     start      = (void *) START_FREE_MEM;
@@ -17,15 +16,17 @@ void createMemoryManager(int size)
     }
     current = 0;
 }
-uint64_t getMemUsed(){
+uint64_t getMemUsed()
+{
     return current * block_size;
 }
 
-char * printMem(){
+char * printMem()
+{
     char * buffer        = (char *) allocMemory(1000);
     char * currentBufPos = buffer;
-    char len= 0;
-    len = strcpy(currentBufPos, "Using MemoryManager system\n");
+    char len             = 0;
+    len                  = strcpy(currentBufPos, "Using MemoryManager system\n");
     currentBufPos += len;
     len = strcpy(currentBufPos, "Total memory consumed: ");
     currentBufPos += len;

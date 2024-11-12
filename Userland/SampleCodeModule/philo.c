@@ -58,23 +58,23 @@ int run_philosophers()
     {
         switch (command)
         {
-            case COMMAND_ADD:
-                if (qtyPhilosophers < MAX_QTY)
-                {
-                    if (addPhilosopher(qtyPhilosophers) == -1)
-                        printf("Error en addPhilosopher, habia espacio, probablemte en MUTEX_SEM_ID\n");
-                }
-                else
-                {
-                    printf("La mesa esta llena \n");
-                }
-                break;
-            case COMMAND_REMOVE:
-                if (qtyPhilosophers > MIN_QTY)
-                {
-                    removePhilosopher(qtyPhilosophers - 1);
-                }
-                break;
+        case COMMAND_ADD:
+            if (qtyPhilosophers < MAX_QTY)
+            {
+                if (addPhilosopher(qtyPhilosophers) == -1)
+                    printf("Error en addPhilosopher, habia espacio, probablemte en MUTEX_SEM_ID\n");
+            }
+            else
+            {
+                printf("La mesa esta llena \n");
+            }
+            break;
+        case COMMAND_REMOVE:
+            if (qtyPhilosophers > MIN_QTY)
+            {
+                removePhilosopher(qtyPhilosophers - 1);
+            }
+            break;
         }
     }
     for (int i = qtyPhilosophers - 1; i >= 0; i--)

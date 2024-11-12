@@ -2,9 +2,9 @@
 #include <string.h>
 #include <lib.h>
 
-#define EMPTY 0
+#define EMPTY    0
 #define NOT_LEAF 1
-#define LEAF 2
+#define LEAF     2
 
 // PARA SALTAR AL HIJO IZQUIERDO: (2 * i) + 1
 // PARA SALTAR AL HIJO DERECHO: (2 * i) + 2
@@ -75,32 +75,32 @@ uint64_t getAsignedMemRecursive(buddy_node * node)
     return getAsignedMemRecursive(node->left) + getAsignedMemRecursive(node->right);
 }
 
-
-
-char * printMem(){
-        char * buffer        = (char *) allocMemory(1000);
-        char * currentBufPos = buffer;
-        char len= 0;
-        len = strcpy(currentBufPos, "Using buddy system\n");
-        currentBufPos += len;
-        len = strcpy(currentBufPos, "Total memory consumed: ");
-        currentBufPos += len;
-        len = itoa(getAsignedMemRecursive(root), currentBufPos, 16);
-        currentBufPos += len;
-        len = strcpy(currentBufPos, " H bytes from ");
-        currentBufPos += len;
-        len = itoa(TOTAL_MEM_SIZE, currentBufPos, 16);
-        currentBufPos += len;
-        len = strcpy(currentBufPos, " H bytes\n");
-        return buffer;
+char * printMem()
+{
+    char * buffer        = (char *) allocMemory(1000);
+    char * currentBufPos = buffer;
+    char len             = 0;
+    len                  = strcpy(currentBufPos, "Using buddy system\n");
+    currentBufPos += len;
+    len = strcpy(currentBufPos, "Total memory consumed: ");
+    currentBufPos += len;
+    len = itoa(getAsignedMemRecursive(root), currentBufPos, 16);
+    currentBufPos += len;
+    len = strcpy(currentBufPos, " H bytes from ");
+    currentBufPos += len;
+    len = itoa(TOTAL_MEM_SIZE, currentBufPos, 16);
+    currentBufPos += len;
+    len = strcpy(currentBufPos, " H bytes\n");
+    return buffer;
 }
 
 buddy_node * allocRecursive(buddy_node * node, uint32_t size)
 {
 
-        if(node == NULL || node->assigned == 1){
-            return NULL;
-        }
+    if (node == NULL || node->assigned == 1)
+    {
+        return NULL;
+    }
 
     // me fijo si tiene que ir en el actual o tengo que partirme en 2
     if (node->size / 2 < size)
@@ -162,7 +162,8 @@ void * allocMemory(uint32_t size)
 // derecho o en el izquierdo
 void freeRecursive(buddy_node * node, void * p)
 {
-    if(node == NULL){
+    if (node == NULL)
+    {
         return;
     }
     if (node->state == LEAF)
