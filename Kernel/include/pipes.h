@@ -15,8 +15,7 @@ typedef struct pipesCDT * pipesADT;
 
 typedef struct pipe_t
 {
-    // fd[0] = read
-    // fd[1] = write
+
     uint8_t readEndClosed;
     uint8_t writeEndClosed;
     int8_t pipeFDs[2];

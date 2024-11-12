@@ -3,10 +3,8 @@
 
 #define SCHEDULER_ADDRESS (0x700000)
 #define MAX_PROCESSES     70
-// #define PRIORITY_LEVELS 10
-#define MAX_PRIO_LEVELS 10 // cuando usamos esto le sumamo 10 porque la shell es el unico
-// proceso que tiene prioridad 20. la suma es para que las cuentas den bien y no
-// nos pasemos
+
+#define MAX_PRIO_LEVELS 10
 
 #include <stdint.h>
 #include <process.h>

@@ -21,14 +21,8 @@ typedef struct buddy_node
     struct buddy_node * parent;
 } buddy_node;
 uint8_t sizeOfNode = sizeof(buddy_node);
-
-// max number of buddie control nodes.
-// buddy_node buddies[(1<<0) + (1<<1) + (1<<2) + (1<<3) + (1<<4) + (1<<5) +
-// (1<<6) + (1<<7)] = {0}; buddy_node buddies[(1<<0) + (1<<1) + (1<<2) + (1<<3)]
-// = {0};
-
 buddy_node * buddies = START_AUX_STRUCT;
-// 1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 = 255
+
 buddy_node * root;
 void * start;
 int current;
@@ -102,7 +96,7 @@ buddy_node * allocRecursive(buddy_node * node, uint32_t size)
         return NULL;
     }
 
-    // me fijo si tiene que ir en el actual o tengo que partirme en 2
+
     if (node->size / 2 < size)
     {
         if (node->state == LEAF)

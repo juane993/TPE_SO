@@ -4,7 +4,8 @@
 
 #include <defs.h>
 #include <stdint.h>
-// buddy system
+
+
 #define START_FREE_MEM 0x600000
 #define TOTAL_MEM_SIZE 0x20000
 
