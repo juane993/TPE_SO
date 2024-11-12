@@ -9,44 +9,7 @@
 
 procesess proc[QTY_PROC];
 
-void initProcesess()
-{
 
-    proc[0].name       = "testproc";
-    proc[0].entryPoint = test_processes;
-
-    proc[1].name       = "testprio";
-    proc[1].entryPoint = test_prio;
-
-    proc[2].name       = "endlessloop";
-    proc[2].entryPoint = endless_loop;
-
-    proc[3].name       = "testsync";
-    proc[3].entryPoint = test_sync;
-}
-
-int8_t runProcess(char * name, char * bgState, char * argv[])
-{
-    int8_t bg = atoi(bgState);
-    if (bg != 0 && bg != 1)
-    {
-        printErr("Invalid background state\n");
-        return -1;
-    }
-    printf("%s\n", name);
-    for (int i = 0; i < QTY_PROC; i++)
-    {
-        if (strcmp(proc[i].name, name) == 0)
-        {
-
-            char pid = my_create_process(proc[i].entryPoint, 0, argv, HIGH, bg);
-            printf("Creating process...with pid%d\n", pid);
-            return pid;
-        }
-    }
-    printErr("Invalid process name\n");
-    return -1;
-}
 int8_t kill(char * pid)
 {
     int8_t pidInt = atoi(pid);
@@ -67,6 +30,7 @@ int8_t run_test_proc(char * argv, char * bgState)
 {
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
     int8_t child       = my_create_process(test_processes, 1, &argv, HIGH, bg);
+    my_block(child);
 
     return child;
 }
@@ -75,6 +39,7 @@ int8_t run_test_prio(char * bgState)
 {
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
     int8_t child       = my_create_process(test_prio, 0, (void *) 0, HIGH, bg);
+    my_block(child);
 
     return child;
 }
@@ -85,6 +50,7 @@ int8_t run_test_sync(char * arg1, char * argv2, char * argv3, char * bgState)
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
     // my_openPipe(5);
     int8_t child = my_create_process(test_sync, 3, argv, HIGH, bg);
+    my_block(child);
 
     return child;
 }
@@ -94,6 +60,7 @@ int8_t run_test_mem(char * arg1, char * bgState)
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
     char * argv[]      = {arg1};
     int8_t child       = my_create_process(test_mm, 1, argv, HIGH, bg);
+    my_block(child);
     return child;
 }
 
@@ -151,6 +118,7 @@ int8_t run_filter(char * bgState)
     BackgroundState bg = FOREGROUND;
 
     int8_t child = my_create_process(filter, 0, (void *) 0, HIGH, bg);
+    my_block(child);
 
     return child;
 }
@@ -164,6 +132,7 @@ int8_t run_cat(char * bgState)
     BackgroundState bg = FOREGROUND;
 
     int8_t child = my_create_process(cat, 0, (void *) 0, HIGH, bg);
+    my_block(child);
 
     return child;
 }
@@ -177,6 +146,7 @@ int8_t run_wc(char * bgState)
     BackgroundState bg = FOREGROUND;
 
     int8_t child = my_create_process(wc, 0, (void *) 0, HIGH, bg);
+    my_block(child);
 
     return child;
 }
@@ -200,7 +170,7 @@ int8_t run_loop(char * arg1, char * bgState)
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
 
     int8_t child = my_create_process(loop, 1, argv, LOW, bg);
-
+    my_block(child);
     //    if(bg == FOREGROUND){
     //        my_waitPid(child);
     //    } else{
@@ -216,6 +186,7 @@ int8_t run_philo(char * bgState)
     BackgroundState bg = strcmp(bgState, "bg") == 0 ? BACKGROUND : FOREGROUND;
 
     int8_t child = my_create_process(run_philosophers, 0, (void *) 0, LOW, bg);
+    my_block(child);
 
     return child;
 }

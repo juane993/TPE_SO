@@ -188,7 +188,7 @@ int32_t kill_current_fg_process()
             }
 
             my_exit_pid(i);
-            return i;
+
         }
     }
     return -1;

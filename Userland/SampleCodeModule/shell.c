@@ -75,7 +75,7 @@ static Command commands[QTY_COMMANDS];
 
 void init()
 {
-    initProcesess();
+
     commands[0]  = (Command){"help", "Listado de comandos", .f = (void *) &help, NO_PARAMS};
     commands[1]  = (Command){"man", "Manual de uso de los comandos", .g = (void *) &man, SINGLE_PARAM};
     commands[2]  = (Command){"inforeg", "Informacion de los registos que fueron capturados en un momento arbitrario de ejecucion del sistema", .f = (void *) &printInfoReg, NO_PARAMS};
@@ -224,9 +224,6 @@ void run_shell()
             pid1 = commands[index1].j(arg1, arg2, arg3, arg4);
             break;
         }
-        if(pid1 != -1) {
-            my_block(pid1);
-        }
 
         if (prog2 != NULL && pid1 != -1)
         {
@@ -255,7 +252,7 @@ void run_shell()
 
             if (pid2 != -1)
             {
-                my_block(pid2);
+
                 my_openPipe(pipesFD);
                 my_mapFD(pid1, STDOUT, pipesFD[1]);
                 my_mapFD(pid2, STDIN, pipesFD[0]);
